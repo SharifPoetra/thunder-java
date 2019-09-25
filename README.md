@@ -1,1 +1,1 @@
-# thunder-java
+java -jar thunder-1.0-jar-with-dependencies.jar
