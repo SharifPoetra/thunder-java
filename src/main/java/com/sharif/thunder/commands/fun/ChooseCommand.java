@@ -1,4 +1,4 @@
-package com.sharif.thunder.commands;
+package com.sharif.thunder.commands.fun;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;

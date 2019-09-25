@@ -1,15 +1,21 @@
-package com.sharif.thunder;
-
-import com.sharif.thunder.commands.*;
+import com.sharif.thunder.*;
+import com.sharif.thunder.commands.fun.*;
+import com.sharif.thunder.commands.owner.*;
+import com.sharif.thunder.events.*;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import javax.security.auth.login.LoginException;
-import java.io.IOException;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
-public class Main {
+import javax.security.auth.login.LoginException;
+import java.io.IOException;
+
+import static spark.Spark.*;
+
+public class Thunder {
   
     public static void main(String[] args) throws IOException, LoginException, IllegalArgumentException, RateLimitedException {
       
@@ -30,14 +36,18 @@ public class Main {
       client.setPrefix(prefix);
       
       client.addCommands(
-        new ChooseCommand()
+        new ChooseCommand(),
+        new EvalCommand()
       );
       
       new JDABuilder(AccountType.BOT)
         
         .setToken(token)
+        .addEventListeners(new Ready())
         .addEventListeners(waiter, client.build())
         .build();
-       
+      
+      get("/", (req, res) -> "Hello World");
     }
+  
 }
