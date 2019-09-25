@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.jagrosh</groupId>
+  <artifactId>jda-utilities</artifactId>
+  <version>3.0.1</version>
+  <packaging>pom</packaging>
+  <repositories>
+    <repository>
+      <name>bintray</name>
+      <id>bintray-jagrosh-maven</id>
+      <url>https://dl.bintray.com/jagrosh/maven</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>com.jagrosh</groupId>
+      <artifactId>jda-utilities-command</artifactId>
+      <version>3.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.jagrosh</groupId>
+      <artifactId>jda-utilities-commons</artifactId>
+      <version>3.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.jagrosh</groupId>
+      <artifactId>jda-utilities-doc</artifactId>
+      <version>3.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.jagrosh</groupId>
+      <artifactId>jda-utilities-examples</artifactId>
+      <version>3.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.jagrosh</groupId>
+      <artifactId>jda-utilities-menu</artifactId>
+      <version>3.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>
