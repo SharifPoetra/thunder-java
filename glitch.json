@@ -1,0 +1,13 @@
+{
+  "start": "java -cp target/classes:'target/dependency/*' Thunder",
+  "install": "echo 'Compiling' && mvn compile",
+  "watch": {
+    "throttle": 900000,
+    "install": {
+      "include": [
+        "^pom\\.xml$",
+        "\\.java$"
+      ]
+    } 
+  } 
+}
