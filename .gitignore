@@ -1,0 +1,9 @@
+# glitch
+shrinkwrap.yaml
+.glitch-assets
+.bash_history
+.cache
+.config
+
+# miscs
+.m2/
