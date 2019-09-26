@@ -1,6 +1,6 @@
 {
-  "start": "java -cp target/classes:'target/dependency/*' Thunder",
-  "install": "echo 'Compiling' && mvn compile",
+  "start": "cd target && java -jar thunder-1.0-jar-with-dependencies.jar",
+  "install": "mvn process-resources compile assembly:single",
   "watch": {
     "throttle": 900000,
     "install": {
