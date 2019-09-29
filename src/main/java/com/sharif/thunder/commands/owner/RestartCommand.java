@@ -1,16 +1,18 @@
 package com.sharif.thunder.commands.owner;
 
 import com.sharif.thunder.Thunder;
-import com.jagrosh.jdautilities.command.Command;
+import com.sharif.thunder.commands.OwnerCommand;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.Command.Category;
 
-public class ReloadCommand extends Command {
- 
-  public ReloadCommand() {
+public class RestartCommand extends OwnerCommand {
+  
+  private final Thunder thunder;
+  
+  public RestartCommand(Thunder thunder) {
+    this.thunder = thunder;
     this.name = "reload";
     this.help = "Kills the current instance and launches a fresh instance of this bot.";
-    this.ownerCommand = true;
-    this.guildOnly = false;
     this.hidden = true;
   } 
   

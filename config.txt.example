@@ -1,0 +1,13 @@
+token = your-bot-token-here
+owner = your-id
+prefix = "prefix-here"
+success = "🎶"
+warning = "💡"
+error = "🚫"
+loading = "⌚"
+searching = "🔎"
+npimages = false
+stayinchannel = false
+updatealerts = true
+maxtime = 0
+playlistsfolder = Playlists

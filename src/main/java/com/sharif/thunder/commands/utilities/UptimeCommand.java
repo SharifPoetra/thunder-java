@@ -1,17 +1,21 @@
 package com.sharif.thunder.commands.utilities;
 
-import com.jagrosh.jdautilities.command.Command;
+import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.UtilitiesCommand;
 import com.jagrosh.jdautilities.command.CommandEvent;
 
 import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 import java.util.List;
 
-public class UptimeCommand extends Command {
- 
-  public UptimeCommand() {
+public class UptimeCommand extends UtilitiesCommand {
+  
+  private final Thunder thunder;
+  
+  public UptimeCommand(Thunder thunder) {
+    this.thunder = thunder;
     this.name = "uptime";
-    this.help = "Displays the amount of time that the bot has been up.";
+    this.help = "displays the amount of time that the bot has been up.";
   } 
   
   @Override
@@ -37,4 +41,4 @@ public class UptimeCommand extends Command {
   private String replaceLast(final String text, final String regex, final String replacement) {
     return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
   }
-} 
+}
