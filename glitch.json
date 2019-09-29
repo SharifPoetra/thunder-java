@@ -1,8 +1,8 @@
 {
-  "start": "cd target && java -jar thunder-1.0-jar-with-dependencies.jar",
+  "start": "cp config.txt ./target && cd target && java -jar thunder-1.0-jar-with-dependencies.jar",
   "install": "mvn process-resources compile assembly:single",
   "watch": {
-    "throttle": 900000,
+    "throttle": 900000000,
     "install": {
       "include": [
         "^pom\\.xml$",

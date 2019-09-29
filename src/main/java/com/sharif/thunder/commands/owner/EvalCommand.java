@@ -1,20 +1,23 @@
 package com.sharif.thunder.commands.owner;
 
-import com.jagrosh.jdautilities.command.Command;
+import com.sharif.thunder.commands.OwnerCommand;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.Command;
+import com.sharif.thunder.Thunder;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-public class EvalCommand extends Command {
+public class EvalCommand extends OwnerCommand {
   
-  public EvalCommand() {
+  private final Thunder thunder;
+  
+  public EvalCommand(Thunder thunder) {
+    this.thunder = thunder;
     this.name = "eval";
     this.help = "evaluates nashorn code";
     this.aliases = new String[]{"e"};
-    this.ownerCommand = true;
-    this.guildOnly = false;
     this.hidden = true;
   }
   
@@ -39,14 +42,11 @@ public class EvalCommand extends Command {
       }
       
       try {
-      engine.put("bot", event.getSelfUser());
-      engine.put("event", event);
-      engine.put("jda", event.getJDA());
-      engine.put("guild", event.getGuild());
-      engine.put("channel", event.getChannel());
-
-      // System.out.println(event.getMessage().getContentDisplay().substring(args[0].length()));
-
+        engine.put("bot", thunder);
+        engine.put("event", event);
+        engine.put("jda", event.getJDA());
+        engine.put("guild", event.getGuild());
+        engine.put("channel", event.getChannel());
         event.replySuccess("Evaluated Successfully:\n```\n"+engine.eval(event.getArgs())+" ```");
       } catch (Exception e) {
         event.replyError("An exception was thrown:\n```\n"+e.getMessage()+" ```");
