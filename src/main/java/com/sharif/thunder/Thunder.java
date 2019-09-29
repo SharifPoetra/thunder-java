@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.Objects;
+import java.time.OffsetDateTime;
 
 import static spark.Spark.*;
 
@@ -42,6 +43,7 @@ public class Thunder {
   public final static String STOP_EMOJI  = "\u23F9"; // ⏹
   public static final int RESTART_EXITCODE = 11;
   public static final Logger LOGGER = LoggerFactory.getLogger(Thunder.class);
+  private final OffsetDateTime readyAt = OffsetDateTime.now();
   private final EventWaiter waiter;
   private final ShardManager shards;
   private JDA jda;
@@ -67,11 +69,7 @@ public class Thunder {
     players.getConfiguration().setFilterHotSwapEnabled(true);
     players.getConfiguration().setOpusEncodingQuality(10);
     players.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
-    
-    String token = "NTgwNjI2OTcyNzQxMzM3MDg4.XYoE-g.Ev7wwjQrxxlKn3d_EIPzGSjpYI8";
-    String ownerId = "580618094792146975";   
-    String prefix = "~";
-      
+          
     CommandClientBuilder client = new CommandClientBuilder()
       .setOwnerId(Long.toString(config.getOwnerId()))
       .setEmojis(config.getSuccess(), config.getWarning(), config.getError())
@@ -102,6 +100,8 @@ public class Thunder {
       new NightcoreCommand(this),
       new PitchCommand(this),
       new KaraokeCommand(this),
+      new VaporwaveCommand(this),
+      new BassboostCommand(this),
       // owner
       new RestartCommand(this), 
       new DebugCommand(this),
@@ -109,13 +109,13 @@ public class Thunder {
       new EvalCommand(this));
       
       new JDABuilder(AccountType.BOT)
-        .setToken(token)
+        .setToken(config.getToken())
         .addEventListeners(waiter, client.build())
         .build();
     
     shards = new DefaultShardManagerBuilder()
                 .setShardsTotal(1)
-                .setToken(token)
+                .setToken(config.getToken())
                 .addEventListeners(new Listener(this))
                 .setBulkDeleteSplittingEnabled(false)
                 .setRequestTimeoutRetry(true)
@@ -166,7 +166,11 @@ public class Thunder {
   public EventWaiter getEventWaiter() {
     return waiter;
   }
-
+  
+  public OffsetDateTime getReadyAt() {
+    return readyAt;
+  }
+  
   public void setJDA(JDA jda) {
     this.jda = jda;
   }
