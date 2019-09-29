@@ -11,7 +11,7 @@ public class VolumeCommand extends MusicCommand {
     super(thunder);
     this.name = "volume";
     this.aliases = new String[]{"vol"};
-    this.help = "sets or shows volume";
+    this.help = "sets or shows volume.";
     this.arguments = "[0-150]";
   }
   

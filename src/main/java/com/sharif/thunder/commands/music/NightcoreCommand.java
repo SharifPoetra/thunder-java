@@ -13,6 +13,7 @@ public class NightcoreCommand extends MusicCommand {
     super(thunder);
     this.name = "nightcore";
     this.help = "toggles nightcore mode and changes it's speed.";
+    this.arguments = "<0.1 - 3.0>";
   }
   
   @Override

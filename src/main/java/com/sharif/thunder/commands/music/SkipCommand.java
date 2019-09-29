@@ -10,7 +10,7 @@ public class SkipCommand extends MusicCommand {
   public SkipCommand(Thunder thunder) {
     super(thunder);
     this.name = "skip";
-    this.help = "votes to skip the current song";
+    this.help = "votes to skip the current song.";
     this.aliases = new String[]{"voteskip"};
     this.beListening = true;
     this.bePlaying = true;
