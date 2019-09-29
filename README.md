@@ -1,3 +1,5 @@
+## Configuration
+Rename `config.txt.example` to `config.txt` and fill it out. 
 ## Compile
 ```bash
 mvn process-resources compile assembly:single

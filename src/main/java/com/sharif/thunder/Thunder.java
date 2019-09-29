@@ -90,9 +90,11 @@ public class Thunder {
       new PingCommand(this), 
       // music
       new PlayCommand(this, config.getLoading()),
+      new PlaylistsCommand(this),
       new NowplayingCommand(this),
       new VolumeCommand(this),
       new SkipCommand(this),
+      new StopCommand(this),
       new ShuffleCommand(this),
       new QueueCommand(this),
       new SearchCommand(this, config.getSearching()),
@@ -103,6 +105,7 @@ public class Thunder {
       // owner
       new RestartCommand(this), 
       new DebugCommand(this),
+      new PlaylistCommand(this),
       new EvalCommand(this));
       
       new JDABuilder(AccountType.BOT)

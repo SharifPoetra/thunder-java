@@ -9,7 +9,7 @@ public class RepeatCommand extends MusicCommand {
   public RepeatCommand(Thunder thunder) {
     super(thunder);
     this.name = "repeat";
-    this.help = "re-adds music to the queue when finished";
+    this.help = "re-adds music to the queue when finished.";
     this.guildOnly = true;
   }
   
