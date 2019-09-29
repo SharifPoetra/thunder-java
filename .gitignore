@@ -8,3 +8,4 @@ shrinkwrap.yaml
 # miscs
 .m2/
 target/
+config.txt
