@@ -12,6 +12,7 @@ public class PitchCommand extends MusicCommand {
     super(thunder);
     this.name = "pitch";
     this.help = "Changes pitch of the song.";
+    this.arguments = "<-12 - 12>";
   }
   
   @Override

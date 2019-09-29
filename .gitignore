@@ -7,4 +7,6 @@ shrinkwrap.yaml
 
 # miscs
 .m2/
+.java/
 target/
+config.txt

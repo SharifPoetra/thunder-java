@@ -189,7 +189,6 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     queue.clear();
     defaultQueue.clear();
     audioPlayer.stopTrack();
-    //current = null;
   }
   
   public Set<String> getVotes() {
@@ -225,7 +224,6 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   @Override
   public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
     // if the track ended normally, and we're in repeat mode, re-add it to the queue
-    System.out.println(endReason);
     if(isRepeating()) {
         queue.add(new QueuedTrack(track.makeClone(), track.getUserData(Long.class)==null ? 0L : track.getUserData(Long.class)));
     }
