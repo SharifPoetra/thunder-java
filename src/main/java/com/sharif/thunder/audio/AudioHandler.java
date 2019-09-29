@@ -19,7 +19,7 @@ import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sharif.thunder.queue.FairQueue;
-import com.sharif.thunder.audio.VolumePcmAudioFilter;
+// import com.sharif.thunder.audio.VolumePcmAudioFilter;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -55,7 +55,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   @Setter
   private AudioPlayer audioPlayer;
 
-  private float volume = 1.0f;
+  // private float volume = 1.0f;
   @Getter
   private float nightcore = 1.0f;
   @Getter
@@ -138,18 +138,26 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     updateFilters(getPlayingTrack());
   }
   
-  public void setVolume(int volume) {
-    if (volume <= 0 || volume > 500)
-      throw new IllegalArgumentException("Volume out of range (0-500)");
-    this.volume = Math.abs((float) volume / 100);
-    updateFilters(getPlayingTrack());
-  }
+  // public void setVolume(int volume) {
+  //   if (volume <= 0 || volume > 500)
+  //     throw new IllegalArgumentException("Volume out of range (0-500)");
+  //   this.volume = Math.abs((float) volume / 100);
+  //   updateFilters(getPlayingTrack());
+  // }
   
   public boolean setRepeating(boolean repeating) {
     return this.repeating = repeating;
   }
   
   // Getters
+  public boolean isBassboost() {
+    return bassboost;
+  }
+  
+  public boolean isVaporwave() {
+    return vaporwave;
+  }
+  
   public boolean isRepeating() {
     return repeating;
   }
@@ -299,7 +307,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   
   // filter stuff
   public boolean hasFiltersEnabled() {
-    return bassboost || karaoke || vaporwave || nightcore != 1 || volume != 1 || tempo != 1 || pitch != 0;
+    return bassboost || karaoke || vaporwave || nightcore != 1 || tempo != 1 || pitch != 0;
   }
   
   public void updateFilters(AudioTrack track) {
@@ -314,7 +322,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   public void resetFilters() {
     this.nightcore = 1.0f;
     this.tempo = 1.0f;
-    this.volume = 1.0f;
+    // this.volume = 1.0f;
     this.bassboost = false;
     this.vaporwave = false;
     this.karaoke = false;
@@ -379,10 +387,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
       equalizer.setGain(3, 0.0625f);
     }
     
-    if (volume != 1) {
-      filter = new VolumePcmAudioFilter(filter, format.channelCount).setVolume(volume);
-      filterList.add(filter);
-    }
+    // if (volume != 1) {
+    //   filter = new VolumePcmAudioFilter(filter, format.channelCount).setVolume(volume);
+    //   filterList.add(filter);
+    // }
     
     Collections.reverse(filterList);
     return filterList;

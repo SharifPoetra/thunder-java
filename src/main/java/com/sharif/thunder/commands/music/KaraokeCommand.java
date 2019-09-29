@@ -13,7 +13,6 @@ public class KaraokeCommand extends MusicCommand {
     this.guildOnly = true;
   }
   
-  // override musiccommand's execute because we don't actually care where this is used
   @Override
   protected void execute(CommandEvent event) {
     AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
