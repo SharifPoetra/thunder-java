@@ -1,15 +1,19 @@
-package com.sharif.thunder.commands;
+package com.sharif.thunder.commands.fun;
 
-import com.jagrosh.jdautilities.command.Command;
+import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.FunCommand;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.Command.Category;
 
-public class ChooseCommand extends Command {
+public class ChooseCommand extends FunCommand {
   
-  public ChooseCommand() {
+  private final Thunder thunder;
+  
+  public ChooseCommand(Thunder thunder) {
+    this.thunder = thunder;
     this.name = "choose";
     this.help = "make a decision";
     this.arguments = "<item> <item> ...";
-    this.guildOnly = true;
   } 
   
   @Override
