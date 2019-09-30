@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.TextChannel;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,16 +45,18 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   private final FairQueue<QueuedTrack> queue = new FairQueue<QueuedTrack>();
   private final List<AudioTrack> defaultQueue = new LinkedList<AudioTrack>();
   private final Set<String> votes = new HashSet<String>();
+  private JDA jda;
   static AudioConfiguration configuration;
   private final PlayerManager manager;
   private final long guildId;
+  private Guild guild;
   
   private AudioFrame lastFrame;
   
   @Getter
+  private long announcingChannel;
   @Setter
   private AudioPlayer audioPlayer;
-
   @Getter
   private float nightcore = 1.0f;
   @Getter
@@ -61,14 +64,13 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   @Getter
   private boolean vaporwave = false;
   @Getter
-  private boolean bassboost = false;
-  @Getter
   private boolean repeating = false;
   private float karaokeWidth = 100f;
   private float karaokeBand = 220f;
   private float karaokeLevel = 1f;
-  private static final float[] BASS_BOOST = { 0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f,
-      -0.1f, -0.1f, -0.1f, -0.1f };
+  private static final float[] BASS_BOOST = { 0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f };
+  @Getter
+  private boolean bassboost = false;
   @Getter
   private int pitch = 0;
   @Getter
@@ -79,8 +81,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   
   protected AudioHandler(PlayerManager manager, Guild guild, AudioPlayer player) {
     this.manager = manager;
-    this.audioPlayer = player;
     this.guildId = guild.getIdLong();
+    this.guild = guild;
+    this.audioPlayer = player;
   }
   
   // Setters
@@ -140,6 +143,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   
   public boolean setRepeating(boolean repeating) {
     return this.repeating = repeating;
+  }
+  
+  public void setAnnouncingChannel(long channelId) {
+    this.announcingChannel = channelId;
   }
   
   // Getters
@@ -241,6 +248,8 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   
   @Override
   public void onTrackStart(AudioPlayer player, AudioTrack track) {
+    TextChannel channel = guild.getTextChannelById(announcingChannel);
+    channel.sendMessage(Thunder.PLAY_EMOJI+" Start playing: **"+track.getInfo().title+"**").queue();
     votes.clear();
     updateFilters(getPlayingTrack());
   }
@@ -372,12 +381,8 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     if (bassboost) {
       EqualizerFactory equalizer = new EqualizerFactory();
       for (int i = 0; i < BASS_BOOST.length; i++) {
-        equalizer.setGain(i, BASS_BOOST[i] + 1.25f);
+        equalizer.setGain(i, BASS_BOOST[i] + 0.1f);
       }
-      // equalizer.setGain(0, 0.25f);
-      // equalizer.setGain(1, 0.25f);
-      // equalizer.setGain(2, 0.125f);
-      // equalizer.setGain(3, 0.0625f);
       audioPlayer.setFilterFactory(equalizer);
     }
 

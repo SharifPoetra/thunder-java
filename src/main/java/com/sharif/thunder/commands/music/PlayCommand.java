@@ -79,6 +79,7 @@ public class PlayCommand extends MusicCommand {
         return;
       }
       AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+      handler.setAnnouncingChannel(event.getChannel().getIdLong());
       int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor()))+1;
       String addMsg = FormatUtil.filterEveryone(thunder.getConfig().getMusic()+" Added **"+track.getInfo().title
                       +"** (`"+FormatUtil.formatTime(track.getDuration())+"`) "+(pos==0?"to begin playing":" to the queue at position "+pos));
