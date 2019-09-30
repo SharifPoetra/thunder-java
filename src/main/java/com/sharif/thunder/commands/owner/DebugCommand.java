@@ -25,15 +25,9 @@ public class DebugCommand extends OwnerCommand {
     long usedMb = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(1024*1024);
     StringBuilder sb = new StringBuilder("**"+event.getSelfUser().getName()+"** statistics:"
                 + "\nLast Startup: "+FormatUtil.secondsToTime(thunder.getReadyAt().until(OffsetDateTime.now(), ChronoUnit.SECONDS))+" ago"
-                + "\nGuilds: **"+thunder.getShardManager().getGuildCache().size()+"**"
+                + "\nGuilds: **"+event.getClient().getTotalGuilds()+"**"
                 + "\nMemory: **"+usedMb+"**Mb / **"+totalMb+"**Mb"
-                + "\nAverage Ping: **"+thunder.getShardManager().getAverageGatewayPing()+"**ms"
-                + "\nShard Total: **"+thunder.getShardManager().getShardsTotal()+"**"
-                + "\nShard Connectivity: ```diff");
-    thunder.getShardManager().getShards().forEach(jda -> sb.append("\n").append(jda.getStatus()==JDA.Status.CONNECTED ? "+ " : "- ")
-                .append(jda.getShardInfo().getShardId()<10 ? "0" : "").append(jda.getShardInfo().getShardId()).append(": ").append(jda.getStatus())
-                .append(" ~ ").append(jda.getGuildCache().size()).append(" guilds"));
-    sb.append("\n```");
+                + "\nAverage Ping: **"+event.getJDA().getGatewayPing()+"**ms");
     event.reply(sb.toString().trim());
     }
 }
