@@ -97,6 +97,8 @@ public class Thunder {
       new KaraokeCommand(this),
       new VaporwaveCommand(this),
       new BassboostCommand(this),
+      // new MoveTrackCommand(this),
+      // new PlaynextCommand(this, config.getLoading()),
       // owner
       new RestartCommand(this), 
       new DebugCommand(this),
