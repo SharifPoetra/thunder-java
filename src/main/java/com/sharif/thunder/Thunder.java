@@ -5,7 +5,6 @@ import com.sharif.thunder.commands.owner.*;
 import com.sharif.thunder.commands.music.*;
 import com.sharif.thunder.commands.utilities.*;
 import com.sharif.thunder.commands.CommandExceptionListener;
-import com.sharif.thunder.utils.BlockingSessionController;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.playlist.PlaylistLoader;
 import com.sharif.thunder.audio.AudioHandler;
@@ -23,8 +22,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
-import net.dv8tion.jda.api.sharding.ShardManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.security.auth.login.LoginException;
@@ -42,10 +39,9 @@ public class Thunder {
   public final static String PAUSE_EMOJI = "\u23F8"; // ⏸
   public final static String STOP_EMOJI  = "\u23F9"; // ⏹
   public static final int RESTART_EXITCODE = 11;
-  public static final Logger LOGGER = LoggerFactory.getLogger(Thunder.class);
+  public static final Logger LOGGER = LoggerFactory.getLogger("Thunder");
   private final OffsetDateTime readyAt = OffsetDateTime.now();
   private final EventWaiter waiter;
-  private final ShardManager shards;
   private JDA jda;
   private final ScheduledExecutorService threadpool;
   private final PlayerManager players;
@@ -77,9 +73,7 @@ public class Thunder {
       .setAlternativePrefix("@mention")
       .setListener(new CommandExceptionListener())
       .setShutdownAutomatically(false)
-      .setHelpConsumer(event -> event.reply(FormatUtil.formatHelp(this, event), 
-                        m-> event.getMessage().addReaction(config.getSuccess()).queue(s->{},f->{}), 
-                        f-> event.replyWarning("Help could not be sent because you are blocking Direct Messages")))
+      .setHelpConsumer(event -> event.reply(FormatUtil.formatHelp(this, event)))
       .addCommands(
       // fun
       new ChooseCommand(this),
@@ -96,6 +90,7 @@ public class Thunder {
       new ShuffleCommand(this),
       new QueueCommand(this),
       new SearchCommand(this, config.getSearching()),
+      new SCSearchCommand(this, config.getSearching()),
       new RepeatCommand(this),
       new NightcoreCommand(this),
       new PitchCommand(this),
@@ -112,15 +107,6 @@ public class Thunder {
         .setToken(config.getToken())
         .addEventListeners(waiter, client.build())
         .build();
-    
-    shards = new DefaultShardManagerBuilder()
-                .setShardsTotal(1)
-                .setToken(config.getToken())
-                .addEventListeners(new Listener(this))
-                .setBulkDeleteSplittingEnabled(false)
-                .setRequestTimeoutRetry(true)
-                .setSessionController(new BlockingSessionController())
-                .build();
       
       get("/", (req, res) -> "Hello World");
     }
@@ -157,10 +143,6 @@ public class Thunder {
 
   public JDA getJDA() {
     return jda;
-  }
-  
-  public ShardManager getShardManager() {
-    return shards;
   }
   
   public EventWaiter getEventWaiter() {

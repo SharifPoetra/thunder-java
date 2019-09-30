@@ -32,6 +32,7 @@ public class PlayCommand extends MusicCommand {
     this.name = "play";
     this.arguments = "<title|URL|subcommand>";
     this.help = "plays the provided song.";
+    this.aliases = new String[]{"p"};
     this.beListening = true;
     this.bePlaying = false;
     this.children = new Command[]{new PlaylistCommand(thunder)};
