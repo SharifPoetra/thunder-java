@@ -18,7 +18,7 @@ public class RestartCommand extends OwnerCommand {
   
   @Override
   protected void execute(CommandEvent event) {
-    event.replySuccess("Restarting the bot with code "+Thunder.RESTART_EXITCODE+", one moment...");
-    System.exit(Thunder.RESTART_EXITCODE);
+    event.replySuccess("Restarting the bot one moment...");
+    System.exit(11);
   } 
 } 

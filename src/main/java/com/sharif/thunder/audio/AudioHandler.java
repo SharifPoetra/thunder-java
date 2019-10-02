@@ -1,6 +1,7 @@
 package com.sharif.thunder.audio;
 
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.Main;
 import com.sharif.thunder.playlist.PlaylistLoader.Playlist;
 import com.github.natanbc.lavadsp.karaoke.KaraokePcmAudioFilter;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
@@ -19,8 +20,8 @@ import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sharif.thunder.queue.FairQueue;
-import com.sharif.thunder.audio.VolumePcmAudioFilter;
 import com.sharif.thunder.utils.FormatUtil;
+import com.sharif.thunder.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -29,6 +30,7 @@ import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.TextChannel;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,17 +47,18 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   private final FairQueue<QueuedTrack> queue = new FairQueue<QueuedTrack>();
   private final List<AudioTrack> defaultQueue = new LinkedList<AudioTrack>();
   private final Set<String> votes = new HashSet<String>();
+  private JDA jda;
   static AudioConfiguration configuration;
   private final PlayerManager manager;
   private final long guildId;
+  private Guild guild;
   
   private AudioFrame lastFrame;
   
   @Getter
+  private long announcingChannel;
   @Setter
   private AudioPlayer audioPlayer;
-
-  private float volume = 1.0f;
   @Getter
   private float nightcore = 1.0f;
   @Getter
@@ -63,12 +66,14 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   @Getter
   private boolean vaporwave = false;
   @Getter
-  private boolean bassboost = false;
-  @Getter
   private boolean repeating = false;
   private float karaokeWidth = 100f;
   private float karaokeBand = 220f;
   private float karaokeLevel = 1f;
+  private static final float[] BASS_BOOST = { 0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f };
+  @Getter
+  private boolean bassboost = false;
+  private boolean deleteMessage = false;
   @Getter
   private int pitch = 0;
   @Getter
@@ -79,8 +84,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   
   protected AudioHandler(PlayerManager manager, Guild guild, AudioPlayer player) {
     this.manager = manager;
-    this.audioPlayer = player;
     this.guildId = guild.getIdLong();
+    this.guild = guild;
+    this.audioPlayer = player;
   }
   
   // Setters
@@ -138,18 +144,23 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     updateFilters(getPlayingTrack());
   }
   
-  public void setVolume(int volume) {
-    if (volume <= 0 || volume > 500)
-      throw new IllegalArgumentException("Volume out of range (0-500)");
-    this.volume = Math.abs((float) volume / 100);
-    updateFilters(getPlayingTrack());
-  }
-  
   public boolean setRepeating(boolean repeating) {
     return this.repeating = repeating;
   }
   
+  public void setAnnouncingChannel(long channelId) {
+    this.announcingChannel = channelId;
+  }
+  
   // Getters
+  public boolean isBassboost() {
+    return bassboost;
+  }
+  
+  public boolean isVaporwave() {
+    return vaporwave;
+  }
+  
   public boolean isRepeating() {
     return repeating;
   }
@@ -184,8 +195,14 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   public FairQueue<QueuedTrack> getQueue() {
     return queue;
   }
+
+  public void stopTrack() {
+    this.deleteMessage = true;
+    audioPlayer.stopTrack();
+  }
   
   public void stopAndClear() {
+    this.deleteMessage = true;
     queue.clear();
     defaultQueue.clear();
     audioPlayer.stopTrack();
@@ -219,20 +236,18 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     return true;
   }
 
-  
   // Audio Events
   @Override
   public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-    // if the track ended normally, and we're in repeat mode, re-add it to the queue
     if(isRepeating()) {
         queue.add(new QueuedTrack(track.makeClone(), track.getUserData(Long.class)==null ? 0L : track.getUserData(Long.class)));
     }
     
     if(queue.isEmpty()) {
       if(!playFromDefault()) {
-        // manager.getBot().getNowplayingHandler().onTrackUpdate(guildId, null, this);
         if(!manager.getBot().getConfig().getStay())
-          manager.getBot().closeAudioConnection(guildId);
+          System.out.println(guildId);
+          guild.getAudioManager().closeAudioConnection();
       }
     } else {
       QueuedTrack qt = queue.pull();
@@ -242,6 +257,19 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   
   @Override
   public void onTrackStart(AudioPlayer player, AudioTrack track) {
+    EmbedBuilder eb = new EmbedBuilder();
+    eb.setColor(guild.getSelfMember().getColor());
+    eb.setAuthor(Main.PLAY_EMOJI+" Start playing");
+    User u = guild.getJDA().getUserById(getRequester());
+    try {
+      eb.setDescription("**["+track.getInfo().title+"]("+track.getInfo().uri+")** ["+u.getAsMention()+"]");
+    } catch(Exception e) {
+      eb.setDescription("**"+track.getInfo().title+"** ["+u.getAsMention()+"]");
+    }
+    TextChannel channel = guild.getTextChannelById(announcingChannel);
+    channel.sendMessage(eb.build()).queue((m) -> {
+      OtherUtil.deleteMessageAfter(m, track.getDuration());
+    });
     votes.clear();
     updateFilters(getPlayingTrack());
   }
@@ -277,7 +305,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         eb.setFooter("Source: " + track.getInfo().author, null);
       
       double progress = (double)audioPlayer.getPlayingTrack().getPosition()/track.getDuration();
-      eb.setDescription((audioPlayer.isPaused() ? Thunder.PAUSE_EMOJI : Thunder.PLAY_EMOJI)
+      eb.setDescription((audioPlayer.isPaused() ? Main.PAUSE_EMOJI : Main.PLAY_EMOJI)
                         + " "+FormatUtil.progressBar(progress)
                         + " `[" + FormatUtil.formatTime(track.getPosition()) + "/" + FormatUtil.formatTime(track.getDuration()) + "]` "
                         + FormatUtil.volumeIcon(audioPlayer.getVolume()));
@@ -292,14 +320,14 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
       .setContent(FormatUtil.filterEveryone(manager.getBot().getConfig().getSuccess()+" **Now Playing...**"))
       .setEmbed(new EmbedBuilder()
                 .setTitle("No music playing")
-                .setDescription(Thunder.STOP_EMOJI+" "+FormatUtil.progressBar(-1)+" "+FormatUtil.volumeIcon(audioPlayer.getVolume()))
+                .setDescription(Main.STOP_EMOJI+" "+FormatUtil.progressBar(-1)+" "+FormatUtil.volumeIcon(audioPlayer.getVolume()))
                 .setColor(guild.getSelfMember().getColor())
                 .build()).build();
   }
   
   // filter stuff
   public boolean hasFiltersEnabled() {
-    return bassboost || karaoke || vaporwave || nightcore != 1 || volume != 1 || tempo != 1 || pitch != 0;
+    return bassboost || karaoke || vaporwave || nightcore != 1 || tempo != 1 || pitch != 0;
   }
   
   public void updateFilters(AudioTrack track) {
@@ -314,7 +342,6 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   public void resetFilters() {
     this.nightcore = 1.0f;
     this.tempo = 1.0f;
-    this.volume = 1.0f;
     this.bassboost = false;
     this.vaporwave = false;
     this.karaoke = false;
@@ -373,17 +400,12 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     
     if (bassboost) {
       EqualizerFactory equalizer = new EqualizerFactory();
-      equalizer.setGain(0, 0.25f);
-      equalizer.setGain(1, 0.25f);
-      equalizer.setGain(2, 0.125f);
-      equalizer.setGain(3, 0.0625f);
+      for (int i = 0; i < BASS_BOOST.length; i++) {
+        equalizer.setGain(i, BASS_BOOST[i] + 0.1f);
+      }
+      audioPlayer.setFilterFactory(equalizer);
     }
-    
-    if (volume != 1) {
-      filter = new VolumePcmAudioFilter(filter, format.channelCount).setVolume(volume);
-      filterList.add(filter);
-    }
-    
+
     Collections.reverse(filterList);
     return filterList;
   }

@@ -5,19 +5,19 @@ import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.audio.AudioHandler;
 
-public class RepeatCommand extends MusicCommand {
-  public RepeatCommand(Thunder thunder) {
+public class VaporwaveCommand extends MusicCommand {
+  public VaporwaveCommand(Thunder thunder) {
     super(thunder);
-    this.name = "repeat";
-    this.help = "re-adds music to the queue when finished.";
+    this.name = "vaporwave";
+    this.help = "toggles vaporwave mode.";
     this.guildOnly = true;
   }
-  
+
   @Override
   protected void execute(CommandEvent event) {
     AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-    handler.setRepeating(!handler.isRepeating());
-    event.reply(thunder.getConfig().getRepeat()+" Repeat mode is now `"+(!handler.isRepeating() ? "disabled" : "enabled")+"`.");
+    handler.setVaporwave(!handler.isVaporwave());
+    event.replySuccess("Vaporwave mode is now `"+(!handler.isVaporwave() ? "disabled" : "enabled")+"`.");
   } 
   
   @Override
