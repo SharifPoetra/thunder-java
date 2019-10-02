@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.Main;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.audio.QueuedTrack;
 import com.sharif.thunder.commands.MusicCommand;
@@ -75,7 +76,7 @@ public class QueueCommand extends MusicCommand {
     private String getQueueTitle(AudioHandler ah, String success, int songslength, long total) {
       StringBuilder sb = new StringBuilder();
       if(ah.getPlayer().getPlayingTrack()!=null) {
-        sb.append(ah.getPlayer().isPaused() ? Thunder.PAUSE_EMOJI : Thunder.PLAY_EMOJI).append(" **")
+        sb.append(ah.getPlayer().isPaused() ? Main.PAUSE_EMOJI : Main.PLAY_EMOJI).append(" **")
           .append(ah.getPlayer().getPlayingTrack().getInfo().title).append("**\n");
       }
       return FormatUtil.filterEveryone(sb.append(success).append(" Current Queue | ").append(songslength)

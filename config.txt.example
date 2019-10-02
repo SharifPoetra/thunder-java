@@ -14,3 +14,4 @@ stayinchannel = false
 updatealerts = true
 maxtime = 0
 playlistsfolder = Playlists
+lyrics.default = "A-Z Lyrics"

@@ -38,6 +38,6 @@ public class PlayerManager extends DefaultAudioPlayerManager {
       guild.getAudioManager().setSendingHandler(handler);
     } else 
       handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
-    return handler;
+      return handler;
     }
 }

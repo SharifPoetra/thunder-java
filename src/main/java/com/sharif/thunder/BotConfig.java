@@ -12,7 +12,7 @@ import java.util.List;
 
 public class BotConfig {
   private Path path = null;
-  private String token, prefix, successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji, musicEmoji, shuffleEmoji, repeatEmoji, playlistsFolder;
+  private String token, prefix, altPrefix, successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji, musicEmoji, shuffleEmoji, repeatEmoji, playlistsFolder;
   private boolean stayInChannel, npImages, updateAlerts;
   private long owner, maxSeconds;
   
@@ -32,6 +32,7 @@ public class BotConfig {
       token = config.getString("token");
       owner = config.getLong("owner");
       prefix = config.getString("prefix");
+      altPrefix = config.getString("altprefix");
       successEmoji = config.getString("success");
       warningEmoji = config.getString("warning");
       errorEmoji = config.getString("error");
@@ -67,6 +68,10 @@ public class BotConfig {
   public String getPrefix() {
     return prefix;
   }
+  
+  public String getAltPrefix() {
+    return altPrefix;
+  }  
 
   public String getSuccess() {
     return successEmoji;

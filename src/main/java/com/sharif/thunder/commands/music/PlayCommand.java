@@ -14,6 +14,7 @@ import com.sharif.thunder.audio.QueuedTrack;
 import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.playlist.PlaylistLoader.Playlist;
 import com.sharif.thunder.utils.FormatUtil;
+import com.sharif.thunder.utils.OtherUtil;
 import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
@@ -42,6 +43,7 @@ public class PlayCommand extends MusicCommand {
   public void doCommand(CommandEvent event) {
     if(event.getArgs().isEmpty() && event.getMessage().getAttachments().isEmpty()) {
       AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+      handler.setAnnouncingChannel(event.getChannel().getIdLong());
       if(handler.getPlayer().getPlayingTrack()!=null && handler.getPlayer().isPaused()) {
         handler.getPlayer().setPaused(false);
         event.reply("" + thunder.getConfig().getMusic()+ " Resumed **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**.");
@@ -82,9 +84,11 @@ public class PlayCommand extends MusicCommand {
       handler.setAnnouncingChannel(event.getChannel().getIdLong());
       int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor()))+1;
       String addMsg = FormatUtil.filterEveryone(thunder.getConfig().getMusic()+" Added **"+track.getInfo().title
-                      +"** (`"+FormatUtil.formatTime(track.getDuration())+"`) "+(pos==0?"to begin playing":" to the queue at position "+pos));
+                      +"** (`"+FormatUtil.formatTime(track.getDuration())+"`) "+(pos == 0 ? "":" to the queue at position "+pos));
       if(playlist==null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
-        m.editMessage(addMsg).queue();
+        m.editMessage(addMsg).queue((m) -> {
+        OtherUtil.deleteMessageAfter(m, track.getDuration());
+      });
       else {
         new ButtonMenu.Builder()
           .setText(addMsg+"\n"+event.getClient().getWarning()+" This track has a playlist of **"+playlist.getTracks().size()+"** tracks attached. Select "+LOAD+" to load playlist.")
@@ -109,6 +113,7 @@ public class PlayCommand extends MusicCommand {
       playlist.getTracks().stream().forEach((track) -> {
         if(!thunder.getConfig().isTooLong(track) && !track.equals(exclude)) {
           AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+          handler.setAnnouncingChannel(event.getChannel().getIdLong());
           handler.addTrack(new QueuedTrack(track, event.getAuthor()));
           count[0]++;
         }
@@ -185,6 +190,7 @@ public class PlayCommand extends MusicCommand {
       }
       event.getChannel().sendMessage(loadingEmoji+" Loading playlist **"+event.getArgs()+"**... ("+playlist.getItems().size()+" items)").queue(m -> {
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+        handler.setAnnouncingChannel(event.getChannel().getIdLong());
         playlist.loadTracks(thunder.getPlayerManager(), (at)->handler.addTrack(new QueuedTrack(at, event.getAuthor())), () -> {
           StringBuilder builder = new StringBuilder(playlist.getTracks().isEmpty() 
                                                     ? event.getClient().getWarning()+" No tracks were loaded!" 
