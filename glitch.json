@@ -1,6 +1,6 @@
 {
-  "start": "cp config.txt ./target && cd target && java -jar thunder-1.0-jar-with-dependencies.jar",
-  "install": "mvn checkstyle:checkstyle process-resources compile assembly:single",
+  "start": "cp config.txt ./target && cd target && java -jar thunder-1.0-All.jar",
+  "install": "mvn package",
   "watch": {
     "throttle": 900000000,
     "install": {
