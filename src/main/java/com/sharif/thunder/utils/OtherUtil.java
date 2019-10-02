@@ -3,14 +3,19 @@ package com.sharif.thunder.utils;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Message;
 import okhttp3.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 public class OtherUtil {
+  
+  public static void deleteMessageAfter(Message message, long delay) {
+    message.delete().queueAfter(delay, TimeUnit.MILLISECONDS);
+  }
   
   public static String loadResource(Object clazz, String name) {
     try(BufferedReader reader = new BufferedReader(new InputStreamReader(clazz.getClass().getResourceAsStream(name)))) {

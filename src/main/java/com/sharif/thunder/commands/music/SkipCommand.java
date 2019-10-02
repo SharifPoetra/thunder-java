@@ -21,7 +21,7 @@ public class SkipCommand extends MusicCommand {
     AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
     if(event.getAuthor().getIdLong()==handler.getRequester()) {
       event.reply(event.getClient().getSuccess()+" Skipped **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**");
-      handler.getPlayer().stopTrack();
+      handler.stopTrack();
     } else {
       int listeners = (int)event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
         .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened()).count();
