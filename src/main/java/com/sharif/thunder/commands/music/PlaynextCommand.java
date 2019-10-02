@@ -6,6 +6,7 @@ import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.audio.QueuedTrack;
 import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.utils.FormatUtil;
+import com.sharif.thunder.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -55,10 +56,13 @@ public class PlaynextCommand extends MusicCommand {
         return;
       }
       AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+      handler.setAnnouncingChannel(event.getChannel().getIdLong());
       int pos = handler.addTrackToFront(new QueuedTrack(track, event.getAuthor()))+1;
       String addMsg = FormatUtil.filterEveryone(event.getClient().getSuccess()+" Added **"+track.getInfo().title
-                                        +"** (`"+FormatUtil.formatTime(track.getDuration())+"`) "+(pos==0?"to begin playing":" to the queue at position "+pos));
-      m.editMessage(addMsg).queue();
+                                        +"** (`"+FormatUtil.formatTime(track.getDuration())+"`) "+(pos == 0 ? "":" to the queue at position "+pos));
+      m.editMessage(addMsg).queue((m) -> {
+        OtherUtil.deleteMessageAfter(m, track.getDuration());
+      });
     }
     
     @Override

@@ -144,7 +144,8 @@ public class PlaylistLoader {
                 if(config.isTooLong(ap.getSelectedTrack()))
                   errors.add(new PlaylistLoadError(index, items.get(index), "This track is longer than the allowed maximum"));
                 else {
-                  ap.getSelectedTrack().setUserData(0L);                                    tracks.add(ap.getSelectedTrack());
+                  ap.getSelectedTrack().setUserData(0L);                                    
+                  tracks.add(ap.getSelectedTrack());
                   consumer.accept(ap.getSelectedTrack());
                 }
               } else {

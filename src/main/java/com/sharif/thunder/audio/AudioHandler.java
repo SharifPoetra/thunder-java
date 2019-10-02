@@ -1,6 +1,7 @@
 package com.sharif.thunder.audio;
 
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.Main;
 import com.sharif.thunder.playlist.PlaylistLoader.Playlist;
 import com.github.natanbc.lavadsp.karaoke.KaraokePcmAudioFilter;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
@@ -20,6 +21,7 @@ import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceMan
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sharif.thunder.queue.FairQueue;
 import com.sharif.thunder.utils.FormatUtil;
+import com.sharif.thunder.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -71,6 +73,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   private static final float[] BASS_BOOST = { 0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f };
   @Getter
   private boolean bassboost = false;
+  private boolean deleteMessage = false;
   @Getter
   private int pitch = 0;
   @Getter
@@ -192,8 +195,14 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   public FairQueue<QueuedTrack> getQueue() {
     return queue;
   }
+
+  public void stopTrack() {
+    this.deleteMessage = true;
+    audioPlayer.stopTrack();
+  }
   
   public void stopAndClear() {
+    this.deleteMessage = true;
     queue.clear();
     defaultQueue.clear();
     audioPlayer.stopTrack();
@@ -238,7 +247,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
       if(!playFromDefault()) {
         if(!manager.getBot().getConfig().getStay())
           System.out.println(guildId);
-          manager.getBot().closeAudioConnection(guildId);
+          guild.getAudioManager().closeAudioConnection();
       }
     } else {
       QueuedTrack qt = queue.pull();
@@ -248,8 +257,19 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   
   @Override
   public void onTrackStart(AudioPlayer player, AudioTrack track) {
+    EmbedBuilder eb = new EmbedBuilder();
+    eb.setColor(guild.getSelfMember().getColor());
+    eb.setAuthor(Main.PLAY_EMOJI+" Start playing");
+    User u = guild.getJDA().getUserById(getRequester());
+    try {
+      eb.setDescription("**["+track.getInfo().title+"]("+track.getInfo().uri+")** ["+u.getAsMention()+"]");
+    } catch(Exception e) {
+      eb.setDescription("**"+track.getInfo().title+"** ["+u.getAsMention()+"]");
+    }
     TextChannel channel = guild.getTextChannelById(announcingChannel);
-    channel.sendMessage(Thunder.PLAY_EMOJI+" Start playing: **"+track.getInfo().title+"**").queue();
+    channel.sendMessage(eb.build()).queue((m) -> {
+      OtherUtil.deleteMessageAfter(m, track.getDuration());
+    });
     votes.clear();
     updateFilters(getPlayingTrack());
   }
@@ -285,7 +305,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         eb.setFooter("Source: " + track.getInfo().author, null);
       
       double progress = (double)audioPlayer.getPlayingTrack().getPosition()/track.getDuration();
-      eb.setDescription((audioPlayer.isPaused() ? Thunder.PAUSE_EMOJI : Thunder.PLAY_EMOJI)
+      eb.setDescription((audioPlayer.isPaused() ? Main.PAUSE_EMOJI : Main.PLAY_EMOJI)
                         + " "+FormatUtil.progressBar(progress)
                         + " `[" + FormatUtil.formatTime(track.getPosition()) + "/" + FormatUtil.formatTime(track.getDuration()) + "]` "
                         + FormatUtil.volumeIcon(audioPlayer.getVolume()));
@@ -300,7 +320,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
       .setContent(FormatUtil.filterEveryone(manager.getBot().getConfig().getSuccess()+" **Now Playing...**"))
       .setEmbed(new EmbedBuilder()
                 .setTitle("No music playing")
-                .setDescription(Thunder.STOP_EMOJI+" "+FormatUtil.progressBar(-1)+" "+FormatUtil.volumeIcon(audioPlayer.getVolume()))
+                .setDescription(Main.STOP_EMOJI+" "+FormatUtil.progressBar(-1)+" "+FormatUtil.volumeIcon(audioPlayer.getVolume()))
                 .setColor(guild.getSelfMember().getColor())
                 .build()).build();
   }
