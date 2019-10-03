@@ -12,15 +12,15 @@ public class NowplayingCommand extends MusicCommand {
     super(thunder);
     this.name = "nowplaying";
     this.help = "shows the song that is currently playing.";
-    this.aliases = new String[]{"np","current"};
-    this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
+    this.aliases = new String[] {"np", "current"};
+    this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
   }
 
   @Override
   public void doCommand(CommandEvent event) {
-    AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+    AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     Message m = handler.getNowPlaying(event.getJDA());
-    if(m==null) {
+    if (m == null) {
       event.reply(handler.getNoMusicPlaying(event.getJDA()));
       thunder.getNowplayingHandler().clearLastNPMessage(event.getGuild());
     } else {

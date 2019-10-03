@@ -15,9 +15,10 @@ public class StopCommand extends MusicCommand {
 
   @Override
   public void doCommand(CommandEvent event) {
-    AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+    AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.stopAndClear();
     event.getGuild().getAudioManager().closeAudioConnection();
-    event.reply(event.getClient().getSuccess()+" The player has stopped and the queue has been cleared.");
+    event.reply(
+        event.getClient().getSuccess() + " The player has stopped and the queue has been cleared.");
   }
 }
