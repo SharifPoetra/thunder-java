@@ -6,6 +6,8 @@ shrinkwrap.yaml
 .config
 
 # miscs
+.git/
+.nano/
 .m2/
 .java/
 target/
