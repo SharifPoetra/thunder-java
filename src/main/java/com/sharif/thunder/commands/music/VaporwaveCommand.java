@@ -2,8 +2,8 @@ package com.sharif.thunder.commands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
-import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.audio.AudioHandler;
+import com.sharif.thunder.commands.MusicCommand;
 
 public class VaporwaveCommand extends MusicCommand {
   public VaporwaveCommand(Thunder thunder) {
@@ -15,11 +15,14 @@ public class VaporwaveCommand extends MusicCommand {
 
   @Override
   protected void execute(CommandEvent event) {
-    AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+    AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.setVaporwave(!handler.isVaporwave());
-    event.replySuccess("Vaporwave mode is now `"+(!handler.isVaporwave() ? "disabled" : "enabled")+"`.");
-  } 
-  
+    event.replySuccess(
+        "Vaporwave mode is now `" + (!handler.isVaporwave() ? "disabled" : "enabled") + "`.");
+  }
+
   @Override
-  public void doCommand(CommandEvent event) { /* Intentionally Empty */ }
+  public void doCommand(CommandEvent event) {
+    /* Intentionally Empty */
+  }
 }
