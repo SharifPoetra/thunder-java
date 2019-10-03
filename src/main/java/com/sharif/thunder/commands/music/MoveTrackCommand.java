@@ -1,6 +1,5 @@
 package com.sharif.thunder.commands.music;
 
-
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
@@ -9,13 +8,13 @@ import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.queue.FairQueue;
 
 public class MoveTrackCommand extends MusicCommand {
-  
+
   public MoveTrackCommand(Thunder thunder) {
     super(thunder);
     this.name = "movetrack";
-    this.help = "move a track in the current queue to a different position";
+    this.help = "move a track in the current queue to a different position.";
     this.arguments = "<from> <to>";
-    this.aliases = new String[]{"move"};
+    this.aliases = new String[] {"move"};
     this.bePlaying = true;
   }
 
@@ -23,13 +22,13 @@ public class MoveTrackCommand extends MusicCommand {
   public void doCommand(CommandEvent event) {
     int from;
     int to;
-    
+
     String[] parts = event.getArgs().split("\\s+", 2);
-    if(parts.length < 2) {
+    if (parts.length < 2) {
       event.replyError("Please include two valid indexes.");
       return;
     }
-    
+
     try {
       // Validate the args
       from = Integer.parseInt(parts[0]);
@@ -43,7 +42,7 @@ public class MoveTrackCommand extends MusicCommand {
       event.replyError("Can't move a track to the same position.");
       return;
     }
-    
+
     // Validate that from and to are available
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     FairQueue<QueuedTrack> queue = handler.getQueue();
@@ -64,7 +63,7 @@ public class MoveTrackCommand extends MusicCommand {
     String reply = String.format("Moved **%s** from position `%d` to `%d`.", trackTitle, from, to);
     event.replySuccess(reply);
   }
-  
+
   private static boolean isUnavailablePosition(FairQueue<QueuedTrack> queue, int position) {
     return (position < 1 || position > queue.size());
   }

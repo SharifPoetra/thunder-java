@@ -7,7 +7,7 @@ public class SCSearchCommand extends SearchCommand {
     super(thunder, searchingEmoji);
     this.searchPrefix = "scsearch:";
     this.name = "scsearch";
-    this.help = "searches Soundcloud for a provided query";
-    this.aliases = new String[]{};
+    this.help = "searches Soundcloud for a provided query.";
+    this.aliases = new String[] {};
   }
 }
