@@ -131,16 +131,17 @@ public abstract class DataSource {
             }
             writer.flush();
         } catch (IOException e) {
-            System.err.println("Error writing to " + filename);
+            System.err.println("Error writing to " + filename + " : " + e.toString());
             return false;
         }
+
         try {
             Files.copy(
                     new File(filename).toPath(),
                     new File("DataCopies" + File.separatorChar + filename).toPath(),
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            System.err.println("Error making backup of " + filename);
+            System.err.println("Error making backup of " + filename + " : " + e.toString());
         }
 
         return true;

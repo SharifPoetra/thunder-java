@@ -142,7 +142,7 @@ public class SearchCommand extends MusicCommand {
                             })
                     .setCancel((msg) -> {})
                     .setUsers(event.getAuthor());
-            for (int i = 0; i < 4 && i < playlist.getTracks().size(); i++) {
+            for (int i = 0; i < 5 && i < playlist.getTracks().size(); i++) {
                 AudioTrack track = playlist.getTracks().get(i);
                 builder.addChoices(
                         "`["

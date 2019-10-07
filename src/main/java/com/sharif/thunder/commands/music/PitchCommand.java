@@ -20,7 +20,7 @@ public class PitchCommand extends MusicCommand {
         try {
             f = Integer.parseInt(event.getArgs());
         } catch (NumberFormatException e) {
-            event.replyError("The given argument must be a number.");
+            event.replyError("The given argument must be a valid integer!");
             return;
         }
 
@@ -34,9 +34,9 @@ public class PitchCommand extends MusicCommand {
         handler.setPitch(f);
 
         if (f == 0) {
-            event.reply("Pitch reset!");
+            event.replySuccess("Pitch reset!");
         } else {
-            event.reply("Pitch set to " + f + " semitones.");
+            event.replySuccess("Pitch set to " + f + " semitones.");
         }
     }
 
