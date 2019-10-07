@@ -32,7 +32,7 @@ public class PlayerManager extends DefaultAudioPlayerManager {
         AudioHandler handler;
         if (guild.getAudioManager().getSendingHandler() == null) {
             AudioPlayer player = createPlayer();
-            // player.setVolume(100);
+            player.setVolume(100);
             handler = new AudioHandler(this, guild, player);
             player.addListener(handler);
             guild.getAudioManager().setSendingHandler(handler);

@@ -22,7 +22,7 @@ public class NightcoreCommand extends MusicCommand {
         try {
             f = Float.parseFloat(event.getArgs());
         } catch (NumberFormatException e) {
-            event.replyError("The given argument must be a number.");
+            event.replyError("The given argument must be a valid integer!");
             return;
         }
 

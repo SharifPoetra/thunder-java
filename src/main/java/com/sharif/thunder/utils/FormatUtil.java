@@ -1,51 +1,39 @@
 package com.sharif.thunder.utils;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.Command.Category;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.sharif.thunder.Thunder;
-import java.util.Objects;
+import java.util.function.Function;
 
 public class FormatUtil {
 
-    public static String formatHelp(Thunder thunder, CommandEvent event) {
-        StringBuilder builder =
-                new StringBuilder(
-                        thunder.getConfig().getSuccess()
-                                + " __**"
-                                + event.getSelfUser().getName()
-                                + "** commands:__\n");
-        Category category = null;
-        for (Command command : event.getClient().getCommands()) {
-            if (command.isHidden()) continue;
-            if (command.isOwnerCommand()
-                    && !event.getAuthor().getId().equals(event.getClient().getOwnerId())) continue;
-            if (!Objects.equals(category, command.getCategory())) {
-                category = command.getCategory();
-                builder.append("\n\n  **__")
-                        .append(category == null ? "No Category" : category.getName())
-                        .append("__:**\n");
-            }
-            builder.append("\n`")
-                    .append(event.getClient().getPrefix())
-                    .append(command.getName())
-                    .append(
-                            command.getArguments() == null
-                                    ? "`"
-                                    : " " + command.getArguments() + "`")
-                    .append(" - ")
-                    .append(command.getHelp());
+    public static String zeroHexFill(String s) {
+        if (s.length() < 4) {
+
+            StringBuilder sb = new StringBuilder(s);
+            while (sb.length() < 4) sb.insert(0, "0");
+
+            return sb.toString();
         }
-        builder.append(
-                "\n\nDo not include <> nor [] - <> means required and [] means optional."
-                        + "\nFor additional help, contact **"
-                        + event.getJDA().getUserById(event.getClient().getOwnerId()).getName()
-                        + "**#"
-                        + event.getJDA()
-                                .getUserById(event.getClient().getOwnerId())
-                                .getDiscriminator()
-                        + "");
-        return builder.toString();
+        return s;
+    }
+
+    public static String capitalize(String input) {
+        if (input == null || input.isEmpty()) return "";
+        if (input.length() == 1) return input.toUpperCase();
+        return Character.toUpperCase(input.charAt(0)) + input.substring(1).toLowerCase();
+    }
+
+    public static String join(String delimiter, char... items) {
+        if (items == null || items.length == 0) return "";
+        StringBuilder sb = new StringBuilder().append(items[0]);
+        for (int i = 1; i < items.length; i++) sb.append(delimiter).append(items[i]);
+        return sb.toString();
+    }
+
+    public static <T> String join(String delimiter, Function<T, String> function, T... items) {
+        if (items == null || items.length == 0) return "";
+        StringBuilder sb = new StringBuilder(function.apply(items[0]));
+        for (int i = 1; i < items.length; i++)
+            sb.append(delimiter).append(function.apply(items[i]));
+        return sb.toString();
     }
 
     public static String filterEveryone(String input) {
