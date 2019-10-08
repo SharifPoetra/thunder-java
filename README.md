@@ -11,5 +11,5 @@ mvn package
 ## Start it up
 
 ```bash
-cp config.txt ./target && cd target && java -jar <jar file>
+java -jar <jar file>
 ```

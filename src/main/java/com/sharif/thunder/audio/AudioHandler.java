@@ -244,8 +244,8 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 
         if (queue.isEmpty()) {
             if (!playFromDefault()) {
-                if (!manager.getBot().getConfig().getStay()) System.out.println(guildId);
-                guild.getAudioManager().closeAudioConnection();
+                if (!manager.getBot().getConfig().getStay())
+                    guild.getAudioManager().closeAudioConnection();
             }
         } else {
             QueuedTrack qt = queue.pull();
@@ -258,6 +258,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(guild.getSelfMember().getColor());
         eb.setAuthor(Main.PLAY_EMOJI + " Start playing");
+        if (track instanceof YoutubeAudioTrack && manager.getBot().getConfig().useNPImages()) {
+            eb.setThumbnail("https://img.youtube.com/vi/" + track.getIdentifier() + "/0.jpg");
+        }
+        eb.setFooter("Source: " + track.getInfo().author, null);
         User u = guild.getJDA().getUserById(getRequester());
         try {
             eb.setDescription(
@@ -265,7 +269,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                             + track.getInfo().title
                             + "]("
                             + track.getInfo().uri
-                            + ")** ["
+                            + ")** `["
+                            + FormatUtil.formatTime(track.getDuration())
+                            + "]` ["
                             + u.getAsMention()
                             + "]");
         } catch (Exception e) {
@@ -312,8 +318,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             }
 
             if (track instanceof YoutubeAudioTrack && manager.getBot().getConfig().useNPImages()) {
-                eb.setThumbnail(
-                        "https://img.youtube.com/vi/" + track.getIdentifier() + "/mqdefault.jpg");
+                eb.setThumbnail("https://img.youtube.com/vi/" + track.getIdentifier() + "/0.jpg");
             }
 
             if (track.getInfo().author != null && !track.getInfo().author.isEmpty())

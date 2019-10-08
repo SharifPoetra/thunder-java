@@ -1,6 +1,7 @@
 token = your-bot-token-here
 owner = your-id
 prefix = "prefix-here"
+altprefix = "@mention"
 success = "🎶"
 warning = "💡"
 error = "🚫"

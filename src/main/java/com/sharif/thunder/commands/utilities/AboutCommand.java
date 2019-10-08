@@ -5,7 +5,9 @@ import com.jagrosh.jdautilities.commons.JDAUtilitiesInfo;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
 import com.sharif.thunder.commands.UtilitiesCommand;
+import com.sun.management.OperatingSystemMXBean;
 import java.awt.*;
+import java.lang.management.ManagementFactory;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
@@ -23,6 +25,9 @@ public class AboutCommand extends UtilitiesCommand {
     private final Permission[] perms;
     private String oauthLink;
     private final String[] features;
+    private final OperatingSystemMXBean osb;
+    private Runtime rt;
+    private final String jvmVersion;
 
     public AboutCommand(Color color, String description, String[] features, Permission... perms) {
         this.color = color;
@@ -32,7 +37,16 @@ public class AboutCommand extends UtilitiesCommand {
         this.help = "shows info about the bot.";
         this.guildOnly = false;
         this.perms = perms;
+        this.aliases = new String[] {"stats", "botinfo"};
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
+
+        osb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        rt = Runtime.getRuntime();
+        jvmVersion =
+                System.getProperty("java.vm.version", "unknown")
+                        + " ("
+                        + System.getProperty("java.vendor", "unknown")
+                        + ")";
     }
 
     public void setIsAuthor(boolean value) {
@@ -45,6 +59,10 @@ public class AboutCommand extends UtilitiesCommand {
 
     @Override
     protected void execute(CommandEvent event) {
+        long free = rt.freeMemory() / (1024 * 1024);
+        long total = rt.totalMemory() / (1024 * 1024);
+        long used = total - free;
+
         if (oauthLink == null) {
             try {
                 ApplicationInfo info = event.getJDA().retrieveApplicationInfo().complete();
@@ -103,7 +121,9 @@ public class AboutCommand extends UtilitiesCommand {
                         .append(JDAUtilitiesInfo.VERSION)
                         .append(") and the [JDA library](https://github.com/DV8FromTheWorld/JDA) (")
                         .append(JDAInfo.VERSION)
-                        .append(")\nType `")
+                        .append(") using JVM version ")
+                        .append(jvmVersion)
+                        .append("\nType `")
                         .append(event.getClient().getTextualPrefix())
                         .append(event.getClient().getHelpWord())
                         .append("` to see my commands!")
@@ -119,49 +139,33 @@ public class AboutCommand extends UtilitiesCommand {
                     .append(feature);
         descr.append(" ```");
         builder.setDescription(descr);
-        if (event.getJDA().getShardInfo() == null) {
-            builder.addField(
-                    "Stats", event.getJDA().getGuilds().size() + " servers\n1 shard", true);
-            builder.addField(
-                    "Users",
-                    event.getJDA().getUsers().size()
-                            + " unique\n"
-                            + event.getJDA().getGuilds().stream()
-                                    .mapToInt(g -> g.getMembers().size())
-                                    .sum()
-                            + " total",
-                    true);
-            builder.addField(
-                    "Channels",
-                    event.getJDA().getTextChannels().size()
-                            + " Text\n"
-                            + event.getJDA().getVoiceChannels().size()
-                            + " Voice",
-                    true);
-        } else {
-            builder.addField(
-                    "Stats",
-                    (event.getClient()).getTotalGuilds()
-                            + " Servers\nShard "
-                            + (event.getJDA().getShardInfo().getShardId() + 1)
-                            + "/"
-                            + event.getJDA().getShardInfo().getShardTotal(),
-                    true);
-            builder.addField(
-                    "This shard",
-                    event.getJDA().getUsers().size()
-                            + " Users\n"
-                            + event.getJDA().getGuilds().size()
-                            + " Servers",
-                    true);
-            builder.addField(
-                    "",
-                    event.getJDA().getTextChannels().size()
-                            + " Text Channels\n"
-                            + event.getJDA().getVoiceChannels().size()
-                            + " Voice Channels",
-                    true);
-        }
+        builder.addField(
+                "Stats",
+                event.getJDA().getGuilds().size() + " servers\n" + event.getJDA().getShardInfo(),
+                true);
+        builder.addField(
+                "Users",
+                event.getJDA().getUsers().size()
+                        + " unique\n"
+                        + event.getJDA().getGuilds().stream()
+                                .mapToInt(g -> g.getMembers().size())
+                                .sum()
+                        + " total",
+                true);
+        builder.addField(
+                "Channels",
+                event.getJDA().getTextChannels().size()
+                        + " Text\n"
+                        + event.getJDA().getVoiceChannels().size()
+                        + " Voice",
+                true);
+        int cpuLoad = (int) (Math.max(osb.getProcessCpuLoad(), 0.0) * 100.0);
+        String usage = Integer.toString(cpuLoad);
+        builder.addField("CPU usage", usage + "%", true);
+        builder.addField(
+                "Memory usage",
+                "Free: " + free + "MB\n" + "Allocated: " + total + "MB\n" + "Used: " + used + "MB",
+                true);
         builder.setFooter("Last restart", null);
         builder.setTimestamp(event.getClient().getStartTime());
         event.reply(builder.build());

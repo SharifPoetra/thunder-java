@@ -20,7 +20,7 @@ public class LyricsCommand extends MusicCommand {
         this.arguments = "[song name]";
         this.help = "shows the lyrics to the currently-playing song.";
         this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
-        this.bePlaying = true;
+        this.bePlaying = false;
     }
 
     @Override
