@@ -17,13 +17,6 @@ public class VolumeCommand extends MusicCommand {
 
     @Override
     public void doCommand(CommandEvent event) {
-
-        // event.reply("Sorry! the volume command are currently disabled due to still buggy, Thanks
-        // for
-        // your understanding.");
-        // return;
-        // TODO: fix filter feature not work after adjusting the volume
-
         AudioHandler handler =
                 (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         int volume = handler.getPlayer().getVolume();
@@ -37,9 +30,7 @@ public class VolumeCommand extends MusicCommand {
                 nvolume = -1;
             }
             if (nvolume < 0 || nvolume > 150)
-                event.reply(
-                        event.getClient().getError()
-                                + " Volume must be a valid integer between 0 and 150!");
+                event.replyError("Volume must be a valid integer between 0 and 150!");
             else {
                 handler.getPlayer().setVolume(nvolume);
                 event.reply(

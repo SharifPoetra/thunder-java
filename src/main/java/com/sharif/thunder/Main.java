@@ -9,6 +9,7 @@ import com.sharif.thunder.commands.fun.*;
 import com.sharif.thunder.commands.music.*;
 import com.sharif.thunder.commands.owner.*;
 import com.sharif.thunder.commands.utilities.*;
+import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.*;
 import java.awt.Color;
 import java.io.IOException;
@@ -18,11 +19,15 @@ import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.events.*;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Main {
+public class Main extends ListenerAdapter {
     public static final String PLAY_EMOJI = "\u25B6"; // ▶
     public static final String PAUSE_EMOJI = "\u23F8"; // ⏸
     public static final String STOP_EMOJI = "\u23F9"; // ⏹
@@ -42,15 +47,23 @@ public class Main {
                 Permission.NICKNAME_CHANGE
             };
 
+    // datasources
+    private static AFKs afks;
+
     public static void main(String[] args)
             throws Exception, IOException, IllegalArgumentException, LoginException,
                     RateLimitedException {
-
         Logger log = LoggerFactory.getLogger("Startup");
 
         EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
         BotConfig config = new BotConfig();
         Thunder thunder = new Thunder(waiter, config);
+
+        // datasources
+        afks = new AFKs();
+
+        // reading datasources
+        afks.read();
 
         CommandClientBuilder client =
                 new CommandClientBuilder()
@@ -60,11 +73,13 @@ public class Main {
                         .setEmojis(config.getSuccess(), config.getWarning(), config.getError())
                         .setListener(new CommandExceptionListener())
                         .setShutdownAutomatically(false)
-                        .setHelpConsumer(
-                                event -> event.reply(FormatUtil.formatHelp(thunder, event)))
+                        .useHelpBuilder(false)
+                        // .setHelpConsumer(
+                        //         event -> event.reply(FormatUtil.formatHelp(thunder, event)))
                         .addCommands(
                                 // fun
                                 new ChooseCommand(thunder),
+                                new SayCommand(thunder),
                                 // utilities
                                 new AboutCommand(
                                         Color.BLUE,
@@ -74,6 +89,8 @@ public class Main {
                                 new UptimeCommand(thunder),
                                 new PingCommand(thunder),
                                 new EmotesCommand(thunder),
+                                new HelpCommand(thunder),
+                                new AFKCommand(afks),
                                 // music
                                 new PlayCommand(thunder, config.getLoading()),
                                 new PlaylistsCommand(thunder),
@@ -95,6 +112,8 @@ public class Main {
                                 new PlaynextCommand(thunder, config.getLoading()),
                                 new LyricsCommand(thunder),
                                 new RemoveCommand(thunder),
+                                new PauseCommand(thunder),
+                                new SkiptoCommand(thunder),
                                 // owner
                                 new RestartCommand(thunder),
                                 new DebugCommand(thunder),
@@ -106,9 +125,11 @@ public class Main {
         try {
             JDA jda =
                     new JDABuilder(AccountType.BOT)
+                            .addEventListeners(new Main())
                             .setToken(config.getToken())
                             .addEventListeners(waiter, client.build())
-                            .build();
+                            .build()
+                            .awaitReady();
         } catch (LoginException ex) {
             log.error("Something went wrong when tried to login to discord: " + ex);
             System.exit(1);
@@ -122,5 +143,66 @@ public class Main {
         }
 
         get("/", (req, res) -> "Hello World");
+    }
+
+    @Override
+    public void onReady(ReadyEvent event) {
+        System.out.println(event.getJDA().getSelfUser().getAsTag() + " is ready now!");
+    }
+
+    @Override
+    public void onShutdown(ShutdownEvent event) {
+        afks.shutdown();
+    }
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getAuthor() == null) return;
+
+        if (afks.get(event.getAuthor().getId()) != null) {
+            event.getChannel()
+                    .sendMessage(
+                            event.getAuthor().getAsMention()
+                                    + " Welcome back, I have removed your AFK status.")
+                    .queue();
+            afks.remove(event.getAuthor().getId());
+        }
+        if (event.getChannelType() != ChannelType.PRIVATE && !event.getAuthor().isBot()) {
+            String relate =
+                    "__"
+                            + event.getGuild().getName()
+                            + "__ <#"
+                            + event.getTextChannel().getId()
+                            + "> **"
+                            + event.getAuthor().getAsTag()
+                            + "**:\n"
+                            + event.getMessage().getContentRaw();
+            event.getMessage().getMentionedUsers().stream()
+                    .filter((u) -> (afks.get(u.getId()) != null))
+                    .forEach(
+                            (u) -> {
+                                u.openPrivateChannel()
+                                        .queue(channel -> channel.sendMessage(relate).queue());
+                            });
+        }
+        if (event.getChannelType() != ChannelType.PRIVATE
+                && !event.getMessage().getMentionedUsers().isEmpty()
+                && !event.getAuthor().isBot()) {
+            StringBuilder builder = new StringBuilder("");
+            event.getMessage().getMentionedUsers().stream()
+                    .forEach(
+                            u -> {
+                                if (afks.get(u.getId()) != null) {
+                                    String response = afks.get(u.getId())[AFKs.MESSAGE];
+                                    if (response != null)
+                                        builder.append("\n\uD83D\uDCA4 **")
+                                                .append(u.getName())
+                                                .append("** is currently AFK:\n")
+                                                .append(response);
+                                }
+                            });
+            String afkmessage = builder.toString().trim();
+            if (!afkmessage.equals("")) event.getChannel().sendMessage(afkmessage).queue();
+        }
     }
 }

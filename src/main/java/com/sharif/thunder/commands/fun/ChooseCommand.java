@@ -11,7 +11,7 @@ public class ChooseCommand extends FunCommand {
     public ChooseCommand(Thunder thunder) {
         this.thunder = thunder;
         this.name = "choose";
-        this.help = "make a decision";
+        this.help = "make a decision.";
         this.arguments = "<item> <item> ...";
     }
 
