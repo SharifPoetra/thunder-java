@@ -1,11 +1,17 @@
 # Changelog
+
 Key: [+] added, [-] removed, [~] modified, [!] important.
+
+## v0.1.3
+
 
 ## v0.1.2
 
 - [~] Improve emoji command using embed
 - [!] Add some stuff to about command
 - [~] Improve help command using embed and help for specified command
+- [+] add `setinvcrole` command that set a role to be given to the members when they're joining the voice channel
+- [+] add `kitsu` command to search anime from https://kitsu.io
 
 ## v0.1.1
 

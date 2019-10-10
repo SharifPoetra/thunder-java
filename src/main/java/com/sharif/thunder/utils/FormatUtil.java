@@ -1,8 +1,18 @@
 package com.sharif.thunder.utils;
 
+import java.util.List;
 import java.util.function.Function;
+import net.dv8tion.jda.api.entities.Role;
 
 public class FormatUtil {
+
+    public static String listOfRoles(List<Role> list, String query) {
+        String out = " Multiple roles found matching \"" + query + "\":";
+        for (int i = 0; i < 6 && i < list.size(); i++)
+            out += "\n - " + list.get(i).getName() + " (ID:" + list.get(i).getId() + ")";
+        if (list.size() > 6) out += "\n**And " + (list.size() - 6) + " more...**";
+        return out;
+    }
 
     public static String zeroHexFill(String s) {
         if (s.length() < 4) {
