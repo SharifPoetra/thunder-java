@@ -43,6 +43,7 @@ public class Thunder {
     }
 
     public void closeAudioConnection(long guildId) {
+        System.out.println("Guild id from [closeAudioConnection]: " + guildId);
         Guild guild = jda.getGuildById(guildId);
         if (guild != null) threadpool.submit(() -> guild.getAudioManager().closeAudioConnection());
     }

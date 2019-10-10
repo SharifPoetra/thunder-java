@@ -5,6 +5,7 @@ import static spark.Spark.*;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sharif.thunder.commands.CommandExceptionListener;
+import com.sharif.thunder.commands.administration.*;
 import com.sharif.thunder.commands.fun.*;
 import com.sharif.thunder.commands.music.*;
 import com.sharif.thunder.commands.owner.*;
@@ -21,8 +22,10 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.*;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.exceptions.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +52,7 @@ public class Main extends ListenerAdapter {
 
     // datasources
     private static AFKs afks;
+    private static InVCRoles inVcRoles;
 
     public static void main(String[] args)
             throws Exception, IOException, IllegalArgumentException, LoginException,
@@ -61,9 +65,11 @@ public class Main extends ListenerAdapter {
 
         // datasources
         afks = new AFKs();
+        inVcRoles = new InVCRoles();
 
         // reading datasources
         afks.read();
+        inVcRoles.read();
 
         CommandClientBuilder client =
                 new CommandClientBuilder()
@@ -77,6 +83,8 @@ public class Main extends ListenerAdapter {
                         // .setHelpConsumer(
                         //         event -> event.reply(FormatUtil.formatHelp(thunder, event)))
                         .addCommands(
+                                // administration
+                                new SetInVCRoleCommand(inVcRoles),
                                 // fun
                                 new ChooseCommand(thunder),
                                 new SayCommand(thunder),
@@ -91,6 +99,7 @@ public class Main extends ListenerAdapter {
                                 new EmotesCommand(thunder),
                                 new HelpCommand(thunder),
                                 new AFKCommand(afks),
+                                new KitsuCommand(thunder),
                                 // music
                                 new PlayCommand(thunder, config.getLoading()),
                                 new PlaylistsCommand(thunder),
@@ -153,6 +162,7 @@ public class Main extends ListenerAdapter {
     @Override
     public void onShutdown(ShutdownEvent event) {
         afks.shutdown();
+        inVcRoles.shutdown();
     }
 
     @Override
@@ -203,6 +213,46 @@ public class Main extends ListenerAdapter {
                             });
             String afkmessage = builder.toString().trim();
             if (!afkmessage.equals("")) event.getChannel().sendMessage(afkmessage).queue();
+        }
+    }
+
+    @Override
+    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+        try {
+            if (event.getMember().getUser().isBot()) return;
+            if (inVcRoles.get(event.getGuild().getId()) != null) {
+                event.getGuild()
+                        .addRoleToMember(
+                                event.getMember(),
+                                event.getGuild()
+                                        .getRoleById(
+                                                inVcRoles
+                                                        .get(event.getGuild().getId())[
+                                                        InVCRoles.ROLEID]))
+                        .queue();
+            }
+        } catch (ErrorResponseException | InsufficientPermissionException | HierarchyException ex) {
+            System.out.println("Error when giving a member voice role: " + ex.toString());
+        }
+    }
+
+    @Override
+    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+        try {
+            if (event.getMember().getUser().isBot()) return;
+            if (inVcRoles.get(event.getGuild().getId()) != null) {
+                event.getGuild()
+                        .removeRoleFromMember(
+                                event.getMember(),
+                                event.getGuild()
+                                        .getRoleById(
+                                                inVcRoles
+                                                        .get(event.getGuild().getId())[
+                                                        InVCRoles.ROLEID]))
+                        .queue();
+            }
+        } catch (ErrorResponseException | InsufficientPermissionException | HierarchyException ex) {
+            System.out.println("Error when removing a member voice role: " + ex.toString());
         }
     }
 }
