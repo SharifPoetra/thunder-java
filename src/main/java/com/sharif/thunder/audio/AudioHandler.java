@@ -225,7 +225,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
       audioPlayer.playTrack(defaultQueue.remove(0));
       return true;
     }
-    if (!manager.getBot().getConfig().getStay()) manager.getBot().closeAudioConnection(guildId);
+    if (!manager.getBot().getConfig().getStay()) guild.getAudioManager().closeAudioConnection();
     return true;
   }
 
