@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ApplicationInfo;
+import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,7 +136,12 @@ public class AboutCommand extends UtilitiesCommand {
     builder.setDescription(descr);
     builder.addField(
         "Stats",
-        event.getJDA().getGuilds().size() + " servers\n" + event.getJDA().getShardInfo(),
+        event.getJDA().getGuilds().size()
+            + " servers\n"
+            + event.getJDA().getShardInfo()
+            + "\n"
+            + event.getJDA().getAudioManagers().stream().filter(AudioManager::isConnected).count()
+            + " voice connections",
         true);
     builder.addField(
         "Users",
