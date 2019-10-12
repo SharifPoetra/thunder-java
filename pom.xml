@@ -83,6 +83,11 @@
       <artifactId>guava</artifactId>
       <version>11.0.2</version>
     </dependency>
+    <dependency>
+      <groupId>com.konghq</groupId>
+      <artifactId>unirest-java</artifactId>
+      <version>3.1.00</version> 
+    </dependency>
   </dependencies>
   
   <build>
@@ -107,7 +112,7 @@
           <filesNamePattern>.*\.java</filesNamePattern>
           <skip>false</skip>
           <skipSortingImports>false</skipSortingImports>
-          <style>aosp</style> <!-- you can choose between 'google' or 'aosp' style -->
+          <style>google</style> <!-- you can choose between 'google' or 'aosp' style -->
         </configuration>
         <executions>
           <execution>
