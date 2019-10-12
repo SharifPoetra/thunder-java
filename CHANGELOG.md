@@ -12,6 +12,7 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 - [+] `cry` command
 - [+] small image avatar to help command
 - [~] add voice connections count to about command
+- [!] fix the bot won't leave the voice channel even the config is set to false! oh Finally!!
 
 ## v0.1.2
 
