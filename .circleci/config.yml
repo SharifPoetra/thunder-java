@@ -22,9 +22,6 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          command: |
-            mkdir /tmp/artifacts;
 
       # Download and cache dependencies
       - restore_cache:
@@ -42,7 +39,3 @@ jobs:
 
       # run tests!
       - run: mvn integration-test
-      
-      # store artifacts
-      - store_artifacts:
-          path: /tmp/artifacts
