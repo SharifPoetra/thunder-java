@@ -12,3 +12,4 @@ shrinkwrap.yaml
 .java/
 target/
 config.txt
+glitch.json
