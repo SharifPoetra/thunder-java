@@ -86,6 +86,9 @@ public class Main extends ListenerAdapter {
             .addCommands(
                 // interaction
                 new PatCommand(thunder),
+                new SlapCommand(thunder),
+                new BlushCommand(thunder),
+                new CryCommand(thunder),
                 // administration
                 new SetInVCRoleCommand(inVcRoles),
                 // fun
