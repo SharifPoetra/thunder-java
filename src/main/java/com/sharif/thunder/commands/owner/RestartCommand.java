@@ -6,18 +6,18 @@ import com.sharif.thunder.commands.OwnerCommand;
 
 public class RestartCommand extends OwnerCommand {
 
-    private final Thunder thunder;
+  private final Thunder thunder;
 
-    public RestartCommand(Thunder thunder) {
-        this.thunder = thunder;
-        this.name = "reload";
-        this.help = "Kills the current instance and launches a fresh instance of this bot.";
-        this.hidden = true;
-    }
+  public RestartCommand(Thunder thunder) {
+    this.thunder = thunder;
+    this.name = "reload";
+    this.help = "Kills the current instance and launches a fresh instance of this bot.";
+    this.hidden = true;
+  }
 
-    @Override
-    protected void execute(CommandEvent event) {
-        event.replySuccess("Restarting the bot one moment...");
-        System.exit(11);
-    }
+  @Override
+  protected void execute(CommandEvent event) {
+    event.replySuccess("Restarting the bot one moment...");
+    System.exit(11);
+  }
 }

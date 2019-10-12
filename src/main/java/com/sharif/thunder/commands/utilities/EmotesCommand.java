@@ -15,144 +15,126 @@ import net.dv8tion.jda.api.utils.TimeUtil;
 
 public class EmotesCommand extends UtilitiesCommand {
 
-    private final Thunder thunder;
-    private static final Pattern emojiPatten = Pattern.compile("<:.*:(\\d+)>");
-    private static final Pattern animatedEmojiPatten = Pattern.compile("<a:.*:(\\d+)>");
+  private final Thunder thunder;
+  private static final Pattern emojiPatten = Pattern.compile("<:.*:(\\d+)>");
+  private static final Pattern animatedEmojiPatten = Pattern.compile("<a:.*:(\\d+)>");
 
-    public EmotesCommand(Thunder thunder) {
-        this.thunder = thunder;
-        this.name = "emote";
-        this.arguments = "<emotes>";
-        this.aliases = new String[] {"emotes", "emoji", "charinfo"};
-        this.help = "shows detailed information about an emote, emoji, or character.";
+  public EmotesCommand(Thunder thunder) {
+    this.thunder = thunder;
+    this.name = "emote";
+    this.arguments = "<emotes>";
+    this.aliases = new String[] {"emotes", "emoji", "charinfo"};
+    this.help = "shows detailed information about an emote, emoji, or character.";
+  }
+
+  @Override
+  protected void execute(CommandEvent event) {
+
+    Matcher staticMatcher = emojiPatten.matcher(event.getArgs());
+    Matcher animMatcher = animatedEmojiPatten.matcher(event.getArgs());
+
+    if (staticMatcher.matches()) {
+      custom(staticMatcher, event);
+    } else if (animMatcher.matches()) {
+      animated(animMatcher, event);
+    } else {
+      unicode(event);
     }
+  }
 
-    @Override
-    protected void execute(CommandEvent event) {
+  private void animated(Matcher matcher, CommandEvent event) {
+    EmbedBuilder eb = new EmbedBuilder();
+    String id = matcher.replaceFirst("$1");
+    String url = "https://cdn.discordapp.com/emojis/" + id + ".gif";
+    eb.setThumbnail(url);
+    eb.setColor(event.getSelfMember().getColor());
 
-        Matcher staticMatcher = emojiPatten.matcher(event.getArgs());
-        Matcher animMatcher = animatedEmojiPatten.matcher(event.getArgs());
+    DateTimeFormatter formatter =
+        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
+            .withZone(TimeZone.getTimeZone("UTC").toZoneId());
 
-        if (staticMatcher.matches()) {
-            custom(staticMatcher, event);
-        } else if (animMatcher.matches()) {
-            animated(animMatcher, event);
-        } else {
-            unicode(event);
-        }
+    String date = TimeUtil.getTimeCreated(MiscUtil.parseSnowflake(id)).format(formatter);
+
+    Emote emote = event.getJDA().getEmoteById(id);
+    if (emote == null) {
+      eb.setTitle("Emoji info");
+      eb.setDescription(
+          String.format(
+              "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
+              "???", date, id, "???", url));
+    } else {
+      eb.setTitle("Emoji info");
+      eb.setDescription(
+          String.format(
+              "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
+              emote.getName(), date, id, emote.getGuild(), url));
     }
+    event.reply(eb.build());
+  }
 
-    private void animated(Matcher matcher, CommandEvent event) {
-        EmbedBuilder eb = new EmbedBuilder();
-        String id = matcher.replaceFirst("$1");
-        String url = "https://cdn.discordapp.com/emojis/" + id + ".gif";
-        eb.setThumbnail(url);
-        eb.setColor(event.getSelfMember().getColor());
+  private void custom(Matcher matcher, CommandEvent event) {
+    EmbedBuilder eb = new EmbedBuilder();
+    String id = matcher.replaceFirst("$1");
+    String url = "https://cdn.discordapp.com/emojis/" + id + ".png";
+    eb.setThumbnail(url);
+    eb.setColor(event.getSelfMember().getColor());
 
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
-                        .withZone(TimeZone.getTimeZone("UTC").toZoneId());
+    DateTimeFormatter formatter =
+        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
+            .withZone(TimeZone.getTimeZone("UTC").toZoneId());
 
-        String date = TimeUtil.getTimeCreated(MiscUtil.parseSnowflake(id)).format(formatter);
+    String date = TimeUtil.getTimeCreated(MiscUtil.parseSnowflake(id)).format(formatter);
 
-        Emote emote = event.getJDA().getEmoteById(id);
-        if (emote == null) {
-            eb.setTitle("Emoji info");
-            eb.setDescription(
-                    String.format(
-                            "Name: `%s`\n"
-                                    + "Created at: `%s`\n"
-                                    + "ID: `%s`\n"
-                                    + "Guild: `%s`\n"
-                                    + "URL: %s",
-                            "???", date, id, "???", url));
-        } else {
-            eb.setTitle("Emoji info");
-            eb.setDescription(
-                    String.format(
-                            "Name: `%s`\n"
-                                    + "Created at: `%s`\n"
-                                    + "ID: `%s`\n"
-                                    + "Guild: `%s`\n"
-                                    + "URL: %s",
-                            emote.getName(), date, id, emote.getGuild(), url));
-        }
-        event.reply(eb.build());
+    Emote emote = event.getJDA().getEmoteById(id);
+    if (emote == null) {
+      eb.setTitle("Emoji info");
+      eb.setDescription(
+          String.format(
+              "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
+              "???", date, id, "???", url));
+    } else {
+      eb.setTitle("Emoji info");
+      eb.setDescription(
+          String.format(
+              "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
+              emote.getName(), date, id, emote.getGuild(), url));
     }
+    event.reply(eb.build());
+  }
 
-    private void custom(Matcher matcher, CommandEvent event) {
-        EmbedBuilder eb = new EmbedBuilder();
-        String id = matcher.replaceFirst("$1");
-        String url = "https://cdn.discordapp.com/emojis/" + id + ".png";
-        eb.setThumbnail(url);
-        eb.setColor(event.getSelfMember().getColor());
-
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
-                        .withZone(TimeZone.getTimeZone("UTC").toZoneId());
-
-        String date = TimeUtil.getTimeCreated(MiscUtil.parseSnowflake(id)).format(formatter);
-
-        Emote emote = event.getJDA().getEmoteById(id);
-        if (emote == null) {
-            eb.setTitle("Emoji info");
-            eb.setDescription(
-                    String.format(
-                            "Name: `%s`\n"
-                                    + "Created at: `%s`\n"
-                                    + "ID: `%s`\n"
-                                    + "Guild: `%s`\n"
-                                    + "URL: %s",
-                            "???", date, id, "???", url));
-        } else {
-            eb.setTitle("Emoji info");
-            eb.setDescription(
-                    String.format(
-                            "Name: `%s`\n"
-                                    + "Created at: `%s`\n"
-                                    + "ID: `%s`\n"
-                                    + "Guild: `%s`\n"
-                                    + "URL: %s",
-                            emote.getName(), date, id, emote.getGuild(), url));
-        }
-        event.reply(eb.build());
+  private void unicode(CommandEvent event) {
+    EmbedBuilder eb = new EmbedBuilder();
+    eb.setColor(event.getSelfMember().getColor());
+    if (event.getArgs().codePoints().count() > 10) {
+      event.replyError("Invalid emote, or input is too long");
+    } else {
+      StringBuilder builder = new StringBuilder("Emoji/Character info:");
+      event
+          .getArgs()
+          .codePoints()
+          .forEachOrdered(
+              code -> {
+                char[] chars = Character.toChars(code);
+                String hex = Integer.toHexString(code).toUpperCase();
+                while (hex.length() < 4) hex = "0" + hex;
+                builder.append("\n`\\u").append(hex).append("`   ");
+                if (chars.length > 1) {
+                  String hex0 = Integer.toHexString(chars[0]).toUpperCase();
+                  String hex1 = Integer.toHexString(chars[1]).toUpperCase();
+                  while (hex0.length() < 4) hex0 = "0" + hex0;
+                  while (hex1.length() < 4) hex1 = "0" + hex1;
+                  builder.append("[`\\u").append(hex0).append("\\u").append(hex1).append("`]  ");
+                }
+                builder
+                    .append(String.valueOf(chars))
+                    .append("   _")
+                    .append(Character.getName(code))
+                    .append("_");
+              });
+      eb.setDescription(builder.toString());
+      event.reply(eb.build());
     }
-
-    private void unicode(CommandEvent event) {
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(event.getSelfMember().getColor());
-        if (event.getArgs().codePoints().count() > 10) {
-            event.replyError("Invalid emote, or input is too long");
-        } else {
-            StringBuilder builder = new StringBuilder("Emoji/Character info:");
-            event.getArgs()
-                    .codePoints()
-                    .forEachOrdered(
-                            code -> {
-                                char[] chars = Character.toChars(code);
-                                String hex = Integer.toHexString(code).toUpperCase();
-                                while (hex.length() < 4) hex = "0" + hex;
-                                builder.append("\n`\\u").append(hex).append("`   ");
-                                if (chars.length > 1) {
-                                    String hex0 = Integer.toHexString(chars[0]).toUpperCase();
-                                    String hex1 = Integer.toHexString(chars[1]).toUpperCase();
-                                    while (hex0.length() < 4) hex0 = "0" + hex0;
-                                    while (hex1.length() < 4) hex1 = "0" + hex1;
-                                    builder.append("[`\\u")
-                                            .append(hex0)
-                                            .append("\\u")
-                                            .append(hex1)
-                                            .append("`]  ");
-                                }
-                                builder.append(String.valueOf(chars))
-                                        .append("   _")
-                                        .append(Character.getName(code))
-                                        .append("_");
-                            });
-            eb.setDescription(builder.toString());
-            event.reply(eb.build());
-        }
-    }
+  }
 }
 //          String str = event.getArgs();
 //          if (str.matches("<:.*:\\d+>")) {

@@ -4,6 +4,7 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 
 ## v0.1.3
 
+- [~] kitsu command response is now have a color in embed
 
 ## v0.1.2
 
