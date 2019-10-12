@@ -44,7 +44,10 @@ public class HelpCommand extends UtilitiesCommand {
                   .append(command.getName())
                   .append(
                       command.getArguments() == null ? "`" : " " + command.getArguments() + "`");
-          eb.setAuthor("Available help for " + command.getName() + " command:", null, event.getSelfUser().getEffectiveAvatarUrl());
+          eb.setAuthor(
+              "Available help for " + command.getName() + " command:",
+              null,
+              event.getSelfUser().getEffectiveAvatarUrl());
           eb.setDescription(FormatUtil.capitalize(command.getHelp()));
           eb.addField("Usage: ", usageSb.toString(), true);
           if (command.getAliases().length > 0) {
@@ -89,7 +92,10 @@ public class HelpCommand extends UtilitiesCommand {
   private void generateFullHelp(CommandEvent event) {
     EmbedBuilder eb = new EmbedBuilder();
     eb.setColor(event.getSelfMember().getColor());
-    eb.setAuthor(event.getSelfUser().getName() + " commands:", null, event.getSelfUser().getEffectiveAvatarUrl());
+    eb.setAuthor(
+        event.getSelfUser().getName() + " commands:",
+        null,
+        event.getSelfUser().getEffectiveAvatarUrl());
     StringBuilder builder = new StringBuilder();
     Category category = null;
     for (Command command : event.getClient().getCommands()) {
