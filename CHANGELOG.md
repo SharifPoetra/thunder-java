@@ -5,7 +5,13 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 ## v0.1.3
 
 - [~] kitsu command response is now have a color in embed
-- [+] Interaction category with pat command
+- [+] Interaction category
+- [+] `pat`s command
+- [+] `slap`s command
+- [+] `blush` command
+- [+] `cry` command
+- [+] small image avatar to help command
+- [~] add voice connections count to about command
 
 ## v0.1.2
 
