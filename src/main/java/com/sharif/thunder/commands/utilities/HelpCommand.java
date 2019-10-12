@@ -44,7 +44,7 @@ public class HelpCommand extends UtilitiesCommand {
                   .append(command.getName())
                   .append(
                       command.getArguments() == null ? "`" : " " + command.getArguments() + "`");
-          eb.setAuthor("Available help for " + command.getName() + " command:");
+          eb.setAuthor("Available help for " + command.getName() + " command:", null, event.getSelfUser().getEffectiveAvatarUrl());
           eb.setDescription(FormatUtil.capitalize(command.getHelp()));
           eb.addField("Usage: ", usageSb.toString(), true);
           if (command.getAliases().length > 0) {
@@ -80,48 +80,6 @@ public class HelpCommand extends UtilitiesCommand {
                   + event.getJDA().getUserById(event.getClient().getOwnerId()).getDiscriminator()
                   + "");
           eb.setFooter(footerSb.toString());
-
-          // builder.append("**Available help for `" + command.getName() + "`:**\n")
-          //         .append("Usage: `")
-          //         .append(event.getClient().getPrefix())
-          //         .append(command.getName())
-          //         .append(
-          //                 command.getArguments() == null
-          //                         ? "`"
-          //                         : " " + command.getArguments() + "`");
-          // if (command.getAliases().length > 0) {
-          //     builder.append("\nAliases:");
-          //     for (String alias : command.getAliases()) {
-          //         builder.append(" `").append(alias).append("`");
-          //     }
-          // }
-          // builder.append("\n*" + FormatUtil.capitalize(command.getHelp()) + "*\n");
-          // if (command.getChildren().length > 0) {
-          //     for (Command children : command.getChildren()) {
-          //         builder.append("\n**Subcommands:**")
-          //                 .append("\n`")
-          //                 .append(event.getClient().getPrefix())
-          //                 .append(command.getName())
-          //                 .append(" ")
-          //                 .append(children.getName())
-          //                 .append(
-          //                         children.getArguments() == null
-          //                                 ? "`"
-          //                                 : " " + children.getArguments() + "`")
-          //                 .append(" - ")
-          //                 .append(FormatUtil.capitalize(children.getHelp()));
-          //     }
-          // }
-          // builder.append(
-          //         "\n\nFor additional help, contact **"
-          //                 + event.getJDA()
-          //                         .getUserById(event.getClient().getOwnerId())
-          //                         .getName()
-          //                 + "**#"
-          //                 + event.getJDA()
-          //                         .getUserById(event.getClient().getOwnerId())
-          //                         .getDiscriminator()
-          //                 + "");
           event.reply(eb.build());
         }
       }
@@ -131,7 +89,7 @@ public class HelpCommand extends UtilitiesCommand {
   private void generateFullHelp(CommandEvent event) {
     EmbedBuilder eb = new EmbedBuilder();
     eb.setColor(event.getSelfMember().getColor());
-    eb.setTitle("__**" + event.getSelfUser().getName() + "** commands:__");
+    eb.setAuthor(event.getSelfUser().getName() + " commands:", null, event.getSelfUser().getEffectiveAvatarUrl());
     StringBuilder builder = new StringBuilder();
     Category category = null;
     for (Command command : event.getClient().getCommands()) {
