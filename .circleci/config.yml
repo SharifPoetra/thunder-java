@@ -22,6 +22,12 @@ jobs:
 
     steps:
       - checkout
+      - run:
+      name: Creating Artifacts
+      command: |
+            echo "my artifact file" > /tmp/artifact-1;
+            mkdir /tmp/artifacts;
+            echo "my artifact files in a dir" > /tmp/artifacts/artifact-2;
 
       # Download and cache dependencies
       - restore_cache:
@@ -39,3 +45,10 @@ jobs:
 
       # run tests!
       - run: mvn integration-test
+      
+      - store_artifacts:
+          path: /tmp/artifact-1
+          destination: artifact-file
+
+      - store_artifacts:
+          path: /tmp/artifacts
