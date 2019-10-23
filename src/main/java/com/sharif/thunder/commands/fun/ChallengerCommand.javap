@@ -1,0 +1,24 @@
+package com.sharif.thunder.commands.fun;
+
+import com.jagrosh.jdautilities.command.CommandEvent;
+import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.FunCommand;
+import net.dv8tion.jda.api.Permission;
+import com.sharif.emiliaapi.EmiliaApi;
+
+public class ChallengerCommand extends FunCommand {
+  
+  private final Thunder thunder;
+  
+  public ChallengerCommand(Thunder thunder) {
+    this.thunder = thunder;
+    this.name = "challenger";
+  }
+  
+  @Override
+  protected void execute(CommandEvent event) {
+    EmiliaApi api = new EmiliaApi(thunder.getConfig().getEmiliaKey());
+    System.out.println(api.getChallenger(event.getAuthor().getEffectiveAvatarUrl()));
+    
+  }
+}
