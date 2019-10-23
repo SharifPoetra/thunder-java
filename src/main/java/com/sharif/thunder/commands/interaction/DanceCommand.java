@@ -11,15 +11,13 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
-public class CryCommand extends InteractionCommand {
+public class DanceCommand extends InteractionCommand {
   private final Thunder thunder;
-  private String[] msg = {
-    "is crying... :c", "needs a hug...", "is crying... there there...", "cries... :'c"
-  };
+  private String[] msg = {"is dancing!!", "loves to dance!", "is shaking some booty!!"};
 
-  public CryCommand(Thunder thunder) {
+  public DanceCommand(Thunder thunder) {
     this.thunder = thunder;
-    this.name = "cry";
+    this.name = "dance";
     this.help = "Express your emotions.";
     this.botPermissions =
         new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
@@ -36,12 +34,12 @@ public class CryCommand extends InteractionCommand {
                 event.getChannel().sendTyping().queue();
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/cry", headers);
+                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/dance", headers);
                 List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
                 message.delete().submit();
                 event
                     .getChannel()
-                    .sendFile(image, "cry.gif")
+                    .sendFile(image, "dance.gif")
                     .embed(
                         new EmbedBuilder()
                             .setAuthor(
@@ -51,7 +49,7 @@ public class CryCommand extends InteractionCommand {
                                 null,
                                 event.getAuthor().getEffectiveAvatarUrl())
                             .setColor(event.getSelfMember().getColor())
-                            .setImage("attachment://cry.gif")
+                            .setImage("attachment://dance.gif")
                             .build())
                     .queue();
               });

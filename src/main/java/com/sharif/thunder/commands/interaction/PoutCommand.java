@@ -11,15 +11,13 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
-public class CryCommand extends InteractionCommand {
+public class PoutCommand extends InteractionCommand {
   private final Thunder thunder;
-  private String[] msg = {
-    "is crying... :c", "needs a hug...", "is crying... there there...", "cries... :'c"
-  };
+  private String[] msg = {"pouts >:c", "is pouting!", "doesn't like that!"};
 
-  public CryCommand(Thunder thunder) {
+  public PoutCommand(Thunder thunder) {
     this.thunder = thunder;
-    this.name = "cry";
+    this.name = "pout";
     this.help = "Express your emotions.";
     this.botPermissions =
         new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
@@ -36,12 +34,12 @@ public class CryCommand extends InteractionCommand {
                 event.getChannel().sendTyping().queue();
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/cry", headers);
+                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/pout", headers);
                 List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
-                message.delete().submit();
+                message.delete().queue();
                 event
                     .getChannel()
-                    .sendFile(image, "cry.gif")
+                    .sendFile(image, "pout.gif")
                     .embed(
                         new EmbedBuilder()
                             .setAuthor(
@@ -51,7 +49,7 @@ public class CryCommand extends InteractionCommand {
                                 null,
                                 event.getAuthor().getEffectiveAvatarUrl())
                             .setColor(event.getSelfMember().getColor())
-                            .setImage("attachment://cry.gif")
+                            .setImage("attachment://pout.gif")
                             .build())
                     .queue();
               });

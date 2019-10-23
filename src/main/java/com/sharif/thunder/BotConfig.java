@@ -20,7 +20,8 @@ public class BotConfig {
       shuffleEmoji,
       repeatEmoji,
       playlistsFolder,
-      emiliaKey;
+      emiliaKey,
+      sentryKey;
   private boolean stayInChannel, npImages, updateAlerts;
   private long owner, maxSeconds;
 
@@ -56,6 +57,7 @@ public class BotConfig {
       updateAlerts = config.getBoolean("updatealerts");
       playlistsFolder = config.getString("playlistsfolder");
       emiliaKey = config.getString("emiliakey");
+      sentryKey = config.getString("sentrykey");
 
     } catch (Exception ex) {
       System.out.println(
@@ -141,6 +143,10 @@ public class BotConfig {
 
   public String getEmiliaKey() {
     return emiliaKey;
+  }
+
+  public String getSentryKey() {
+    return sentryKey;
   }
 
   public boolean isTooLong(AudioTrack track) {

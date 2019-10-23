@@ -6,9 +6,21 @@ import com.jagrosh.jdautilities.command.CommandListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CommandExceptionListener implements CommandListener {
+public class CommandListeners implements CommandListener {
 
-  private final Logger log = LoggerFactory.getLogger("Command");
+  private final Logger log = LoggerFactory.getLogger("CommandListeners");
+
+  @Override
+  public void onCommand(CommandEvent event, Command command) {
+    log.info(
+        event.getAuthor().getAsTag()
+            + " is using a command: "
+            + command.getName()
+            + " "
+            + event.getArgs()
+            + " in "
+            + event.getGuild());
+  }
 
   @Override
   public void onCommandException(CommandEvent event, Command command, Throwable throwable) {

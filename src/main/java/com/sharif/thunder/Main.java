@@ -4,7 +4,7 @@ import static spark.Spark.*;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.sharif.thunder.commands.CommandExceptionListener;
+import com.sharif.thunder.commands.CommandListeners;
 import com.sharif.thunder.commands.administration.*;
 import com.sharif.thunder.commands.fun.*;
 import com.sharif.thunder.commands.interaction.*;
@@ -13,6 +13,7 @@ import com.sharif.thunder.commands.owner.*;
 import com.sharif.thunder.commands.utilities.*;
 import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.*;
+import io.sentry.Sentry;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -58,10 +59,10 @@ public class Main extends ListenerAdapter {
   public static void main(String[] args)
       throws Exception, IOException, IllegalArgumentException, LoginException,
           RateLimitedException {
-    Logger log = LoggerFactory.getLogger(Main.class);
-
-    EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
     BotConfig config = new BotConfig();
+    Sentry.init(config.getSentryKey());
+    Logger log = LoggerFactory.getLogger(Main.class);
+    EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
     Thunder thunder = new Thunder(waiter, config);
 
     // datasources
@@ -78,7 +79,7 @@ public class Main extends ListenerAdapter {
             .setPrefix(config.getPrefix())
             .setAlternativePrefix(config.getAltPrefix())
             .setEmojis(config.getSuccess(), config.getWarning(), config.getError())
-            .setListener(new CommandExceptionListener())
+            .setListener(new CommandListeners())
             .setShutdownAutomatically(false)
             .useHelpBuilder(false)
             // .setHelpConsumer(
@@ -89,18 +90,20 @@ public class Main extends ListenerAdapter {
                 new SlapCommand(thunder),
                 new BlushCommand(thunder),
                 new CryCommand(thunder),
+                new DanceCommand(thunder),
+                new PoutCommand(thunder),
                 // administration
                 new SetInVCRoleCommand(inVcRoles),
                 // fun
                 new ChooseCommand(thunder),
                 new SayCommand(thunder),
+                // new ChallengerCommand(thunder),
                 // utilities
                 new AboutCommand(
                     Color.BLUE,
                     "a simple but powerfull multipurpose bot",
                     new String[] {"Music", "Utilities", "Lots of fun!"},
                     RECOMMENDED_PERMS),
-                new UptimeCommand(thunder),
                 new PingCommand(thunder),
                 new EmotesCommand(thunder),
                 new HelpCommand(thunder),
@@ -157,7 +160,7 @@ public class Main extends ListenerAdapter {
       System.exit(1);
     }
 
-    get("/", (req, res) -> "Hello World");
+    get("/", (req, res) -> "{\"message\": \"Hello World\"}");
   }
 
   @Override
