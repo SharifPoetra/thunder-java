@@ -6,13 +6,17 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 
 - [~] kitsu command response is now have a color in embed
 - [+] Interaction category
-- [+] `pat`s command
-- [+] `slap`s command
-- [+] `blush` command
-- [+] `cry` command
+- [+] add `pat`s command
+- [+] add `slap`s command
+- [+] add `blush` command
+- [+] add `cry` command
 - [+] small image avatar to help command
 - [~] add voice connections count to about command
 - [!] fix the bot won't leave the voice channel even the config is set to false! oh Finally!!
+- [-] remove `uptime` command as it already in the `about` command
+- [~] add error message to every Interaction commands
+- [~] the bot will be start typing before sending the image on Interaction commands
+- [+] add `dance` command
 
 ## v0.1.2
 
