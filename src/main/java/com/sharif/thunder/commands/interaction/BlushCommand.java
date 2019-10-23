@@ -31,10 +31,10 @@ public class BlushCommand extends InteractionCommand {
           .sendMessage("Please wait...")
           .queue(
               message -> {
+                event.getChannel().sendTyping().queue();
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                byte[] image =
-                    UnirestUtil.getBytes("https://emilia-api.glitch.me/api/blush", headers);
+                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/blush", headers);
                 List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
                 message.delete().queue();
                 event
@@ -52,7 +52,8 @@ public class BlushCommand extends InteractionCommand {
                             .build())
                     .queue();
               });
-    } catch (Exception ex) {
+    } catch (IllegalArgumentException ex) {
+      event.replyError("Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }

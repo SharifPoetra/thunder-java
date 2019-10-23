@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.Member;
 
 public class PatCommand extends InteractionCommand {
   private final Thunder thunder;
+  private String text;
   private String[] msg = {"There there!", "Adorable~", "*pat pat*"};
 
   public PatCommand(Thunder thunder) {
@@ -26,6 +27,7 @@ public class PatCommand extends InteractionCommand {
   @Override
   public void execute(CommandEvent event) {
     try {
+      event.getChannel().sendTyping().queue();
       event
           .getChannel()
           .sendMessage("Please wait...")
@@ -37,10 +39,10 @@ public class PatCommand extends InteractionCommand {
                       .queue();
                   return;
                 }
+                event.getChannel().sendTyping().queue();
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                byte[] image =
-                    UnirestUtil.getBytes("https://emilia-api.glitch.me/api/pat", headers);
+                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/pat", headers);
                 List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
                 message.delete().queue();
                 event
@@ -61,7 +63,8 @@ public class PatCommand extends InteractionCommand {
                             .build())
                     .queue();
               });
-    } catch (Exception ex) {
+    } catch (IllegalArgumentException ex) {
+      event.replyError("Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }
