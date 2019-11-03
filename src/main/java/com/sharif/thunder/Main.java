@@ -13,7 +13,6 @@ import com.sharif.thunder.commands.owner.*;
 import com.sharif.thunder.commands.utilities.*;
 import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.*;
-import io.sentry.Sentry;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -60,7 +59,6 @@ public class Main extends ListenerAdapter {
       throws Exception, IOException, IllegalArgumentException, LoginException,
           RateLimitedException {
     BotConfig config = new BotConfig();
-    Sentry.init(config.getSentryKey());
     Logger log = LoggerFactory.getLogger(Main.class);
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
     Thunder thunder = new Thunder(waiter, config);
@@ -95,6 +93,7 @@ public class Main extends ListenerAdapter {
                 // administration
                 new SetInVCRoleCommand(inVcRoles),
                 // fun
+                new BobRossCommand(thunder),
                 new ChooseCommand(thunder),
                 new SayCommand(thunder),
                 // new ChallengerCommand(thunder),
