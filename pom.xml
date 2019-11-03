@@ -93,7 +93,7 @@
     <dependency>
       <groupId>io.sentry</groupId>
       <artifactId>sentry</artifactId>
-      <version>1.7.27</version>
+      <version>1.7.28</version>
     </dependency>
   </dependencies>
   
