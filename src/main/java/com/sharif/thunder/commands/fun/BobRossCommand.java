@@ -1,28 +1,25 @@
-package com.sharif.thunder.commands.interaction;
+package com.sharif.thunder.commands.fun;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.sharif.thunder.Thunder;
-import com.sharif.thunder.commands.InteractionCommand;
+import com.sharif.thunder.commands.FunCommand;
 import com.sharif.thunder.utils.*;
 import java.util.*;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
-public class SlapCommand extends InteractionCommand {
-  private final Thunder thunder;
-  private String[] msg = {"Deserves it!", "oof.", "That looks like it hurt..."};
+public class BobRossCommand extends FunCommand {
 
-  public SlapCommand(Thunder thunder) {
+  private final Thunder thunder;
+
+  public BobRossCommand(Thunder thunder) {
     this.thunder = thunder;
-    this.name = "slap";
-    this.help = "Slaps the specified user ;).";
-    this.botPermissions =
-        new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
+    this.name = "bobross";
+    this.help = "Draws a user's avatar over 'Bob Ross' canvas.";
+    this.arguments = "<user>";
   }
 
-  @Override
   public void execute(CommandEvent event) {
     try {
       event
@@ -39,24 +36,25 @@ public class SlapCommand extends InteractionCommand {
                 event.getChannel().sendTyping().queue();
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/slap", headers);
                 List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
-                message.delete().queue();
+                byte[] image =
+                    UnirestUtil.getBytes(
+                        "https://emilia.shrf.xyz/api/bob-ross?image="
+                            + list.get(0).getUser().getEffectiveAvatarUrl()
+                            + "",
+                        headers);
+                message.delete().submit();
                 event
                     .getChannel()
-                    .sendFile(image, "slap.gif")
+                    .sendFile(image, "bobross.png")
                     .embed(
                         new EmbedBuilder()
                             .setAuthor(
-                                event.getMember().getUser().getName()
-                                    + " slaps "
-                                    + list.get(0).getUser().getName()
-                                    + "!! "
-                                    + RandomUtil.randomElement(msg),
+                                event.getMember().getUser().getName(),
                                 null,
                                 event.getAuthor().getEffectiveAvatarUrl())
                             .setColor(event.getSelfMember().getColor())
-                            .setImage("attachment://slap.gif")
+                            .setImage("attachment://bobross.png")
                             .build())
                     .queue();
               });
