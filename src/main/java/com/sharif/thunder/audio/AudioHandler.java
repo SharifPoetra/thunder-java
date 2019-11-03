@@ -251,6 +251,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 
   @Override
   public void onTrackStart(AudioPlayer player, AudioTrack track) {
+    if (queue.isEmpty()) return;
     EmbedBuilder eb = new EmbedBuilder();
     eb.setColor(guild.getSelfMember().getColor());
     eb.setAuthor(Main.PLAY_EMOJI + " Start playing");
