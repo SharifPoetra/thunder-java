@@ -20,5 +20,5 @@ mvn package
 ## Start it up
 
 ```bash
-java -jar <jar file>
+java -jar <generated jar file>
 ```
