@@ -1,6 +1,7 @@
-<img width="150" height="150" align="left" style="float: left; margin: 0 10px 0 0;" alt="Thunder" src="https://cdn.discordapp.com/avatars/580626972741337088/5d0a676eab9365c294dbd59f2a0d5d36.png?size=2048">  
+<img width="150" height="150" align="left" style="float: left; margin: 0 10px 0 0;" alt="Thunder" src="https://cdn.discordapp.com/avatars/580626972741337088/5d0a676eab9365c294dbd59f2a0d5d36.png?size=2048">
 
 # Thunder
+
   <a href="https://opensource.org/licenses/Apache-2.0">
     <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
   </a>
@@ -10,7 +11,8 @@
   <a href="https://dependabot.com">
     <img src="https://api.dependabot.com/badges/status?host=github&repo=SharifPoetra/thunder-java&identifier=210757811">
   </a> 
- 
+  <br>
+
 ## Configuration
 
 Rename `config.txt.example` to `config.txt` and fill it out.
