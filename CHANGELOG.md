@@ -2,7 +2,11 @@
 
 Key: [+] added, [-] removed, [~] modified, [!] important.
 
-## v0.1.3
+## v1.14.9
+- [~] about command fixes
+- [!] the changelog now sync with releases version
+- [!] why is the version on the pom.xml is different on changelogs/releases? because the version is no matter for me and can be changed at every time and all we need is the compiled jar file to run it.
+## v1.14.6
 
 - [~] kitsu command response is now have a color in embed
 - [+] Interaction category
@@ -19,7 +23,7 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 - [+] add `dance` command
 - [+] add `bobross` command
 
-## v0.1.2
+## v1.6.0
 
 - [~] Improve emoji command using embed
 - [!] Add some stuff to about command
@@ -27,7 +31,7 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 - [+] add `setinvcrole` command that set a role to be given to the members when they're joining the voice channel
 - [+] add `kitsu` command to search anime from https://kitsu.io
 
-## v0.1.1
+## v1.4.4
 
 - [~] Fix emote command unknown emote ordered that one line length
 - [+] Add `about` command
@@ -38,6 +42,6 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 - [~] Adding thumbnail and footer source to start playing embed
 - [+] Adding duration to start playing embed
 
-## v0.1.0
+## v1.0.0
 
 - [!] First release information can be found [on the releases](https://github.com/SharifPoetra/thunder-java/releases/tag/0.1.0).
