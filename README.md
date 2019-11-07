@@ -12,7 +12,8 @@
     <img src="https://api.dependabot.com/badges/status?host=github&repo=SharifPoetra/thunder-java&identifier=210757811">
   </a> 
   <br>
----  
+  
+>
 
 ## Configuration
 
