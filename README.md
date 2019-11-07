@@ -5,6 +5,9 @@
   <a href="https://discord.gg/ZEFrfj5">
     <img src="https://discordapp.com/api/guilds/582372920047829014/embed.png">
   </a>
+  <a href="https://dependabot.com">
+    <img src="https://api.dependabot.com/badges/status?host=github&repo=SharifPoetra/thunder-java&identifier=210757811">
+  </a>
 </p>
 
 ## Configuration
