@@ -13,7 +13,7 @@
   </a> 
   <br>
   
->
+> You can invite the bot [here](https://discordapp.com/oauth2/authorize?client_id=580626972741337088&scope=bot&permissions=70642768&guild_id=0)
 
 ## Configuration
 
