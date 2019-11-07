@@ -13,19 +13,20 @@
   </a> 
   
 > You can invite the bot [here](https://discordapp.com/oauth2/authorize?client_id=580626972741337088&scope=bot&permissions=70642768&guild_id=0)  
-      
-      
-## Configuration
+
+<br>  
+
+# Configuration
 
 Rename `config.txt.example` to `config.txt` and fill it out.
 
-## Compile
+# Compile
 
 ```bash
 mvn package
-```
+``` 
 
-## Start it up
+# Start it up
 
 ```bash
 java -jar <generated-jar-file.jar>
