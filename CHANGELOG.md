@@ -17,7 +17,6 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 - [~] add error message to every Interaction commands
 - [~] the bot will be start typing before sending the image on Interaction commands
 - [+] add `dance` command
-- [~] fix spam now playing message even there no more queue
 - [+] add `bobross` command
 
 ## v0.1.2
