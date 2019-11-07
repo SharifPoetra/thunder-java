@@ -1,5 +1,5 @@
 {
-  "start": "echo 'Copying config file to target folder...' && cp config.txt ./target && echo 'Starting the compiled jar file...' && java -jar ./target/thunder-1.0.0-All.jar",
+  "start": "echo 'Copying config file to target folder...' && cp config.txt ./target && echo 'Starting the compiled jar file...' && cd target && java -jar thunder-1.0.0-All.jar",
   "install": "mvn package",
   "watch": {
     "throttle": 900000000,
