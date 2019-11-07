@@ -11,10 +11,10 @@
   <a href="https://dependabot.com">
     <img src="https://api.dependabot.com/badges/status?host=github&repo=SharifPoetra/thunder-java&identifier=210757811">
   </a> 
-  <br>
   
-> You can invite the bot [here](https://discordapp.com/oauth2/authorize?client_id=580626972741337088&scope=bot&permissions=70642768&guild_id=0)
-
+> You can invite the bot [here](https://discordapp.com/oauth2/authorize?client_id=580626972741337088&scope=bot&permissions=70642768&guild_id=0)  
+      
+      
 ## Configuration
 
 Rename `config.txt.example` to `config.txt` and fill it out.
