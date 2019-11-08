@@ -14,5 +14,4 @@ target/
 config.txt
 
 # data
-discordbot.afks
-discordbot.invcroles
+discordbot.*
