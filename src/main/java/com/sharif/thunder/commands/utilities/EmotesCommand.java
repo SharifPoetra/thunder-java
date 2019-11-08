@@ -44,7 +44,10 @@ public class EmotesCommand extends UtilitiesCommand {
 
   @Override
   protected void execute(CommandEvent event) {
-
+    
+    if (event.getArgs().isEmpty()) {
+      event.replyError("You must specify the emote to see the information about it!");
+    }
     Matcher staticMatcher = emojiPatten.matcher(event.getArgs());
     Matcher animMatcher = animatedEmojiPatten.matcher(event.getArgs());
 

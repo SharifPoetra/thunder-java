@@ -26,7 +26,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
 public class LyricsCommand extends MusicCommand {
-  private final LyricsClient client = new LyricsClient();
   private Lyrics lyrics;
 
   public LyricsCommand(Thunder thunder) {
@@ -40,9 +39,13 @@ public class LyricsCommand extends MusicCommand {
 
   @Override
   public void doCommand(CommandEvent event) {
+    LyricsClient client = new LyricsClient();
+
     event.getChannel().sendTyping().queue();
     String title;
-    if (event.getArgs().isEmpty())
+    if (event.getArgs().isEmpty()
+        && ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
+            .isMusicPlaying(event.getJDA()))
       title =
           ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
               .getPlayer()
@@ -50,6 +53,10 @@ public class LyricsCommand extends MusicCommand {
               .getInfo()
               .title;
     else title = event.getArgs();
+    if (title.isEmpty()) {
+      event.replyError("You must specify what lyrics you want to search!");
+      return;
+    }
     try {
       lyrics = client.getLyrics(title).get();
     } catch (InterruptedException | ExecutionException e) {
