@@ -1,17 +1,17 @@
 # glitch
-shrinkwrap.yaml
-.glitch-assets
-.bash_history
-.cache
-.config
+# shrinkwrap.yaml
+# .glitch-assets
+# .bash_history
+# .cache
+# .config
 
 # miscs
-.git/
-.nano/
-.m2/
-.java/
-target/
-config.txt
+# .git/
+# .nano/
+# .m2/
+# .java/
+# target/
+# config.txt
 
 # data
-discordbot.*
+# discordbot.*
