@@ -2,10 +2,13 @@
 
 Key: [+] added, [-] removed, [~] modified, [!] important.
 
-## v1.14.9
+## v1.14.10
 - [~] about command fixes
 - [!] the changelog now sync with releases version
 - [!] why is the version on the pom.xml is different on changelogs/releases? because the version is no matter for me and can be changed at every time and all we need is the compiled jar file to run it.
+- [~] fix the emote command where it always return the empty emoji information when there no arguments given
+- [~] fix lyrics throws an error when there are no music playing and no arguments given
+
 ## v1.14.6
 
 - [~] kitsu command response is now have a color in embed
