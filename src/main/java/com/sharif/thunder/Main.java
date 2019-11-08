@@ -174,7 +174,7 @@ public class Main extends ListenerAdapter {
       System.exit(1);
     }
 
-    get("/", (req, res) -> "{\"message\": \"Hello World\"}");
+    // get("/", (req, res) -> "{\"message\": \"Hello World\"}");
   }
 
   @Override

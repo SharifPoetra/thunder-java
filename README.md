@@ -10,7 +10,8 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/SharifPoetra/thunder-java)
 ![GitHub repo size](https://img.shields.io/github/repo-size/SharifPoetra/thunder-java)
 ![Uptime Robot ratio (7 days)](https://img.shields.io/uptimerobot/ratio/7/m783516155-547dfefe9aaa2d503b9aea20)
-
+ 
+ 
 <hr>
 
 > You can invite the bot [here](https://discordapp.com/oauth2/authorize?client_id=580626972741337088&scope=bot&permissions=70642768&guild_id=0)
