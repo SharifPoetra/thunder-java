@@ -2,19 +2,14 @@
 
 # Thunder
 
-  <a href="https://opensource.org/licenses/Apache-2.0">
-    <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
-  </a>
-  <a href="https://discord.gg/ZEFrfj5">
-    <img src="https://discordapp.com/api/guilds/582372920047829014/embed.png">
-  </a>
-  <a href="https://dependabot.com">
-    <img src="https://api.dependabot.com/badges/status?host=github&repo=SharifPoetra/thunder-java&identifier=210757811">
-  </a> 
+[![Lisence](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Discord](https://discordapp.com/api/guilds/582372920047829014/embed.png)](https://discord.gg/ZEFrfj5)
+[![Dependabot](https://api.dependabot.com/badges/status?host=github&repo=SharifPoetra/thunder-java&identifier=210757811)](https://dependabot.com)
+[![CodeFactor](https://www.codefactor.io/repository/github/sharifpoetra/thunder-java/badge)](https://www.codefactor.io/repository/github/sharifpoetra/thunder-java)
   
-> You can invite the bot [here](https://discordapp.com/oauth2/authorize?client_id=580626972741337088&scope=bot&permissions=70642768&guild_id=0)  
+> You can invite the bot [here](https://discordapp.com/oauth2/authorize?client_id=580626972741337088&scope=bot&permissions=70642768&guild_id=0)
 
-<br>  
+<br>
 
 # Configuration
 
@@ -24,7 +19,7 @@ Rename `config.txt.example` to `config.txt` and fill it out.
 
 ```bash
 mvn package
-``` 
+```
 
 # Start it up
 
