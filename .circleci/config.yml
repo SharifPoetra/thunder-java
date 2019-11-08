@@ -24,6 +24,10 @@ jobs:
           key: thunder-{{ checksum "pom.xml" }}
 
       - run: mvn package
+
+      -run: 
+          name: Send to CodeCov 
+          command: bash <(curl -s https://codecov.io/bash)
       
       - store_test_results:
           path: target/surefire-reports

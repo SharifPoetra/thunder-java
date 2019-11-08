@@ -1,0 +1,11 @@
+coverage:
+
+  status:
+    project:
+      default: off
+      app:
+        paths: "src/"
+    patch: true
+    changes: false
+
+comment: off
