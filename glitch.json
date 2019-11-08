@@ -1,5 +1,6 @@
 {
-  "start": "echo 'Starting the compiled jar file...' & java -jar ./target/thunder-1.0.0-All.jar",  "install": "mvn package",
+  "start": "java -jar ./target/thunder-1.0.0-All.jar",
+  "install": "mvn package",
   "watch": {
     "throttle": 900000000,
     "install": {
