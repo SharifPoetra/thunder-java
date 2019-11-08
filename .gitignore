@@ -12,3 +12,7 @@ shrinkwrap.yaml
 .java/
 target/
 config.txt
+
+# data
+discordbot.afks
+discordbot.invcroles
