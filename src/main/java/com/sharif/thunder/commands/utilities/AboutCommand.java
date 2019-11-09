@@ -119,14 +119,10 @@ public class AboutCommand extends UtilitiesCommand {
             .append(description)
             .append("\nI ")
             .append(IS_AUTHOR ? "was written in Java" : "am owned")
-            .append(" by ")
-            // .append("[SharifPoetra](https://shrf.xyz)")
-            // .append(" and hosted by ")
-            .append("**")
+            .append(" by **")
             .append(author)
-            .append("**")
             .append(
-                " using "
+                "** using "
                     + JDAUtilitiesInfo.AUTHOR
                     + "'s [Commands Extension]("
                     + JDAUtilitiesInfo.GITHUB
