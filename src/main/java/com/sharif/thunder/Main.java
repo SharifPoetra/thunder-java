@@ -15,7 +15,7 @@
  */
 package com.sharif.thunder;
 
-// import static spark.Spark.*;
+import static spark.Spark.*;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -174,7 +174,7 @@ public class Main extends ListenerAdapter {
       System.exit(1);
     }
 
-    // get("/", (req, res) -> "{\"message\": \"Hello World\"}");
+    get("/", (req, res) -> "{\"message\": \"Hello World\"}");
   }
 
   @Override
