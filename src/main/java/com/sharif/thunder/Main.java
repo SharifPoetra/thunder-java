@@ -95,8 +95,6 @@ public class Main extends ListenerAdapter {
             .setListener(new CommandListeners())
             .setShutdownAutomatically(false)
             .useHelpBuilder(false)
-            // .setHelpConsumer(
-            //         event -> event.reply(FormatUtil.formatHelp(thunder, event)))
             .addCommands(
                 // interaction
                 new PatCommand(thunder),
@@ -105,15 +103,16 @@ public class Main extends ListenerAdapter {
                 new CryCommand(thunder),
                 new DanceCommand(thunder),
                 new PoutCommand(thunder),
+                new LewdCommand(thunder),
                 // administration
                 new SetInVCRoleCommand(inVcRoles),
                 // fun
                 new BobRossCommand(thunder),
                 new ChooseCommand(thunder),
                 new SayCommand(thunder),
-                // new ChallengerCommand(thunder),
                 // utilities
                 new AboutCommand(
+                    thunder,
                     Color.BLUE,
                     "a simple but powerfull multipurpose bot",
                     new String[] {"Music", "Utilities", "Lots of fun!"},
@@ -148,7 +147,6 @@ public class Main extends ListenerAdapter {
                 new SkiptoCommand(thunder),
                 // owner
                 new RestartCommand(thunder),
-                new DebugCommand(thunder),
                 new PlaylistCommand(thunder),
                 new EvalCommand(thunder));
 
@@ -214,7 +212,7 @@ public class Main extends ListenerAdapter {
           .filter((u) -> (afks.get(u.getId()) != null))
           .forEach(
               (u) -> {
-                u.openPrivateChannel().queue(channel -> channel.sendMessage(relate).queue());
+                OtherUtil.sendDM(u, relate);
               });
     }
     if (event.getChannelType() != ChannelType.PRIVATE

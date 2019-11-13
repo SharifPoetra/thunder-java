@@ -2,12 +2,16 @@
 
 Key: [+] added, [-] removed, [~] modified, [!] important.
 
-## v1.14.10
+## v1.16.1
 - [~] about command fixes
 - [!] the changelog now sync with releases version
 - [!] why is the version on the pom.xml is different on changelogs/releases? because the version is no matter for me and can be changed at every time and all we need is the compiled jar file to run it.
 - [~] fix the emote command where it always return the empty emoji information when there no arguments given
 - [~] fix lyrics throws an error when there are no music playing and no arguments given
+- [+] add `lewd` commamd on Interaction category
+- [~] fix setinvcrole description
+- [-] removed debug command
+- [~] improve uptime on about command
 
 ## v1.14.6
 
