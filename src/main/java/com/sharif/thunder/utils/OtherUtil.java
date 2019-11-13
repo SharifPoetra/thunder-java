@@ -20,7 +20,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
 import okhttp3.*;
 
 public class OtherUtil {
@@ -58,12 +57,5 @@ public class OtherUtil {
     } catch (IOException | IllegalArgumentException ignore) {
     }
     return null;
-  }
-
-  public static void sendDM(User user, String message) {
-    try {
-      user.openPrivateChannel().queue(pc -> pc.sendMessage(message).queue());
-    } catch (Exception ignore) {
-    }
   }
 }
