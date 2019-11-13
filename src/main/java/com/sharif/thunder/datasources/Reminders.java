@@ -71,8 +71,8 @@ public class Reminders extends DataSource {
         .forEach(
             (item) -> {
               TextChannel chan = jda.getTextChannelById(item[Reminders.CHANNELID]);
+              System.out.println(chan);
               if (chan == null) {
-                System.out.println(chan);
                 User user = jda.getUserById(item[Reminders.USERID]);
                 if (user != null) SenderUtil.sendDM(user, "\u23F0 " + item[Reminders.MESSAGE]);
                 System.out.println(user);
