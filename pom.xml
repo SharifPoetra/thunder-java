@@ -52,7 +52,7 @@
     <dependency>
       <groupId>com.jagrosh</groupId>
       <artifactId>JLyrics</artifactId>
-      <version>0.3</version>
+      <version>0.4</version>
     </dependency>
     <dependency>
       <groupId>com.github.natanbc</groupId>
@@ -91,7 +91,7 @@
       <version>3.1.04</version> 
     </dependency>
   </dependencies>
-  
+
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -114,7 +114,7 @@
           <filesNamePattern>.*\.java</filesNamePattern>
           <skip>false</skip>
           <skipSortingImports>false</skipSortingImports>
-          <style>google</style> <!-- you can choose between 'google' or 'aosp' style -->
+          <style>google</style> <!-- you can choose between 'google' or 'aosp' formatting style -->
         </configuration>
         <executions>
           <execution>
