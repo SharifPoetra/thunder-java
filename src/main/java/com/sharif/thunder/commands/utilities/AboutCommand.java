@@ -19,10 +19,14 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.JDAUtilitiesInfo;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
+import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.UtilitiesCommand;
+import com.sharif.thunder.utils.FormatUtil;
 import com.sun.management.OperatingSystemMXBean;
 import java.awt.*;
 import java.lang.management.ManagementFactory;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
@@ -44,8 +48,11 @@ public class AboutCommand extends UtilitiesCommand {
   private final OperatingSystemMXBean osb;
   private Runtime rt;
   private final String jvmVersion;
+  private final Thunder thunder;
 
-  public AboutCommand(Color color, String description, String[] features, Permission... perms) {
+  public AboutCommand(
+      Thunder thunder, Color color, String description, String[] features, Permission... perms) {
+    this.thunder = thunder;
     this.color = color;
     this.description = description;
     this.features = features;
@@ -149,6 +156,12 @@ public class AboutCommand extends UtilitiesCommand {
           .append(feature);
     descr.append(" ```");
     builder.setDescription(descr);
+    builder.addField(
+        "Last Startup",
+        FormatUtil.secondsToTime(
+                thunder.getReadyAt().until(OffsetDateTime.now(), ChronoUnit.SECONDS))
+            + " ago",
+        true);
     builder.addField(
         "Stats",
         event.getJDA().getGuilds().size()

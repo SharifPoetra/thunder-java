@@ -33,7 +33,6 @@ import java.util.function.Function;
 
 public abstract class DataSource {
   protected final HashMap<String, String[]> data = new HashMap<>();
-  // final protected ArrayList<String[]> data = new ArrayList<>();
   protected String filename = "discordbot.null";
   protected int size;
   protected Function<String[], String> generateKey;

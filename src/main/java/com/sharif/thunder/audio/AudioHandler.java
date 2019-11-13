@@ -131,7 +131,6 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     if (speed <= 0.1 || speed > 3)
       throw new IllegalArgumentException(
           "Nightcore speed out of range (0.1-3)!"); // prevent zero division and other
-    // weird shit
 
     speed = Math.abs(speed);
     nightcore = speed;
