@@ -30,7 +30,7 @@ import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.*;
 import java.awt.Color;
 import java.io.IOException;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
@@ -66,9 +66,14 @@ public class Main extends ListenerAdapter {
         Permission.NICKNAME_CHANGE
       };
 
+  private JDA jda;
   // datasources
   private static AFKs afks;
   private static InVCRoles inVcRoles;
+  private static Reminders reminders;
+
+  // timers
+  private static ScheduledExecutorService reminderchecker;
 
   public static void main(String[] args)
       throws Exception, IOException, IllegalArgumentException, LoginException,
@@ -81,10 +86,14 @@ public class Main extends ListenerAdapter {
     // datasources
     afks = new AFKs();
     inVcRoles = new InVCRoles();
+    reminders = new Reminders();
 
     // reading datasources
     afks.read();
     inVcRoles.read();
+    reminders.read();
+
+    reminderchecker = Executors.newSingleThreadScheduledExecutor();
 
     CommandClientBuilder client =
         new CommandClientBuilder()
@@ -122,6 +131,7 @@ public class Main extends ListenerAdapter {
                 new HelpCommand(thunder),
                 new AFKCommand(afks),
                 new KitsuCommand(thunder),
+                new ReminderCommand(reminders),
                 // music
                 new PlayCommand(thunder, config.getLoading()),
                 new PlaylistsCommand(thunder),
@@ -178,12 +188,22 @@ public class Main extends ListenerAdapter {
   @Override
   public void onReady(ReadyEvent event) {
     System.out.println(event.getJDA().getSelfUser().getAsTag() + " is ready now!");
+    reminderchecker.scheduleWithFixedDelay(
+        () -> {
+          reminders.checkReminders(jda);
+        },
+        0,
+        30,
+        TimeUnit.SECONDS);
   }
 
   @Override
   public void onShutdown(ShutdownEvent event) {
     afks.shutdown();
     inVcRoles.shutdown();
+    reminders.shutdown();
+
+    reminderchecker.shutdown();
   }
 
   @Override
@@ -212,7 +232,7 @@ public class Main extends ListenerAdapter {
           .filter((u) -> (afks.get(u.getId()) != null))
           .forEach(
               (u) -> {
-                OtherUtil.sendDM(u, relate);
+                SenderUtil.sendDM(u, relate);
               });
     }
     if (event.getChannelType() != ChannelType.PRIVATE
