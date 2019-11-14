@@ -83,7 +83,10 @@ public class Main extends ListenerAdapter {
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
     Thunder thunder = new Thunder(waiter, config);
 
-    // datasources
+    // timers initializations
+    reminderchecker = Executors.newSingleThreadScheduledExecutor();
+
+    // datasources initializations
     afks = new AFKs();
     inVcRoles = new InVCRoles();
     reminders = new Reminders();
@@ -92,8 +95,6 @@ public class Main extends ListenerAdapter {
     afks.read();
     inVcRoles.read();
     reminders.read();
-
-    reminderchecker = Executors.newSingleThreadScheduledExecutor();
 
     CommandClientBuilder client =
         new CommandClientBuilder()
