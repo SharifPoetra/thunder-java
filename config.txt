@@ -1,0 +1,21 @@
+token = NTgwNjI2OTcyNzQxMzM3MDg4.Xcz6SQ.722wGnfQpQorAbMD9O2XhGyS9TE
+owner = 580618094792146975
+prefix = "~"
+altprefix = "@mention"
+success = "<:success:629145243354267649>"
+warning = "<:warning:629145363009241088>"
+error = "<:error:629145310752407562>"
+loading = "⌚"
+searching = "🔎"
+music = "🎵"
+shuffle = "🔀"
+repeat = "🔁"
+npimages = true
+stayinchannel = false
+updatealerts = true
+maxtime = 0
+playlistsfolder = Playlists
+lyrics.default = "A-Z Lyrics"
+
+# Api Keys
+emiliakey = NTgwNjE4MDk0NzkyMTQ2OTc1.PcBQC3iRGawJb5pxS6cPlnfENqHPny2gv10bej60Bw
