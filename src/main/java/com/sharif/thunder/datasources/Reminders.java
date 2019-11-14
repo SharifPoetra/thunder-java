@@ -34,6 +34,7 @@ public class Reminders extends DataSource {
 
   public List<String[]> getRemindersForUser(String userId) {
     ArrayList<String[]> list = new ArrayList<>();
+    System.out.println(list);
     synchronized (data) {
       data.values().stream()
           .filter((item) -> (item[USERID].equals(userId)))
@@ -48,6 +49,7 @@ public class Reminders extends DataSource {
   public List<String[]> getExpiredReminders() {
     long now = OffsetDateTime.now().toInstant().toEpochMilli();
     ArrayList<String[]> list = new ArrayList<>();
+    System.out.println(list);
     synchronized (data) {
       for (String[] item : data.values())
         if (now > Long.parseLong(item[EXPIRETIME])) list.add(item.clone());
@@ -56,12 +58,14 @@ public class Reminders extends DataSource {
   }
 
   public void removeReminder(String[] reminder) {
+    System.out.println(reminder);
     remove(generateKey.apply(reminder));
   }
 
   public void checkReminders(JDA jda) {
     if (jda.getStatus() != JDA.Status.CONNECTED) return;
     List<String[]> list = getExpiredReminders();
+    System.out.println(list);
     list.stream()
         .map(
             (item) -> {
