@@ -12,6 +12,7 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 - [~] fix setinvcrole description
 - [-] removed debug command
 - [~] improve uptime on about command
+- [+] add `botstatus` command to change the bot current playing status
 
 ## v1.14.6
 

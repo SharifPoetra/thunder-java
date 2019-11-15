@@ -70,10 +70,6 @@ public class Main extends ListenerAdapter {
   // datasources
   private static AFKs afks;
   private static InVCRoles inVcRoles;
-  private static Reminders reminders;
-
-  // timers
-  private static ScheduledExecutorService reminderchecker;
 
   public static void main(String[] args)
       throws Exception, IOException, IllegalArgumentException, LoginException,
@@ -83,18 +79,13 @@ public class Main extends ListenerAdapter {
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
     Thunder thunder = new Thunder(waiter, config);
 
-    // timers initializations
-    reminderchecker = Executors.newSingleThreadScheduledExecutor();
-
     // datasources initializations
     afks = new AFKs();
     inVcRoles = new InVCRoles();
-    reminders = new Reminders();
 
     // reading datasources
     afks.read();
     inVcRoles.read();
-    reminders.read();
 
     CommandClientBuilder client =
         new CommandClientBuilder()
@@ -132,7 +123,6 @@ public class Main extends ListenerAdapter {
                 new HelpCommand(thunder),
                 new AFKCommand(afks),
                 new KitsuCommand(thunder),
-                new ReminderCommand(reminders),
                 // music
                 new PlayCommand(thunder, config.getLoading()),
                 new PlaylistsCommand(thunder),
@@ -159,6 +149,7 @@ public class Main extends ListenerAdapter {
                 // owner
                 new RestartCommand(thunder),
                 new PlaylistCommand(thunder),
+                new BotStatusCommand(),
                 new EvalCommand(thunder));
 
     log.info("Loaded config from " + config.getConfigLocation());
@@ -189,22 +180,12 @@ public class Main extends ListenerAdapter {
   @Override
   public void onReady(ReadyEvent event) {
     System.out.println(event.getJDA().getSelfUser().getAsTag() + " is ready now!");
-    reminderchecker.scheduleWithFixedDelay(
-        () -> {
-          reminders.checkReminders(jda);
-        },
-        0,
-        30,
-        TimeUnit.SECONDS);
   }
 
   @Override
   public void onShutdown(ShutdownEvent event) {
     afks.shutdown();
     inVcRoles.shutdown();
-    reminders.shutdown();
-
-    reminderchecker.shutdown();
   }
 
   @Override
