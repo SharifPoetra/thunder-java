@@ -149,6 +149,7 @@ public class Main extends ListenerAdapter {
                 // owner
                 new RestartCommand(thunder),
                 new PlaylistCommand(thunder),
+                new BotStatusCommand(),
                 new EvalCommand(thunder));
 
     log.info("Loaded config from " + config.getConfigLocation());
