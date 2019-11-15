@@ -35,6 +35,7 @@ public class BotConfig {
       shuffleEmoji,
       repeatEmoji,
       playlistsFolder,
+      databaseFolder,
       defaultLyrics,
       emiliaKey;
   private boolean stayInChannel, npImages, updateAlerts;
@@ -71,6 +72,7 @@ public class BotConfig {
       maxSeconds = config.getLong("maxtime");
       updateAlerts = config.getBoolean("updatealerts");
       playlistsFolder = config.getString("playlistsfolder");
+      databaseFolder = config.getString("databasefolder");
       defaultLyrics = config.getString("lyrics.default");
       emiliaKey = config.getString("emiliakey");
 
@@ -154,6 +156,10 @@ public class BotConfig {
 
   public String getPlaylistsFolder() {
     return playlistsFolder;
+  }
+
+  public String getDatabaseFolder() {
+    return databaseFolder;
   }
 
   public String getDefaultLyrics() {

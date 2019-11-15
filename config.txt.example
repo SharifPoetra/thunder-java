@@ -15,6 +15,7 @@ stayinchannel = false
 updatealerts = true
 maxtime = 0
 playlistsfolder = Playlists
+databasefolder = data
 lyrics.default = "A-Z Lyrics"
 
 # Api Keys

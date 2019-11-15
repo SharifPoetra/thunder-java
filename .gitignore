@@ -14,5 +14,5 @@ target/
 config.txt
 
 # data
-discordbot.*
+data/
 Playlists/

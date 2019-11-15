@@ -37,6 +37,7 @@ public abstract class DataSource {
   protected int size;
   protected Function<String[], String> generateKey;
 
+  BotConfig config = new BotConfig();
   ExecutorService filewriting = Executors.newSingleThreadExecutor();
   boolean writeScheduled = false;
 
@@ -86,9 +87,19 @@ public abstract class DataSource {
   }
 
   public boolean read() {
+    File dataDir = new File(config.getDatabaseFolder());
+    if (!dataDir.exists()) {
+      try {
+        dataDir.mkdir();
+      } catch (SecurityException e) {
+        System.err.println("Error making folder of databases: " + e.toString());
+      }
+    }
     BufferedReader reader = null;
     try {
-      reader = new BufferedReader(new FileReader(filename));
+      reader =
+          new BufferedReader(
+              new FileReader(config.getDatabaseFolder() + File.separatorChar + filename));
     } catch (FileNotFoundException e) {
       System.err.println("WARNING - " + filename + " not found : " + e.toString());
     }
@@ -127,7 +138,9 @@ public abstract class DataSource {
     synchronized (data) {
       copy = new HashMap<>(data);
     }
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+    try (BufferedWriter writer =
+        new BufferedWriter(
+            new FileWriter(config.getDatabaseFolder() + File.separatorChar + filename))) {
       for (String[] s : copy.values()) {
         String str = s[0];
         for (int i = 1; i < s.length; i++) {
@@ -149,7 +162,7 @@ public abstract class DataSource {
 
     try {
       Files.copy(
-          new File(filename).toPath(),
+          new File(config.getDatabaseFolder() + File.separatorChar + filename).toPath(),
           new File("DataCopies" + File.separatorChar + filename).toPath(),
           StandardCopyOption.REPLACE_EXISTING);
     } catch (IOException e) {
