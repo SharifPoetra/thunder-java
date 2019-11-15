@@ -25,7 +25,7 @@ Rename `config.txt.example` to `config.txt` and fill it out.
 # Compile
 
 ```bash
-mvn package
+gradle shadowJar
 ```
 
 # Start it up

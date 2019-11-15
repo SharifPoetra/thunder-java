@@ -1,6 +1,6 @@
 {
-  "start": "echo 'Starting the compiled jar file...' & java -jar ./target/thunder-1.0.0-All.jar",
-  "install": "mvn package -nsu -DskipTests",
+  "start": "echo 'Starting the compiled jar file...' & java -jar ./build/libs/thunder-1.0.0.jar",
+  "install": "gradle shadowJar",
   "watch": {
     "throttle": 900000000,
     "install": {
