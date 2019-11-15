@@ -1,18 +1,16 @@
-# glitch
-shrinkwrap.yaml
-.glitch-assets
-.bash_history
-.cache
-.config
+# Java
+*.class
+*.jar
+hs_err_pid*
 
-# miscs
+# Gradle
+.gradle
+build/
+!gradle-wrapper.jar
+
+# Runtime
 .git/
-.nano/
-.m2/
-.java/
-target/
-config.txt
-
-# data
 data/
 Playlists/
+target/
+config.txt
