@@ -25,6 +25,7 @@ public class RepeatCommand extends MusicCommand {
     super(thunder);
     this.name = "repeat";
     this.help = "re-adds music to the queue when finished.";
+    this.aliases = new String[] {"loop"};
     this.guildOnly = true;
   }
 

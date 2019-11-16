@@ -25,6 +25,7 @@ public class StopCommand extends MusicCommand {
     super(thunder);
     this.name = "stop";
     this.help = "stops the current song and clears the queue.";
+    this.aliases = new String[] {"leave"};
     this.bePlaying = false;
   }
 

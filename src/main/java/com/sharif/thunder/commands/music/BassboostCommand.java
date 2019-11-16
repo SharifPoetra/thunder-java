@@ -25,6 +25,7 @@ public class BassboostCommand extends MusicCommand {
     super(thunder);
     this.name = "bassboost";
     this.help = "toggles bassboost mode.";
+    this.aliases = new String[] {"bb"};
     this.guildOnly = true;
   }
 

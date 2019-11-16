@@ -39,7 +39,7 @@ public class QueueCommand extends MusicCommand {
     this.name = "queue";
     this.help = "shows the current queue.";
     this.arguments = "[pagenum]";
-    this.aliases = new String[] {"list"};
+    this.aliases = new String[] {"q", "list"};
     this.bePlaying = true;
     this.botPermissions =
         new Permission[] {Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS};
