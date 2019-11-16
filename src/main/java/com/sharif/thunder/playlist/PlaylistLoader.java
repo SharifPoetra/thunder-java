@@ -46,7 +46,7 @@ public class PlaylistLoader {
           .collect(Collectors.toList());
     } else {
       createFolder();
-      return Collections.EMPTY_LIST;
+      return Collections.emptyList();
     }
   }
 

@@ -53,6 +53,7 @@ public class FormatUtil {
     return sb.toString();
   }
 
+  @SafeVarargs
   public static <T> String join(String delimiter, Function<T, String> function, T... items) {
     if (items == null || items.length == 0) return "";
     StringBuilder sb = new StringBuilder(function.apply(items[0]));

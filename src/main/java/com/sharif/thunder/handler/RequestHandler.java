@@ -74,7 +74,7 @@ public class RequestHandler {
    */
   public JsonObject getJsonObject() throws IllegalStateException {
     try {
-      return (content == null) ? null : new JsonParser().parse(content).getAsJsonObject();
+      return (content == null) ? null : JsonParser.parseString(content).getAsJsonObject();
     } catch (Exception ex) {
       log.error(
           "An error occurred while running the {} class, message: {}", this, ex.getMessage(), ex);
@@ -91,7 +91,7 @@ public class RequestHandler {
    */
   public JsonArray getJsonArray() throws IllegalStateException {
     try {
-      return (content == null) ? null : new JsonParser().parse(content).getAsJsonArray();
+      return (content == null) ? null : JsonParser.parseString(content).getAsJsonArray();
     } catch (Exception ex) {
       log.error(
           "An error occurred while running the {} class, message: {}", this, ex.getMessage(), ex);

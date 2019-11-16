@@ -77,7 +77,7 @@ public class NetworkUtil {
     exchange
         .getRequestReceiver()
         .receiveFullString(
-            (sex, string) -> future.complete(new JsonParser().parse(string)),
+            (sex, string) -> future.complete(JsonParser.parseString(string)),
             (sex, err) -> future.completeExceptionally(err));
 
     return future;

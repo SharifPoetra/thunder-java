@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.events.*;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.exceptions.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
@@ -67,6 +68,7 @@ public class Main extends ListenerAdapter {
       };
 
   private JDA jda;
+  private static Thunder thunder;
   // datasources
   private static AFKs afks;
   private static InVCRoles inVcRoles;
@@ -74,10 +76,10 @@ public class Main extends ListenerAdapter {
   public static void main(String[] args)
       throws Exception, IOException, IllegalArgumentException, LoginException,
           RateLimitedException {
-    BotConfig config = new BotConfig();
     Logger log = LoggerFactory.getLogger(Main.class);
+    BotConfig config = new BotConfig();
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
-    Thunder thunder = new Thunder(waiter, config);
+    thunder = new Thunder(waiter, config);
 
     // datasources initializations
     afks = new AFKs();
@@ -243,6 +245,11 @@ public class Main extends ListenerAdapter {
       String afkmessage = builder.toString().trim();
       if (!afkmessage.equals("")) event.getChannel().sendMessage(afkmessage).queue();
     }
+  }
+
+  @Override
+  public void onGuildMessageDelete(GuildMessageDeleteEvent event) {
+    thunder.getNowplayingHandler().onMessageDelete(event.getGuild(), event.getMessageIdLong());
   }
 
   @Override

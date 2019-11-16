@@ -28,7 +28,10 @@ dependencies {
 group = 'com.sharif'
 mainClassName = 'com.sharif.thunder.Main'
 version = '1.0.0'
-sourceCompatibility = '1.8'
+sourceCompatibility = 11
+targetCompatibility = 11
+
+compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
