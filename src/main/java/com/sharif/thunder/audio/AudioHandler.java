@@ -294,6 +294,11 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     updateFilters(getPlayingTrack());
   }
 
+  public void onTrackLoadFailed() {
+    if (audioPlayer.getPlayingTrack() == null)
+      onTrackEnd(audioPlayer, null, AudioTrackEndReason.LOAD_FAILED);
+  }
+
   // Formatting
   public Message getNowPlaying(JDA jda) {
     if (isMusicPlaying(jda)) {

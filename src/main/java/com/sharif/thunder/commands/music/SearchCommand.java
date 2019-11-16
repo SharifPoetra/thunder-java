@@ -93,6 +93,7 @@ public class SearchCommand extends MusicCommand {
                         + thunder.getConfig().getMaxTime()
                         + "`"))
             .queue();
+        ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).onTrackLoadFailed();
         return;
       }
       AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
@@ -132,6 +133,8 @@ public class SearchCommand extends MusicCommand {
                           + "` > `"
                           + thunder.getConfig().getMaxTime()
                           + "`");
+                  ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
+                      .onTrackLoadFailed();
                   return;
                 }
                 AudioHandler handler =
@@ -145,7 +148,10 @@ public class SearchCommand extends MusicCommand {
                         + "`) "
                         + (pos == 0 ? "to begin playing" : " to the queue at position " + pos));
               })
-          .setCancel((msg) -> {})
+          .setCancel(
+              (msg) ->
+                  ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
+                      .onTrackLoadFailed())
           .setUsers(event.getAuthor());
       for (int i = 0; i < 5 && i < playlist.getTracks().size(); i++) {
         AudioTrack track = playlist.getTracks().get(i);
@@ -170,6 +176,8 @@ public class SearchCommand extends MusicCommand {
                       + event.getArgs()
                       + "`."))
           .queue();
+
+      ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).onTrackLoadFailed();
     }
 
     @Override
@@ -178,6 +186,8 @@ public class SearchCommand extends MusicCommand {
         m.editMessage(event.getClient().getError() + " Error loading: " + throwable.getMessage())
             .queue();
       else m.editMessage(event.getClient().getError() + " Error loading track.").queue();
+
+      ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).onTrackLoadFailed();
     }
   }
 }

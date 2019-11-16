@@ -132,6 +132,7 @@ public class PlayCommand extends MusicCommand {
                         + FormatUtil.formatTime(thunder.getConfig().getMaxSeconds() * 1000)
                         + "`"))
             .queue();
+        ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).onTrackLoadFailed();
         return;
       }
       AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
@@ -240,6 +241,8 @@ public class PlayCommand extends MusicCommand {
                           + thunder.getConfig().getMaxTime()
                           + "`)"))
               .queue();
+          ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
+              .onTrackLoadFailed();
         } else {
           m.editMessage(
                   FormatUtil.filterEveryone(
@@ -278,6 +281,8 @@ public class PlayCommand extends MusicCommand {
             .getPlayerManager()
             .loadItemOrdered(
                 event.getGuild(), "ytsearch:" + event.getArgs(), new ResultHandler(m, event, true));
+
+      ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).onTrackLoadFailed();
     }
 
     @Override
@@ -286,6 +291,8 @@ public class PlayCommand extends MusicCommand {
         m.editMessage(event.getClient().getError() + " Error loading: " + throwable.getMessage())
             .queue();
       else m.editMessage(event.getClient().getError() + " Error loading track.").queue();
+
+      ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).onTrackLoadFailed();
     }
   }
 
