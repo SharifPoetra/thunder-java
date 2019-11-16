@@ -33,6 +33,12 @@ targetCompatibility = 11
 
 compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
+shadowJar {
+   baseName = 'thunder'
+   classifier = ''
+   archiveVersion = ''
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }

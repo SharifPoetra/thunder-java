@@ -40,23 +40,11 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Generate code coverage report
-          command:
-            bash ./gradlew shadowJar
-      - store_test_results:
-          path: build/test-results/test
-      - store_artifacts:
-          path: build/test-results/test
-          when: always
-      - store_artifacts:
-          path: build/reports/sharif/test/html
-          when: always
-      - run:
-          name: Assemble JAR
+          name: Generating JAR
           command: |
             # Skip this for other nodes
             if [ "$CIRCLE_NODE_INDEX" == 0 ]; then
-              bash ./gradlew assemble
+              bash ./gradlew shadowJar
             fi
       # This will be empty for all nodes except the first one
       - store_artifacts:

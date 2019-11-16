@@ -1,5 +1,5 @@
 {
-  "start": "echo 'Starting the compiled jar file...' & java -jar ./build/libs/thunder-1.0.0.jar",
+  "start": "echo 'Starting the compiled jar file...' & java -jar ./build/libs/thunder.jar",
   "install": "echo 'Nothing to install...'",
   "watch": {
     "throttle": 900000000,
