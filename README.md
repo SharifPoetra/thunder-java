@@ -18,22 +18,24 @@
 
 <br>
 
-# Configuration
+# Selfhosting  
+
+### Configuration
 
 Rename `config.txt.example` to `config.txt` and fill it out.
 
-# Compile
+### Compile
 
 ```bash
 gradle shadowJar
 ```
 
-# Start it up
+### Start it up
 
 ```bash
 java -jar <generated-jar-file.jar>
 ```
 
-## Licensing
+# Licensing
 
 The bot is licensed under the Apache 2.0 license. See the file [LICENSE.md](https://github.com/SharifPoetra/thunder-java/blob/master/LICENSE.md) for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
