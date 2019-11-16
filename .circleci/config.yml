@@ -42,7 +42,7 @@ jobs:
       - run:
           name: Generate code coverage report
           command:
-            bash ./gradlew sharifTestReport
+            bash ./gradlew shadowJar
       - store_test_results:
           path: build/test-results/test
       - store_artifacts:
