@@ -2,7 +2,7 @@
 
 Key: [+] added, [-] removed, [~] modified, [!] important.
 
-## v1.18.0
+## v1.18.1
 - [~] about command fixes
 - [!] the changelog now sync with releases version
 - [!] why is the version on the pom.xml is different on changelogs/releases? because the version is no matter for me and can be changed at every time and all we need is the compiled jar file to run it.
@@ -14,6 +14,7 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 - [~] improve uptime on about command
 - [+] add `botstatus` command to change the bot current playing status
 - [!] option to specify where you want to save data files
+- [~] add aliases for some commands on Music category
 
 ## v1.14.6
 
