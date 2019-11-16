@@ -15,7 +15,7 @@ jobs:
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - run:
           name: Install dependencies
-          command: ./gradlew build -x test
+          command: bash ./gradlew build -x test
       - save_cache:
           paths:
             - ~/.gradle/wrapper
@@ -63,7 +63,7 @@ jobs:
       - run:
           name: Generate code coverage report
           command:
-            ./gradlew sharifTestReport
+            bash ./gradlew sharifTestReport
       - store_test_results:
           path: build/test-results/test
       - store_artifacts:
@@ -77,7 +77,7 @@ jobs:
           command: |
             # Skip this for other nodes
             if [ "$CIRCLE_NODE_INDEX" == 0 ]; then
-              ./gradlew assemble
+              bash ./gradlew assemble
             fi
       # This will be empty for all nodes except the first one
       - store_artifacts:
