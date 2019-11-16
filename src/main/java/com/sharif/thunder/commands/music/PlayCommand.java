@@ -196,7 +196,9 @@ public class PlayCommand extends MusicCommand {
 
     private int loadPlaylist(AudioPlaylist playlist, AudioTrack exclude) {
       int[] count = {0};
-      playlist.getTracks().stream()
+      playlist
+          .getTracks()
+          .stream()
           .forEach(
               (track) -> {
                 if (!thunder.getConfig().isTooLong(track) && !track.equals(exclude)) {

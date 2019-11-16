@@ -1,20 +1,12 @@
 plugins {
     id 'java'
-    id 'maven-publish'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'com.github.sherter.google-java-format' version '0.8'
 }
 
 repositories {
     jcenter()
-    mavenLocal()
-    maven {
-        url = 'http://jcenter.bintray.com/'
-    }
-
-    maven {
-        url = 'http://repo.maven.apache.org/maven2'
-    }
 }
 
 dependencies {
@@ -37,14 +29,6 @@ group = 'com.sharif'
 mainClassName = 'com.sharif.thunder.Main'
 version = '1.0.0'
 sourceCompatibility = '1.8'
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'

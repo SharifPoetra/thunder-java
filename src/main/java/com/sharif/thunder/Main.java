@@ -210,7 +210,10 @@ public class Main extends ListenerAdapter {
               + event.getAuthor().getAsTag()
               + "**:\n"
               + event.getMessage().getContentRaw();
-      event.getMessage().getMentionedUsers().stream()
+      event
+          .getMessage()
+          .getMentionedUsers()
+          .stream()
           .filter((u) -> (afks.get(u.getId()) != null))
           .forEach(
               (u) -> {
@@ -221,7 +224,10 @@ public class Main extends ListenerAdapter {
         && !event.getMessage().getMentionedUsers().isEmpty()
         && !event.getAuthor().isBot()) {
       StringBuilder builder = new StringBuilder("");
-      event.getMessage().getMentionedUsers().stream()
+      event
+          .getMessage()
+          .getMentionedUsers()
+          .stream()
           .forEach(
               u -> {
                 if (afks.get(u.getId()) != null) {

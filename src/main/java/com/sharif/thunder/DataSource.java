@@ -119,7 +119,8 @@ public abstract class DataSource {
         reader.close();
         synchronized (data) {
           data.clear();
-          newData.stream()
+          newData
+              .stream()
               .forEach(
                   (item) -> {
                     data.put(generateKey.apply(item), item);

@@ -55,7 +55,12 @@ public class SkiptoCommand extends MusicCommand {
     } else {
       int listeners =
           (int)
-              event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
+              event
+                  .getSelfMember()
+                  .getVoiceState()
+                  .getChannel()
+                  .getMembers()
+                  .stream()
                   .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened())
                   .count();
       String msg;
@@ -67,7 +72,12 @@ public class SkiptoCommand extends MusicCommand {
       }
       int skippers =
           (int)
-              event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
+              event
+                  .getSelfMember()
+                  .getVoiceState()
+                  .getChannel()
+                  .getMembers()
+                  .stream()
                   .filter(m -> handler.getVotes().contains(m.getUser().getId()))
                   .count();
       int required = (int) Math.ceil(listeners * .55);
