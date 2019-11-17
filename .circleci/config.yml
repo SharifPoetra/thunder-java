@@ -40,7 +40,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Assemble JAR
+          name: Generate JAR
           command: |
             # Skip this for other nodes
             if [ "$CIRCLE_NODE_INDEX" == 0 ]; then
@@ -54,7 +54,7 @@ workflows:
   version: 2
   workflow:
     jobs:
-    # - build
+    - build
     - test:
         requires:
           - build
