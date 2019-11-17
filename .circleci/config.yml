@@ -40,13 +40,8 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Generating JAR
-          command: |
-            # Skip this for other nodes
-            if [ "$CIRCLE_NODE_INDEX" == 0 ]; then
-              bash ./gradlew shadowJar
-            fi
-      # This will be empty for all nodes except the first one
+          name: Generate JAR
+          command: bash ./gradlew shadowJar
       - store_artifacts:
           path: build/libs
 
