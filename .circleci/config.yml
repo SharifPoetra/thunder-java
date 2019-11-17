@@ -44,6 +44,8 @@ jobs:
           command: bash ./gradlew shadowJar
       - store_artifacts:
           path: build/libs
+      - store_test_results:
+          path: build/test_results
 
 workflows:
   version: 2
