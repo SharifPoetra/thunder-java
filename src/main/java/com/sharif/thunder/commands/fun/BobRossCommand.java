@@ -64,10 +64,6 @@ public class BobRossCommand extends FunCommand {
                     .sendFile(image, "bobross.png")
                     .embed(
                         new EmbedBuilder()
-                            .setAuthor(
-                                event.getMember().getUser().getName(),
-                                null,
-                                event.getAuthor().getEffectiveAvatarUrl())
                             .setColor(event.getSelfMember().getColor())
                             .setImage("attachment://bobross.png")
                             .build())
