@@ -55,8 +55,7 @@ public class BobRossCommand extends FunCommand {
                 byte[] image =
                     UnirestUtil.getBytes(
                         "https://emilia.shrf.xyz/api/bob-ross?image="
-                            + list.get(0).getUser().getEffectiveAvatarUrl()
-                            + "",
+                            + list.get(0).getUser().getEffectiveAvatarUrl(),
                         headers);
                 message.delete().submit();
                 event
