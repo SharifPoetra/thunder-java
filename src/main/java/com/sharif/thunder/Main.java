@@ -113,6 +113,7 @@ public class Main extends ListenerAdapter {
                 new BobRossCommand(thunder),
                 new ChooseCommand(thunder),
                 new SayCommand(thunder),
+                new BatSlapCommand(thunder),
                 // utilities
                 new AboutCommand(
                     thunder,
