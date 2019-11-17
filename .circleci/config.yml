@@ -40,18 +40,6 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Generate JAR
-          command:
-            bash ./gradlew shadowJar
-      - store_test_results:
-          path: build/test-results/test
-      - store_artifacts:
-          path: build/test-results/test
-          when: always
-      - store_artifacts:
-          path: build/reports/sharif/test/html
-          when: always
-      - run:
           name: Assemble JAR
           command: |
             # Skip this for other nodes
@@ -66,7 +54,7 @@ workflows:
   version: 2
   workflow:
     jobs:
-    - build
+    # - build
     - test:
         requires:
           - build
