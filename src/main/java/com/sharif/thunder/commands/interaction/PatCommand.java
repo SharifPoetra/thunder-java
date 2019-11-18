@@ -42,7 +42,6 @@ public class PatCommand extends InteractionCommand {
   @Override
   public void execute(CommandEvent event) {
     try {
-      event.getChannel().sendTyping().queue();
       event
           .getChannel()
           .sendMessage("Please wait...")
@@ -54,7 +53,6 @@ public class PatCommand extends InteractionCommand {
                       .queue();
                   return;
                 }
-                event.getChannel().sendTyping().queue();
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
                 byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/pat", headers);
