@@ -16,6 +16,7 @@ Key: [+] added, [-] removed, [~] modified, [!] important.
 - [!] option to specify where you want to save data files
 - [~] add aliases for some commands on Music category
 - [+] add `batslap` command
+- [+] add `avatar` command
 
 ## v1.14.6
 

@@ -126,6 +126,7 @@ public class Main extends ListenerAdapter {
                 new HelpCommand(thunder),
                 new AFKCommand(afks),
                 new KitsuCommand(thunder),
+                new AvatarCommand(thunder),
                 // music
                 new PlayCommand(thunder, config.getLoading()),
                 new PlaylistsCommand(thunder),
