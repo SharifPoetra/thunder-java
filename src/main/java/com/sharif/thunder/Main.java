@@ -46,6 +46,7 @@ import net.dv8tion.jda.api.exceptions.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spark.Spark;
 
 public class Main extends ListenerAdapter {
   public static final String PLAY_EMOJI = "\u25B6"; // ▶
@@ -178,6 +179,7 @@ public class Main extends ListenerAdapter {
       System.exit(1);
     }
 
+    Spark.port(3000);
     get("/", (req, res) -> "{\"message\": \"Hello World\"}");
   }
 
