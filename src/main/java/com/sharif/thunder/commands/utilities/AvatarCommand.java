@@ -15,6 +15,7 @@ public class AvatarCommand extends UtilitiesCommand {
   public AvatarCommand(Thunder thunder) {
     this.thunder = thunder;
     this.name = "avatar";
+    this.help = "Gets a user's avatar";
     this.aliases = new String[] {"ava"};
     this.arguments = "<user>";
   }
