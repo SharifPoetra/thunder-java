@@ -1,11 +1,11 @@
 package com.sharif.thunder.commands.utilities;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.UtilitiesCommand;
-import net.dv8tion.jda.api.EmbedBuilder;
-import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import java.util.List;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
 public class AvatarCommand extends UtilitiesCommand {
