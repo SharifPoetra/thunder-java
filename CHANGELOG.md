@@ -2,7 +2,7 @@
 
 Key: [+] added, [-] removed, [~] modified, [!] important.
 
-## v1.19.0
+## v1.20.0
 - [~] about command fixes
 - [!] the changelog now sync with releases version
 - [!] why is the version on the pom.xml is different on changelogs/releases? because the version is no matter for me and can be changed at every time and all we need is the compiled jar file to run it.
