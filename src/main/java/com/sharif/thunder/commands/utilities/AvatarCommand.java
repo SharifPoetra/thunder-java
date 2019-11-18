@@ -1,11 +1,11 @@
 package com.sharif.thunder.commands.utilities;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.UtilitiesCommand;
-import net.dv8tion.jda.api.EmbedBuilder;
-import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import java.util.List;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
 public class AvatarCommand extends UtilitiesCommand {
@@ -15,6 +15,7 @@ public class AvatarCommand extends UtilitiesCommand {
   public AvatarCommand(Thunder thunder) {
     this.thunder = thunder;
     this.name = "avatar";
+    this.help = "Gets a user's avatar";
     this.aliases = new String[] {"ava"};
     this.arguments = "<user>";
   }
@@ -39,6 +40,7 @@ public class AvatarCommand extends UtilitiesCommand {
                 event.reply(eb.build());
               });
     } catch (Exception e) {
+      event.replyError("Something went wrong: `" + e.getMessage() + "` please try again later!");
     }
   }
 }
