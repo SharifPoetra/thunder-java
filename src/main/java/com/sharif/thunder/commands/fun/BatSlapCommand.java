@@ -48,7 +48,6 @@ public class BatSlapCommand extends FunCommand {
                       .queue();
                   return;
                 }
-                event.getChannel().sendTyping().queue();
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
                 List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
