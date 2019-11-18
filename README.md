@@ -20,21 +20,21 @@
 
 # Selfhosting  
 
+Download the latest [releases](https://github.com/SharifPoetra/thunder-java/releases) (it should be `thunder.jar` and `config.txt.example`. `playlist_file.txt.example` is just an example for how it works)
+
 ### Configuration
 
 Rename `config.txt.example` to `config.txt` and fill it out.
 
-### Compile
-
-```bash
-gradle shadowJar
-```
-
 ### Start it up
 
 ```bash
-java -jar <generated-jar-file.jar>
+java -jar thunder.jar
 ```
+
+# Contributing
+
+We are very open for any contributions. Please read [CONTRIBUTING.md](https://github.com/SharifPoetra/thunder-java/blob/master/CONTRIBUTING.md) for more insformation.
 
 # Licensing
 
