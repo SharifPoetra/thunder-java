@@ -39,7 +39,6 @@ public class EvalCommand extends OwnerCommand {
   @Override
   protected void execute(CommandEvent event) {
     Logger log = LoggerFactory.getLogger(EvalCommand.class);
-    event.getChannel().sendTyping().queue();
     event.async(
         () -> {
           ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");

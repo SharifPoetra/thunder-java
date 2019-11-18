@@ -48,7 +48,6 @@ public class CryCommand extends InteractionCommand {
           .sendMessage("Please wait...")
           .queue(
               message -> {
-                event.getChannel().sendTyping().queue();
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
                 byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/cry", headers);
