@@ -39,6 +39,7 @@ public class AvatarCommand extends UtilitiesCommand {
                 event.reply(eb.build());
               });
     } catch (Exception e) {
+      event.replyError("Something went wrong: `" + e.getMessage() + "` please try again later!");
     }
   }
 }
