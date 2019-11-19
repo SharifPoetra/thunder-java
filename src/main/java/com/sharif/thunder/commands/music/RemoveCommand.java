@@ -30,6 +30,7 @@ public class RemoveCommand extends MusicCommand {
     this.help = "removes a song from the queue.";
     this.arguments = "<position|ALL>";
     this.aliases = new String[] {"delete"};
+    this.guildOnly = true;
     this.beListening = true;
     this.bePlaying = true;
   }

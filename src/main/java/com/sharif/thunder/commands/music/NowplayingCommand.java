@@ -29,6 +29,9 @@ public class NowplayingCommand extends MusicCommand {
     this.help = "shows the song that is currently playing.";
     this.aliases = new String[] {"np", "current"};
     this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
+    this.guildOnly = true;
+    this.beListening = false;
+    this.bePlaying = false;
   }
 
   @Override

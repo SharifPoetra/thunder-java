@@ -27,6 +27,8 @@ public class RepeatCommand extends MusicCommand {
     this.help = "re-adds music to the queue when finished.";
     this.aliases = new String[] {"loop"};
     this.guildOnly = true;
+    this.beListening = true;
+    this.bePlaying = true;
   }
 
   @Override

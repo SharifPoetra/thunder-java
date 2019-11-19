@@ -37,8 +37,9 @@ public class PlaynextCommand extends MusicCommand {
     this.name = "playnext";
     this.arguments = "<title|URL>";
     this.help = "plays a single song next.";
+    this.guildOnly = true;
     this.beListening = true;
-    this.bePlaying = false;
+    this.bePlaying = true;
   }
 
   @Override

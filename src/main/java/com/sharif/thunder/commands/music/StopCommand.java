@@ -26,6 +26,8 @@ public class StopCommand extends MusicCommand {
     this.name = "stop";
     this.help = "stops the current song and clears the queue.";
     this.aliases = new String[] {"leave"};
+    this.guildOnly = true;
+    this.beListening = true;
     this.bePlaying = false;
   }
 

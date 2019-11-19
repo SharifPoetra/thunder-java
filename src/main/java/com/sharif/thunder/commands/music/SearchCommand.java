@@ -43,6 +43,7 @@ public class SearchCommand extends MusicCommand {
     this.aliases = new String[] {"ytsearch"};
     this.arguments = "<query>";
     this.help = "searches Youtube for a provided query.";
+    this.guildOnly = true;
     this.beListening = true;
     this.bePlaying = false;
     this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};

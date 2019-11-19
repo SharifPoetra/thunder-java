@@ -27,6 +27,7 @@ public class SkipCommand extends MusicCommand {
     this.name = "skip";
     this.help = "votes to skip the current song.";
     this.aliases = new String[] {"voteskip"};
+    this.guildOnly = true;
     this.beListening = true;
     this.bePlaying = true;
   }

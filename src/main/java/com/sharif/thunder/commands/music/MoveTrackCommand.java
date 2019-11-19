@@ -30,6 +30,8 @@ public class MoveTrackCommand extends MusicCommand {
     this.help = "move a track in the current queue to a different position.";
     this.arguments = "<from> <to>";
     this.aliases = new String[] {"move"};
+    this.guildOnly = true;
+    this.beListening = true;
     this.bePlaying = true;
   }
 

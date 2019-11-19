@@ -29,6 +29,9 @@ public class NightcoreCommand extends MusicCommand {
     this.name = "nightcore";
     this.help = "toggles nightcore mode and changes it's speed.";
     this.arguments = "<0.1 - 3.0>";
+    this.guildOnly = true;
+    this.beListening = true;
+    this.bePlaying = true;
   }
 
   @Override

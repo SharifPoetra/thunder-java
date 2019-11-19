@@ -28,6 +28,8 @@ public class SkiptoCommand extends MusicCommand {
     this.help = "skips to the specified song.";
     this.arguments = "<position>";
     this.aliases = new String[] {"jumpto"};
+    this.guildOnly = true;
+    this.beListening = true;
     this.bePlaying = true;
   }
 
