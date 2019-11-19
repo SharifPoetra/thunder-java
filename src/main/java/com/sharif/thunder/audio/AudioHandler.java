@@ -22,7 +22,7 @@ import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.ResamplingPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.UniversalPcmAudioFilter;
-import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
+import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -50,8 +50,11 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AudioHandler extends AudioEventAdapter implements AudioSendHandler {
+  Logger log = LoggerFactory.getLogger(AudioHandler.class);
   private final FairQueue<QueuedTrack> queue = new FairQueue<QueuedTrack>();
   private final List<AudioTrack> defaultQueue = new LinkedList<AudioTrack>();
   private final Set<String> votes = new HashSet<String>();
@@ -69,9 +72,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   @Getter private boolean karaoke = false;
   @Getter private boolean vaporwave = false;
   @Getter private boolean repeating = false;
+  private float karaokeLevel = 1f;
+  private float karaokeMono = 1f;
   private float karaokeWidth = 100f;
   private float karaokeBand = 220f;
-  private float karaokeLevel = 1f;
   private static final float[] BASS_BOOST = {
     0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f,
     -0.1f
@@ -102,6 +106,16 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     updateFilters(getPlayingTrack());
   }
 
+  public void setKaraokeLevel(float level) {
+    this.karaokeLevel = level;
+    updateFilters(getPlayingTrack());
+  }
+
+  public void setKaraokeMono(float mono) {
+    this.karaokeMono = mono;
+    updateFilters(getPlayingTrack());
+  }
+
   public void setKaraokeWidth(float width) {
     this.karaokeWidth = width;
     updateFilters(getPlayingTrack());
@@ -109,11 +123,6 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 
   public void setKaraokeBand(float band) {
     this.karaokeBand = band;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setKaraokeLevel(float level) {
-    this.karaokeLevel = level;
     updateFilters(getPlayingTrack());
   }
 
@@ -260,7 +269,6 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 
   @Override
   public void onTrackStart(AudioPlayer player, AudioTrack track) {
-    // if (queue.isEmpty()) return;
     EmbedBuilder eb = new EmbedBuilder();
     eb.setColor(guild.getSelfMember().getColor());
     eb.setAuthor(Main.PLAY_EMOJI + " Start playing");
@@ -410,14 +418,15 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     if (canChangeSpeed(getPlayingTrack())
         && (vaporwave || nightcore != 1 || tempo != 1 || pitch != 0)) {
       if (nightcore != 1 && highQualityNightcore) {
-        filter =
+        ResamplingPcmAudioFilter resamplingFilter =
             new ResamplingPcmAudioFilter(
                 configuration,
                 format.channelCount,
                 filter,
                 format.sampleRate,
                 (int) (format.sampleRate / nightcore));
-        filterList.add(filter);
+        filterList.add(resamplingFilter);
+        filter = resamplingFilter;
       }
 
       TimescalePcmAudioFilter timescale =
@@ -438,21 +447,24 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     }
 
     if (karaoke) {
-      filter =
+      KaraokePcmAudioFilter karaokeFilter =
           new KaraokePcmAudioFilter(filter, format.channelCount, format.sampleRate)
               .setLevel(karaokeLevel)
+              .setMonoLevel(karaokeMono)
               .setFilterBand(karaokeBand)
               .setFilterWidth(karaokeWidth);
 
-      filterList.add(filter);
+      filterList.add(karaokeFilter);
+      filter = karaokeFilter;
     }
 
     if (bassboost) {
-      EqualizerFactory equalizer = new EqualizerFactory();
+      Equalizer equalizer = new Equalizer(format.channelCount, filter);
       for (int i = 0; i < BASS_BOOST.length; i++) {
         equalizer.setGain(i, BASS_BOOST[i] + 0.1f);
       }
-      audioPlayer.setFilterFactory(equalizer);
+      filter = equalizer;
+      filterList.add(equalizer);
     }
 
     Collections.reverse(filterList);
