@@ -2,6 +2,9 @@
 
 Key: [+] added, [-] removed, [~] modified, [!] important.
 
+## v1.20.1
+- [~] fixed where other filters won't work after activating bassboost filter
+
 ## v1.20.0
 - [~] about command fixes
 - [!] the changelog now sync with releases version
