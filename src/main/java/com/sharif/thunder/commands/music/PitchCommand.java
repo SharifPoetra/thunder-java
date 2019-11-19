@@ -27,6 +27,9 @@ public class PitchCommand extends MusicCommand {
     this.name = "pitch";
     this.help = "changes pitch of the song.";
     this.arguments = "<-12 - 12>";
+    this.guildOnly = true;
+    this.beListening = true;
+    this.bePlaying = true;
   }
 
   @Override

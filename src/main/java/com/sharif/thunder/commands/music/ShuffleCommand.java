@@ -25,6 +25,7 @@ public class ShuffleCommand extends MusicCommand {
     super(thunder);
     this.name = "shuffle";
     this.help = "shuffles songs you have added.";
+    this.guildOnly = true;
     this.beListening = true;
     this.bePlaying = true;
   }

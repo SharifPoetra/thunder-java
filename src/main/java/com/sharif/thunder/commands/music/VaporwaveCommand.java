@@ -27,6 +27,8 @@ public class VaporwaveCommand extends MusicCommand {
     this.help = "toggles vaporwave mode.";
     this.aliases = new String[] {"vw"};
     this.guildOnly = true;
+    this.beListening = true;
+    this.bePlaying = true;
   }
 
   @Override

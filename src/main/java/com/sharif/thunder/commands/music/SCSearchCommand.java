@@ -24,5 +24,8 @@ public class SCSearchCommand extends SearchCommand {
     this.name = "scsearch";
     this.help = "searches Soundcloud for a provided query.";
     this.aliases = new String[] {};
+    this.guildOnly = true;
+    this.beListening = true;
+    this.bePlaying = false;
   }
 }

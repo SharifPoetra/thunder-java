@@ -28,6 +28,9 @@ public class VolumeCommand extends MusicCommand {
     this.aliases = new String[] {"vol"};
     this.help = "sets or shows volume.";
     this.arguments = "[0-150]";
+    this.guildOnly = true;
+    this.beListening = true;
+    this.bePlaying = true;
   }
 
   @Override

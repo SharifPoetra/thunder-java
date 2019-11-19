@@ -25,6 +25,8 @@ public class PauseCommand extends MusicCommand {
     super(thunder);
     this.name = "pause";
     this.help = "pauses the current song.";
+    this.guildOnly = true;
+    this.beListening = true;
     this.bePlaying = true;
   }
 

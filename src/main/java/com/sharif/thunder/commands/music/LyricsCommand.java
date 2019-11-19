@@ -34,6 +34,8 @@ public class LyricsCommand extends MusicCommand {
     this.arguments = "[song name]";
     this.help = "shows the lyrics to the currently-playing song.";
     this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
+    this.guildOnly = true;
+    this.beListening = false;
     this.bePlaying = false;
   }
 
@@ -62,6 +64,7 @@ public class LyricsCommand extends MusicCommand {
     } catch (InterruptedException | ExecutionException e) {
       event.replyError("Shomething went wrong when trying fetching the lyrics: " + e.getMessage());
     }
+
     if (lyrics == null) {
       event.replyError("Lyrics for `" + title + "` could not be found!");
       return;
