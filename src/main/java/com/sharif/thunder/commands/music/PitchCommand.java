@@ -33,7 +33,7 @@ public class PitchCommand extends MusicCommand {
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  public void doCommand(CommandEvent event) {
     int f;
     try {
       f = Integer.parseInt(event.getArgs());
@@ -55,10 +55,5 @@ public class PitchCommand extends MusicCommand {
     } else {
       event.replySuccess("Pitch set to " + f + " semitones.");
     }
-  }
-
-  @Override
-  public void doCommand(CommandEvent event) {
-    /* Intentionally Empty */
   }
 }

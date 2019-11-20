@@ -32,15 +32,10 @@ public class VaporwaveCommand extends MusicCommand {
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  public void doCommand(CommandEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.setVaporwave(!handler.isVaporwave());
     event.replySuccess(
         "Vaporwave mode is now `" + (!handler.isVaporwave() ? "disabled" : "enabled") + "`.");
-  }
-
-  @Override
-  public void doCommand(CommandEvent event) {
-    /* Intentionally Empty */
   }
 }

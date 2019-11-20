@@ -35,7 +35,7 @@ public class NightcoreCommand extends MusicCommand {
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  public void doCommand(CommandEvent event) {
 
     try {
       f = Float.parseFloat(event.getArgs());
@@ -57,10 +57,5 @@ public class NightcoreCommand extends MusicCommand {
     } else {
       event.reply("Nightcore mode enabled, speed: " + f + "");
     }
-  }
-
-  @Override
-  public void doCommand(CommandEvent event) {
-    /* Intentionally Empty */
   }
 }

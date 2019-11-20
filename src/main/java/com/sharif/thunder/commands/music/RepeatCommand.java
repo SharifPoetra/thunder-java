@@ -32,7 +32,7 @@ public class RepeatCommand extends MusicCommand {
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  public void doCommand(CommandEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.setRepeating(!handler.isRepeating());
     event.reply(
@@ -40,10 +40,5 @@ public class RepeatCommand extends MusicCommand {
             + " Repeat mode is now `"
             + (!handler.isRepeating() ? "disabled" : "enabled")
             + "`.");
-  }
-
-  @Override
-  public void doCommand(CommandEvent event) {
-    /* Intentionally Empty */
   }
 }

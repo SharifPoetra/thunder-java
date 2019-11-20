@@ -38,7 +38,7 @@ targetCompatibility = 1.8
 compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
 shadowJar {
-   baseName = 'thunder'
+   archiveBaseName = 'thunder'
    classifier = ''
    archiveVersion = ''
 }
