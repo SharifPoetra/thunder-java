@@ -34,16 +34,11 @@ public class KaraokeCommand extends MusicCommand {
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  public void doCommand(CommandEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.setKaraoke(!handler.isKaraoke());
     event.replySuccess(
         "Karaoke mode is now `" + (!handler.isKaraoke() ? "disabled" : "enabled") + "`.");
-  }
-
-  @Override
-  public void doCommand(CommandEvent event) {
-    /* Intentionally Empty */
   }
 
   public class KaraokeLevelCommand extends MusicCommand {
