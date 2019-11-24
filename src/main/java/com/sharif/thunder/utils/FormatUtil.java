@@ -54,11 +54,15 @@ public class FormatUtil {
     }
     return content;
   }
-  
+
   public static String listOfMembers(List<Member> list, String query) {
     String out = String.format("**Multiple %s found matching \"%s\":**", "members", query);
     for (int i = 0; i < 6 && i < list.size(); i++)
-      out += "\n - " + list.get(i).getUser().getName() + " #" + list.get(i).getUser().getDiscriminator();
+      out +=
+          "\n - "
+              + list.get(i).getUser().getName()
+              + " #"
+              + list.get(i).getUser().getDiscriminator();
     if (list.size() > 6) out += "\n**And " + (list.size() - 6) + " more...**";
     return out;
   }

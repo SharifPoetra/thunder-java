@@ -6,6 +6,7 @@ import com.sharif.thunder.utils.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -36,34 +37,47 @@ public abstract class Command {
   public final void run(String args, MessageReceivedEvent event) {
 
     if ("help".equalsIgnoreCase(args)) {
-      StringBuilder builder = new StringBuilder();
-      builder.append("**Available help for `").append(name).append("` ").append("**:\n");
-      builder
-          .append("Usage: `" + config.getPrefix())
-          .append(name)
-          .append(Argument.arrayToString(arguments))
-          .append("`");
-
+      StringBuilder sb = new StringBuilder();
+      EmbedBuilder eb = new EmbedBuilder();
+      eb.setColor(event.getGuild().getSelfMember().getColor());
+      eb.setAuthor(
+          "Available help for " + name + " command:",
+          null,
+          event.getGuild().getSelfMember().getUser().getEffectiveAvatarUrl());
+      eb.addField(
+          "Usage:",
+          "`" + config.getPrefix() + name + Argument.arrayToString(arguments) + "`",
+          true);
       if (aliases.length > 0) {
-        builder.append("\nAliases:");
-        for (String alias : aliases) builder.append(" `").append(alias).append("`");
+        StringBuilder aliasesSb = new StringBuilder();
+        for (String alias : aliases) aliasesSb.append(" `").append(alias).append("`");
+        eb.addField("Aliases", aliasesSb.toString(), true);
       }
-      builder.append("\n*").append(help).append("*\n");
+      eb.setDescription("\n\n*" + help + "*\n");
+
       if (children.length > 0) {
-        builder.append("\n**Subcommands**:");
+        StringBuilder subSb = new StringBuilder();
         for (Command child : children) {
-          if (child.hidden) continue;
-          builder
-              .append("\n`" + config.getPrefix())
+          subSb
+              .append("`")
+              .append(config.getPrefix())
               .append(name)
               .append(" ")
-              .append(child.name)
-              .append(Argument.arrayToString(child.arguments))
-              .append("` - ")
-              .append(child.help);
+              .append(child.getName())
+              .append(child.getArguments() == null ? "`" : " " + child.getArguments() + "`")
+              .append(" - ")
+              .append(FormatUtil.capitalize(child.getHelp()));
         }
       }
-      SenderUtil.sendHelp(event, builder.toString());
+      StringBuilder footerSb = new StringBuilder();
+      footerSb.append(
+          "\n\nFor additional help, contact "
+              + event.getJDA().getUserById(config.getOwnerId()).getName()
+              + "#"
+              + event.getJDA().getUserById(config.getOwnerId()).getDiscriminator()
+              + "");
+      eb.setFooter(footerSb.toString());
+      event.getChannel().sendMessage(eb.build()).queue();
       return;
     }
 
@@ -298,8 +312,7 @@ public abstract class Command {
             workingSet = parts[1];
             break;
           }
-          
-        
+
         case MEMBER:
           {
             String[] parts;
@@ -318,7 +331,9 @@ public abstract class Command {
               SenderUtil.reply(
                   event,
                   String.format(
-                      config.getWarning() + " **No %s found matching \"%s\"**", "members", parts[0]));
+                      config.getWarning() + " **No %s found matching \"%s\"**",
+                      "members",
+                      parts[0]));
               return;
             } else if (mlist.size() > 1) {
               SenderUtil.reply(event, FormatUtil.listOfMembers(mlist, parts[0]));
@@ -328,7 +343,6 @@ public abstract class Command {
             workingSet = parts[1];
             break;
           }
-        
 
         case USER:
           {

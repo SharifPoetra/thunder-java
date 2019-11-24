@@ -53,8 +53,7 @@ public class BlushCommand extends InteractionCommand {
                     .embed(
                         new EmbedBuilder()
                             .setAuthor(
-                                event.getAuthor().getName()
-                                    + RandomUtil.randomElement(msg),
+                                event.getAuthor().getName() + RandomUtil.randomElement(msg),
                                 null,
                                 event.getAuthor().getEffectiveAvatarUrl())
                             .setColor(event.getGuild().getSelfMember().getColor())
