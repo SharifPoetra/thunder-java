@@ -2,24 +2,31 @@
 
 Key: [+] added, [-] removed, [~] modified, [!] important.
 
-## v1.20.1
-- [~] fixed where other filters won't work after activating bassboost filter
+## v1.21.6
+- [~] Fixed where other filters won't work after activating bassboost filter
+- [+] Add `resetfilters` command
+- [~] Fixed bassboost command where it still can be used when there no playing music
+- [~] Fixed karaoke command where it still can be used when there no playing music
+- [~] Fixed nightcore command where it still can be used when there no playing music
+- [~] Fixed pitch command where it still can be used when there no playing music
+- [~] Fixed repeat command where it still can be used when there no playing music
+- [~] Fixed vaporwave command where it still can be used when there no playing music
 
 ## v1.20.0
-- [~] about command fixes
-- [!] the changelog now sync with releases version
-- [!] why is the version on the pom.xml is different on changelogs/releases? because the version is no matter for me and can be changed at every time and all we need is the compiled jar file to run it.
-- [~] fix the emote command where it always return the empty emoji information when there no arguments given
-- [~] fix lyrics throws an error when there are no music playing and no arguments given
-- [+] add `lewd` commamd on Interaction category
-- [~] fix setinvcrole description
-- [-] removed debug command
-- [~] improve uptime on about command
-- [+] add `botstatus` command to change the bot current playing status
-- [!] option to specify where you want to save data files
-- [~] add aliases for some commands on Music category
-- [+] add `batslap` command
-- [+] add `avatar` command
+- [~] About command fixes
+- [!] The changelog now sync with releases version
+- [!] Why is the version on the pom.xml is different on changelogs/releases? because the version is no matter for me and can be changed at every time and all we need is the compiled jar file to run it.
+- [~] Fix the emote command where it always return the empty emoji information when there no arguments given
+- [~] Fix lyrics throws an error when there are no music playing and no arguments given
+- [+] Add `lewd` commamd on Interaction category
+- [~] Fix setinvcrole description
+- [-] Removed debug command
+- [~] Improve uptime on about command
+- [+] Add `botstatus` command to change the bot current playing status
+- [!] Option to specify where you want to save data files
+- [~] Add aliases for some commands on Music category
+- [+] Add `batslap` command
+- [+] Add `avatar` command
 
 ## v1.14.6
 
