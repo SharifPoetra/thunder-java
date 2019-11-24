@@ -15,16 +15,13 @@
  */
 package com.sharif.thunder.commands.interaction;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.InteractionCommand;
 import com.sharif.thunder.utils.*;
 import java.util.*;
-import java.util.List;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class BlushCommand extends InteractionCommand {
   private final Thunder thunder;
@@ -39,7 +36,7 @@ public class BlushCommand extends InteractionCommand {
   }
 
   @Override
-  public void execute(CommandEvent event) {
+  public void execute(Object[] args, MessageReceivedEvent event) {
     try {
       event
           .getChannel()
@@ -49,7 +46,6 @@ public class BlushCommand extends InteractionCommand {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
                 byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/blush", headers);
-                List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
                 message.delete().queue();
                 event
                     .getChannel()
@@ -57,17 +53,18 @@ public class BlushCommand extends InteractionCommand {
                     .embed(
                         new EmbedBuilder()
                             .setAuthor(
-                                event.getMember().getUser().getName()
+                                event.getAuthor().getName()
                                     + RandomUtil.randomElement(msg),
                                 null,
                                 event.getAuthor().getEffectiveAvatarUrl())
-                            .setColor(event.getSelfMember().getColor())
+                            .setColor(event.getGuild().getSelfMember().getColor())
                             .setImage("attachment://blush.gif")
                             .build())
                     .queue();
               });
     } catch (IllegalArgumentException ex) {
-      event.replyError("Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(
+          event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }

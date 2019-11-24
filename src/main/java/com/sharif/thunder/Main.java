@@ -19,7 +19,6 @@ import static spark.Spark.*;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.Command;
 import com.sharif.thunder.commands.Command.Category;
 import com.sharif.thunder.commands.CommandListeners;
@@ -103,7 +102,15 @@ public class Main extends ListenerAdapter {
           new SayCommand(thunder),
           new BobRossCommand(thunder),
           new ChooseCommand(thunder),
-          new BatSlapCommand(thunder)
+          new BatSlapCommand(thunder),
+          // interaction
+          new PatCommand(thunder),
+          new SlapCommand(thunder),
+          new BlushCommand(thunder),
+          new CryCommand(thunder),
+          new DanceCommand(thunder),
+          new PoutCommand(thunder),
+          new LewdCommand(thunder)
         };
 
     CommandClientBuilder client =
@@ -117,13 +124,13 @@ public class Main extends ListenerAdapter {
             .useHelpBuilder(false)
             .addCommands(
                 // interaction
-                new PatCommand(thunder),
-                new SlapCommand(thunder),
-                new BlushCommand(thunder),
-                new CryCommand(thunder),
-                new DanceCommand(thunder),
-                new PoutCommand(thunder),
-                new LewdCommand(thunder),
+                // new PatCommand(thunder),
+                // new SlapCommand(thunder),
+                // new BlushCommand(thunder),
+                // new CryCommand(thunder),
+                // new DanceCommand(thunder),
+                // new PoutCommand(thunder),
+                // new LewdCommand(thunder),
                 // administration
                 new SetInVCRoleCommand(inVcRoles),
                 // fun

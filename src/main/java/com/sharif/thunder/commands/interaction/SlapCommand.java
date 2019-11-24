@@ -15,15 +15,15 @@
  */
 package com.sharif.thunder.commands.interaction;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.InteractionCommand;
 import com.sharif.thunder.utils.*;
 import java.util.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class SlapCommand extends InteractionCommand {
   private final Thunder thunder;
@@ -33,28 +33,23 @@ public class SlapCommand extends InteractionCommand {
     this.thunder = thunder;
     this.name = "slap";
     this.help = "Slaps the specified user ;).";
+    this.arguments = new Argument[] {new Argument("user", Argument.Type.USER, true)};
     this.botPermissions =
         new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
   }
 
   @Override
-  public void execute(CommandEvent event) {
+  public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      User user = (User) args[0];
       event
           .getChannel()
           .sendMessage("Please wait...")
           .queue(
               message -> {
-                if (event.getArgs().isEmpty()) {
-                  message
-                      .editMessage(event.getClient().getWarning() + " You need to mention a user")
-                      .queue();
-                  return;
-                }
                 Map<String, String> headers = new HashMap<>();
                 headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
                 byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/slap", headers);
-                List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
                 message.delete().queue();
                 event
                     .getChannel()
@@ -62,20 +57,21 @@ public class SlapCommand extends InteractionCommand {
                     .embed(
                         new EmbedBuilder()
                             .setAuthor(
-                                event.getMember().getUser().getName()
+                                event.getAuthor().getName()
                                     + " slaps "
-                                    + list.get(0).getUser().getName()
+                                    + user.getName()
                                     + "!! "
                                     + RandomUtil.randomElement(msg),
                                 null,
                                 event.getAuthor().getEffectiveAvatarUrl())
-                            .setColor(event.getSelfMember().getColor())
+                            .setColor(event.getGuild().getSelfMember().getColor())
                             .setImage("attachment://slap.gif")
                             .build())
                     .queue();
               });
     } catch (IllegalArgumentException ex) {
-      event.replyError("Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(
+          event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }
