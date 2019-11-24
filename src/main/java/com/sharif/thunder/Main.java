@@ -19,6 +19,9 @@ import static spark.Spark.*;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.sharif.thunder.commands.Argument;
+import com.sharif.thunder.commands.Command;
+import com.sharif.thunder.commands.Command.Category;
 import com.sharif.thunder.commands.CommandListeners;
 import com.sharif.thunder.commands.administration.*;
 import com.sharif.thunder.commands.fun.*;
@@ -30,9 +33,11 @@ import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.*;
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.*;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
@@ -69,6 +74,8 @@ public class Main extends ListenerAdapter {
       };
 
   private JDA jda;
+  private static Command[] commands;
+  private static BotConfig config;
   private static Thunder thunder;
   // datasources
   private static AFKs afks;
@@ -77,8 +84,8 @@ public class Main extends ListenerAdapter {
   public static void main(String[] args)
       throws Exception, IOException, IllegalArgumentException, LoginException,
           RateLimitedException {
+    config = new BotConfig();
     Logger log = LoggerFactory.getLogger(Main.class);
-    BotConfig config = new BotConfig();
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
     thunder = new Thunder(waiter, config);
 
@@ -89,6 +96,15 @@ public class Main extends ListenerAdapter {
     // reading datasources
     afks.read();
     inVcRoles.read();
+
+    commands =
+        new Command[] {
+          // fun
+          new SayCommand(thunder),
+          new BobRossCommand(thunder),
+          new ChooseCommand(thunder),
+          new BatSlapCommand(thunder)
+        };
 
     CommandClientBuilder client =
         new CommandClientBuilder()
@@ -111,10 +127,9 @@ public class Main extends ListenerAdapter {
                 // administration
                 new SetInVCRoleCommand(inVcRoles),
                 // fun
-                new BobRossCommand(thunder),
-                new ChooseCommand(thunder),
-                new SayCommand(thunder),
-                new BatSlapCommand(thunder),
+                // new BobRossCommand(thunder),
+                // new ChooseCommand(thunder),
+                // new BatSlapCommand(thunder),
                 // utilities
                 new AboutCommand(
                     thunder,
@@ -197,6 +212,7 @@ public class Main extends ListenerAdapter {
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
     if (event.getAuthor() == null) return;
+    boolean isCommand = false;
 
     if (afks.get(event.getAuthor().getId()) != null) {
       event
@@ -248,6 +264,66 @@ public class Main extends ListenerAdapter {
               });
       String afkmessage = builder.toString().trim();
       if (!afkmessage.equals("")) event.getChannel().sendMessage(afkmessage).queue();
+    }
+
+    // get a prefixes
+    String[] prefixes = new String[] {config.getPrefix(), config.getAltPrefix()};
+
+    String strippedMessage = null;
+    for (int i = prefixes.length - 1; i >= 0; i--) {
+      if (event.getMessage().getContentRaw().startsWith(prefixes[i].toLowerCase())) {
+        strippedMessage = event.getMessage().getContentRaw().substring(prefixes[i].length()).trim();
+        break;
+      }
+    }
+
+    if (strippedMessage != null && !event.getAuthor().isBot()) {
+      strippedMessage = strippedMessage.trim();
+
+      if (strippedMessage.equalsIgnoreCase("help")) {
+
+        isCommand = true;
+
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(event.getGuild().getSelfMember().getColor());
+        eb.setAuthor(
+            event.getGuild().getSelfMember().getUser().getName() + " commands:",
+            null,
+            event.getGuild().getSelfMember().getUser().getEffectiveAvatarUrl());
+        StringBuilder builder = new StringBuilder();
+        Category category = null;
+        for (Command command : commands) {
+          if (command.isHidden()) continue;
+          if (!Objects.equals(category, command.getCategory())) {
+            category = command.getCategory();
+            builder
+                .append("\n\n**__")
+                .append(category == null ? "No Category" : category.getName())
+                .append("__:**\n");
+          }
+          builder.append("`").append(config.getPrefix()).append(command.getName()).append("`  ");
+        }
+        eb.setDescription(builder.toString());
+        eb.setFooter("Do not include <> nor [] - <> means required and [] means optional.");
+        event.getChannel().sendMessage(eb.build()).queue();
+      } else {
+        Command toRun = null;
+        String[] args = FormatUtil.cleanSplit(strippedMessage);
+        if (args[0].equalsIgnoreCase("help")) {
+          String endhelp = args[1] + " " + args[0];
+          args = FormatUtil.cleanSplit(endhelp);
+        }
+        args[1] = FormatUtil.appendAttachmentUrls(event.getMessage(), args[1]);
+        for (Command com : commands)
+          if (com.isCommandFor(args[0])) {
+            toRun = com;
+            break;
+          }
+        if (toRun != null) {
+          isCommand = true;
+          toRun.run(args[1], event);
+        }
+      }
     }
   }
 

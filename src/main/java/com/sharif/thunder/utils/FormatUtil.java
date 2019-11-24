@@ -15,11 +15,45 @@
  */
 package com.sharif.thunder.utils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import net.dv8tion.jda.api.entities.*;
 
 public class FormatUtil {
+
+  public static String[] cleanSplit(String input) {
+    return cleanSplit(input, "\\s+", 2);
+  }
+
+  public static String[] cleanSplit(String input, int size) {
+    return cleanSplit(input, "\\s+", size);
+  }
+
+  public static String[] cleanSplit(String input, String regex) {
+    return cleanSplit(input, regex, 2);
+  }
+
+  public static String[] cleanSplit(String input, String regex, int size) {
+    return Arrays.copyOf(input.trim().split(regex, size), size);
+  }
+
+  public static String appendAttachmentUrls(Message message) {
+    return appendAttachmentUrls(message, message.getContentRaw());
+  }
+
+  public static String appendAttachmentUrls(Message message, String content) {
+    if (message.getAttachments() != null && !message.getAttachments().isEmpty()) {
+      StringBuilder builder = content == null ? new StringBuilder() : new StringBuilder(content);
+      message
+          .getAttachments()
+          .stream()
+          .map((att) -> " " + att.getUrl())
+          .forEach(url -> builder.append(" ").append(url));
+      return builder.toString();
+    }
+    return content;
+  }
 
   public static String listOfUsers(List<User> list, String query) {
     String out = String.format("**Multiple %s found matching \"%s\":**", "users", query);
@@ -31,6 +65,22 @@ public class FormatUtil {
 
   public static String listOfRoles(List<Role> list, String query) {
     String out = " Multiple roles found matching \"" + query + "\":";
+    for (int i = 0; i < 6 && i < list.size(); i++)
+      out += "\n - " + list.get(i).getName() + " (ID:" + list.get(i).getId() + ")";
+    if (list.size() > 6) out += "\n**And " + (list.size() - 6) + " more...**";
+    return out;
+  }
+
+  public static String listOfChannels(List<TextChannel> list, String query) {
+    String out = String.format("**Multiple %s found matching \"%s\":**", "text channels", query);
+    for (int i = 0; i < 6 && i < list.size(); i++)
+      out += "\n - " + list.get(i).getName() + " (<#" + list.get(i).getId() + ">)";
+    if (list.size() > 6) out += "\n**And " + (list.size() - 6) + " more...**";
+    return out;
+  }
+
+  public static String listOfGuilds(List<Guild> list, String query) {
+    String out = String.format("**Multiple %s found matching \"%s\":**", "servers", query);
     for (int i = 0; i < 6 && i < list.size(); i++)
       out += "\n - " + list.get(i).getName() + " (ID:" + list.get(i).getId() + ")";
     if (list.size() > 6) out += "\n**And " + (list.size() - 6) + " more...**";

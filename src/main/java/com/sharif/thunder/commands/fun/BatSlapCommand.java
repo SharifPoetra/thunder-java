@@ -15,14 +15,14 @@
  */
 package com.sharif.thunder.commands.fun;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.FunCommand;
 import com.sharif.thunder.utils.*;
 import java.util.*;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class BatSlapCommand extends FunCommand {
 
@@ -32,51 +32,37 @@ public class BatSlapCommand extends FunCommand {
     this.thunder = thunder;
     this.name = "batslap";
     this.help = "Slap someone with batslap template.";
-    this.arguments = "<user>";
+    this.arguments = new Argument[] {new Argument("user", Argument.Type.USER, true)};
   }
 
-  public void execute(CommandEvent event) {
+  public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      User user = (User) args[0];
+      Map<String, String> headers = new HashMap<>();
+      headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
+      byte[] image =
+          UnirestUtil.getBytes(
+              "https://emilia.shrf.xyz/api/batslap?slapper="
+                  + event.getAuthor().getEffectiveAvatarUrl()
+                  + "&slapped="
+                  + user.getEffectiveAvatarUrl(),
+              headers);
       event
           .getChannel()
-          .sendMessage("Please wait...")
-          .queue(
-              message -> {
-                if (event.getArgs().isEmpty()) {
-                  message
-                      .editMessage(event.getClient().getWarning() + " You need to mention a user")
-                      .queue();
-                  return;
-                }
-                Map<String, String> headers = new HashMap<>();
-                headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
-                byte[] image =
-                    UnirestUtil.getBytes(
-                        "https://emilia.shrf.xyz/api/batslap?slapper="
-                            + event.getAuthor().getEffectiveAvatarUrl()
-                            + "&slapped="
-                            + list.get(0).getUser().getEffectiveAvatarUrl(),
-                        headers);
-                message.delete().submit();
-                event
-                    .getChannel()
-                    .sendFile(image, "batslap.png")
-                    .embed(
-                        new EmbedBuilder()
-                            .setAuthor(
-                                list.get(0).getUser().getName()
-                                    + " has been batslapped by "
-                                    + event.getAuthor().getName(),
-                                null,
-                                null)
-                            .setColor(event.getSelfMember().getColor())
-                            .setImage("attachment://batslap.png")
-                            .build())
-                    .queue();
-              });
+          .sendFile(image, "batslap.png")
+          .embed(
+              new EmbedBuilder()
+                  .setAuthor(
+                      user.getName() + " has been batslapped by " + event.getAuthor().getName(),
+                      null,
+                      null)
+                  .setColor(event.getMember().getColor())
+                  .setImage("attachment://batslap.png")
+                  .build())
+          .queue();
     } catch (IllegalArgumentException ex) {
-      event.replyError("Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(
+          event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }
