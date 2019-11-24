@@ -298,6 +298,37 @@ public abstract class Command {
             workingSet = parts[1];
             break;
           }
+          
+        
+        case MEMBER:
+          {
+            String[] parts;
+            if (separatorRegex == null) parts = new String[] {workingSet, null};
+            else parts = FormatUtil.cleanSplit(workingSet, separatorRegex);
+            if (parts[0].matches(FinderUtil.USER_MENTION + ".+")) {
+              parts[0] = parts[0].replaceAll("(" + FinderUtil.USER_MENTION + ").+", "$1");
+              parts[1] = workingSet.substring(parts[0].length()).trim();
+            }
+            List<Member> mlist = null;
+            if (event.getChannelType() != ChannelType.PRIVATE)
+              mlist = FinderUtil.findMembers(parts[0], event.getGuild());
+            if (mlist == null || mlist.isEmpty())
+              mlist = FinderUtil.findMembers(parts[0], event.getGuild());
+            if (mlist.isEmpty()) {
+              SenderUtil.reply(
+                  event,
+                  String.format(
+                      config.getWarning() + " **No %s found matching \"%s\"**", "members", parts[0]));
+              return;
+            } else if (mlist.size() > 1) {
+              SenderUtil.reply(event, FormatUtil.listOfMembers(mlist, parts[0]));
+              return;
+            }
+            parsedArgs[i] = mlist.get(0);
+            workingSet = parts[1];
+            break;
+          }
+        
 
         case USER:
           {

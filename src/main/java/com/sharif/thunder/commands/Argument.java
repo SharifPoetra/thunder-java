@@ -52,6 +52,7 @@ public class Argument {
     SHORTSTRING,
     LONGSTRING,
     TIME,
+    MEMBER,
     USER,
     LOCALUSER,
     BANNEDUSER,
