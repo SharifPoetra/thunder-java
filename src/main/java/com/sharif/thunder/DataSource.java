@@ -68,6 +68,12 @@ public abstract class DataSource {
     }
   }
 
+  public boolean has(String key) {
+    synchronized (data) {
+      return data.containsKey(key);
+    }
+  }
+
   public void setToWrite() {
     if (!writeScheduled) {
       writeScheduled = true;

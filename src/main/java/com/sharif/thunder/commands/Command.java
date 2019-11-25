@@ -63,11 +63,12 @@ public abstract class Command {
               .append(config.getPrefix())
               .append(name)
               .append(" ")
-              .append(child.getName())
-              .append(child.getArguments() == null ? "`" : " " + child.getArguments() + "`")
-              .append(" - ")
-              .append(FormatUtil.capitalize(child.getHelp()));
+              .append(child.name)
+              .append(Argument.arrayToString(child.arguments))
+              .append("` - ")
+              .append(child.help);
         }
+        eb.addField("Subcommands:", subSb.toString(), true);
       }
       StringBuilder footerSb = new StringBuilder();
       footerSb.append(
@@ -84,9 +85,12 @@ public abstract class Command {
     // child check
     if (args != null) {
       String[] argv = FormatUtil.cleanSplit(args);
+      System.out.println(argv[0]);
       for (Command child : children) {
-        if (child.isCommandFor(argv[0])) child.run(argv[1], event);
-        return;
+        if (child.isCommandFor(argv[0])) {
+          child.run(argv[1], event);
+          return;
+        }
       }
     }
 

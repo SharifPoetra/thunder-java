@@ -98,6 +98,8 @@ public class Main extends ListenerAdapter {
 
     commands =
         new Command[] {
+          // administration
+          new SetInVCRoleCommand(inVcRoles),
           // fun
           new SayCommand(thunder),
           new BobRossCommand(thunder),
@@ -132,7 +134,7 @@ public class Main extends ListenerAdapter {
                 // new PoutCommand(thunder),
                 // new LewdCommand(thunder),
                 // administration
-                new SetInVCRoleCommand(inVcRoles),
+                // new SetInVCRoleCommand(inVcRoles),
                 // fun
                 // new BobRossCommand(thunder),
                 // new ChooseCommand(thunder),
@@ -146,7 +148,6 @@ public class Main extends ListenerAdapter {
                     RECOMMENDED_PERMS),
                 new PingCommand(thunder),
                 new EmotesCommand(thunder),
-                new HelpCommand(thunder),
                 new AFKCommand(afks),
                 new KitsuCommand(thunder),
                 new AvatarCommand(thunder),
