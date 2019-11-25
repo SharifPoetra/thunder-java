@@ -288,9 +288,6 @@ public class Main extends ListenerAdapter {
       strippedMessage = strippedMessage.trim();
 
       if (strippedMessage.equalsIgnoreCase("help")) {
-
-        isCommand = true;
-
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(event.getGuild().getSelfMember().getColor());
         eb.setAuthor(
