@@ -220,7 +220,7 @@ public class Main extends ListenerAdapter {
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
     if (event.getAuthor() == null) return;
-    
+
     if (afks.get(event.getAuthor().getId()) != null) {
       event
           .getChannel()
