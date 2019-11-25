@@ -37,7 +37,6 @@ public abstract class Command {
   public final void run(String args, MessageReceivedEvent event) {
 
     if ("help".equalsIgnoreCase(args)) {
-      StringBuilder sb = new StringBuilder();
       EmbedBuilder eb = new EmbedBuilder();
       eb.setColor(event.getGuild().getSelfMember().getColor());
       eb.setAuthor(

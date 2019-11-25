@@ -220,8 +220,7 @@ public class Main extends ListenerAdapter {
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
     if (event.getAuthor() == null) return;
-    boolean isCommand = false;
-
+    
     if (afks.get(event.getAuthor().getId()) != null) {
       event
           .getChannel()
@@ -328,7 +327,6 @@ public class Main extends ListenerAdapter {
             break;
           }
         if (toRun != null) {
-          isCommand = true;
           toRun.run(args[1], event);
         }
       }
