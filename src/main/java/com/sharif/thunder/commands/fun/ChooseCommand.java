@@ -15,9 +15,11 @@
  */
 package com.sharif.thunder.commands.fun;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.FunCommand;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class ChooseCommand extends FunCommand {
 
@@ -27,21 +29,18 @@ public class ChooseCommand extends FunCommand {
     this.thunder = thunder;
     this.name = "choose";
     this.help = "make a decision.";
-    this.arguments = "<item> <item> ...";
+    this.arguments = new Argument[] {new Argument("items", Argument.Type.LONGSTRING, true)};
   }
 
   @Override
-  protected void execute(CommandEvent event) {
-
-    if (event.getArgs().isEmpty()) {
-      event.replyWarning("You didn't give me a choices!");
+  protected void execute(Object[] args, MessageReceivedEvent event) {
+    String items = (String) args[0];
+    String[] item = items.split(" ");
+    if (item.length == 1) {
+      SenderUtil.replyWarning(event, "You only gave me one option, `" + item[0] + "`");
     } else {
-      String[] items = event.getArgs().split("\\s+");
-      if (items.length == 1) {
-        event.replyWarning("You only gave me one option, `" + items[0] + "`");
-      } else {
-        event.replySuccess("I choose `" + items[(int) (Math.random() * items.length)] + "`");
-      }
+      SenderUtil.replySuccess(
+          event, "I choose `" + item[(int) (Math.random() * item.length)] + "`");
     }
   }
 }

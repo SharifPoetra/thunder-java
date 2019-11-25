@@ -16,9 +16,16 @@
 package com.sharif.thunder.utils;
 
 import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import okhttp3.*;
 
@@ -57,5 +64,35 @@ public class OtherUtil {
     } catch (IOException | IllegalArgumentException ignore) {
     }
     return null;
+  }
+
+  public static List<Guild> findGuild(String query, JDA jda) {
+    String id;
+    if (query.matches("[Ii][Dd]\\s*:\\s*\\d+")) {
+      id = query.replaceAll("[Ii][Dd]\\s*:\\s*(\\d+)", "$1");
+      Guild g = jda.getGuildById(id);
+      if (g != null) return Collections.singletonList(g);
+    }
+    ArrayList<Guild> exact = new ArrayList<>();
+    ArrayList<Guild> wrongcase = new ArrayList<>();
+    ArrayList<Guild> startswith = new ArrayList<>();
+    ArrayList<Guild> contains = new ArrayList<>();
+    String lowerQuery = query.toLowerCase();
+    jda.getGuilds()
+        .stream()
+        .forEach(
+            (guild) -> {
+              if (guild.getName().equals(query)) exact.add(guild);
+              else if (guild.getName().equalsIgnoreCase(query) && exact.isEmpty())
+                wrongcase.add(guild);
+              else if (guild.getName().toLowerCase().startsWith(lowerQuery) && wrongcase.isEmpty())
+                startswith.add(guild);
+              else if (guild.getName().toLowerCase().contains(lowerQuery) && startswith.isEmpty())
+                contains.add(guild);
+            });
+    if (!exact.isEmpty()) return exact;
+    if (!wrongcase.isEmpty()) return wrongcase;
+    if (!startswith.isEmpty()) return startswith;
+    return contains;
   }
 }
