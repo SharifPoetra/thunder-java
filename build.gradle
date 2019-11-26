@@ -1,17 +1,17 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'com.github.sherter.google-java-format' version '0.8'
 }
 
 repositories {
     jcenter()
     maven {
-      url 'https://dl.bintray.com/sedmelluq/com.sedmelluq/'
+        url 'https://dl.bintray.com/sedmelluq/com.sedmelluq/'
     }
 }
-
+    
 dependencies {
     implementation 'net.dv8tion:JDA:4.0.0_64'
     implementation 'com.jagrosh:jda-utilities:3.0.2'
@@ -35,8 +35,6 @@ version = '1.0.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-
 shadowJar {
    archiveBaseName = 'thunder'
    classifier = ''
@@ -45,4 +43,5 @@ shadowJar {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }

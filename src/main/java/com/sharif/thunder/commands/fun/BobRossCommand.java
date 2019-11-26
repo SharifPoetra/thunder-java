@@ -15,14 +15,14 @@
  */
 package com.sharif.thunder.commands.fun;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.FunCommand;
 import com.sharif.thunder.utils.*;
 import java.util.*;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class BobRossCommand extends FunCommand {
 
@@ -32,43 +32,30 @@ public class BobRossCommand extends FunCommand {
     this.thunder = thunder;
     this.name = "bobross";
     this.help = "Draws a user's avatar over 'Bob Ross' canvas.";
-    this.arguments = "<user>";
+    this.arguments = new Argument[] {new Argument("user", Argument.Type.MEMBER, true)};
   }
 
-  public void execute(CommandEvent event) {
+  public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      User user = (User) args[0];
+      Map<String, String> headers = new HashMap<>();
+      headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
+      byte[] image =
+          UnirestUtil.getBytes(
+              "https://emilia.shrf.xyz/api/bob-ross?image=" + user.getEffectiveAvatarUrl(),
+              headers);
       event
           .getChannel()
-          .sendMessage("Please wait...")
-          .queue(
-              message -> {
-                if (event.getArgs().isEmpty()) {
-                  message
-                      .editMessage(event.getClient().getWarning() + " You need to mention a user")
-                      .queue();
-                  return;
-                }
-                Map<String, String> headers = new HashMap<>();
-                headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                List<Member> list = FinderUtil.findMembers(event.getArgs(), event.getGuild());
-                byte[] image =
-                    UnirestUtil.getBytes(
-                        "https://emilia.shrf.xyz/api/bob-ross?image="
-                            + list.get(0).getUser().getEffectiveAvatarUrl(),
-                        headers);
-                message.delete().submit();
-                event
-                    .getChannel()
-                    .sendFile(image, "bobross.png")
-                    .embed(
-                        new EmbedBuilder()
-                            .setColor(event.getSelfMember().getColor())
-                            .setImage("attachment://bobross.png")
-                            .build())
-                    .queue();
-              });
+          .sendFile(image, "bobross.png")
+          .embed(
+              new EmbedBuilder()
+                  .setColor(event.getMember().getColor())
+                  .setImage("attachment://bobross.png")
+                  .build())
+          .queue();
     } catch (IllegalArgumentException ex) {
-      event.replyError("Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(
+          event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }
