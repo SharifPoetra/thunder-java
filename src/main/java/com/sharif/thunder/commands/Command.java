@@ -84,7 +84,6 @@ public abstract class Command {
     // child check
     if (args != null) {
       String[] argv = FormatUtil.cleanSplit(args);
-      System.out.println(argv[0]);
       for (Command child : children) {
         if (child.isCommandFor(argv[0])) {
           child.run(argv[1], event);
