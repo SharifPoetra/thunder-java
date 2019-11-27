@@ -112,7 +112,9 @@ public class Main extends ListenerAdapter {
           new CryCommand(thunder),
           new DanceCommand(thunder),
           new PoutCommand(thunder),
-          new LewdCommand(thunder)
+          new LewdCommand(thunder),
+          // owner
+          new EvalCommand(thunder)
         };
 
     CommandClientBuilder client =
@@ -175,10 +177,10 @@ public class Main extends ListenerAdapter {
                 new PauseCommand(thunder),
                 new SkiptoCommand(thunder),
                 // owner
+                // new EvalCommand(thunder),
                 new RestartCommand(thunder),
                 new PlaylistCommand(thunder),
-                new BotStatusCommand(),
-                new EvalCommand(thunder));
+                new BotStatusCommand());
 
     log.info("Loaded config from " + config.getConfigLocation());
 

@@ -15,16 +15,17 @@
  */
 package com.sharif.thunder.commands.owner;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
-import com.sharif.thunder.commands.OwnerCommand;
+import com.sharif.thunder.commands.Argument;
+import com.sharif.thunder.commands.Command;
+import com.sharif.thunder.utils.SenderUtil;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EvalCommand extends OwnerCommand {
+public class EvalCommand extends Command {
 
   private final Thunder thunder;
 
@@ -32,44 +33,27 @@ public class EvalCommand extends OwnerCommand {
     this.thunder = thunder;
     this.name = "eval";
     this.help = "evaluates nashorn code";
+    this.arguments = new Argument[] {new Argument("code", Argument.Type.LONGSTRING, true)};
     this.aliases = new String[] {"e"};
     this.hidden = true;
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  protected void execute(Object[] args, MessageReceivedEvent event) {
     Logger log = LoggerFactory.getLogger(EvalCommand.class);
-    event.async(
-        () -> {
-          ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-          try {
-            engine.eval(
-                "var imports = new JavaImporter("
-                    + "java.io,"
-                    + "java.lang,"
-                    + "java.util,"
-                    + "Packages.net.dv8tion.jda.api,"
-                    + "Packages.net.dv8tion.jda.api.entities,"
-                    + "Packages.net.dv8tion.jda.api.entities.impl,"
-                    + "Packages.net.dv8tion.jda.api.managers,"
-                    + "Packages.net.dv8tion.jda.api.managers.impl,"
-                    + "Packages.net.dv8tion.jda.api.utils);");
-          } catch (ScriptException e) {
-            e.printStackTrace();
-          }
-
-          try {
-            engine.put("bot", thunder);
-            engine.put("event", event);
-            engine.put("jda", event.getJDA());
-            engine.put("guild", event.getGuild());
-            engine.put("channel", event.getChannel());
-            engine.put("log", log);
-            event.replySuccess(
-                "Evaluated Successfully:\n```\n" + engine.eval(event.getArgs()) + " ```");
-          } catch (Exception e) {
-            event.replyError("An exception was thrown:\n```\n" + e.getMessage() + " ```");
-          }
-        });
+    String toEval = (String) args[0];
+    ScriptEngine engine = new ScriptEngineManager().getEngineByName("Nashorn");
+    try {
+      engine.put("bot", thunder);
+      engine.put("event", event);
+      engine.put("jda", event.getJDA());
+      engine.put("guild", event.getGuild());
+      engine.put("channel", event.getChannel());
+      engine.put("log", log);
+      SenderUtil.replySuccess(
+          event, "Evaluated Successfully:\n```\n" + engine.eval(toEval) + " ```");
+    } catch (Exception e) {
+      SenderUtil.replyError(event, "An exception was thrown:\n```\n" + e.getMessage() + " ```");
+    }
   }
 }
