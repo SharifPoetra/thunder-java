@@ -15,13 +15,15 @@
  */
 package com.sharif.thunder.commands.owner;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.Argument;
+import com.sharif.thunder.commands.Command;
 import com.sharif.thunder.commands.OwnerCommand;
 import com.sharif.thunder.playlist.PlaylistLoader.Playlist;
+import com.sharif.thunder.utils.SenderUtil;
 import java.io.IOException;
 import java.util.List;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class PlaylistCommand extends OwnerCommand {
   private final Thunder thunder;
@@ -30,111 +32,109 @@ public class PlaylistCommand extends OwnerCommand {
     this.thunder = thunder;
     this.guildOnly = false;
     this.name = "playlist";
-    this.arguments = "<append|delete|make>";
     this.help = "playlist management.";
     this.hidden = true;
     this.children =
-        new OwnerCommand[] {
+        new Command[] {
           new ListCommand(), new AppendlistCommand(), new DeletelistCommand(), new MakelistCommand()
         };
   }
 
   @Override
-  public void execute(CommandEvent event) {
+  public void execute(Object[] args, MessageReceivedEvent event) {
     StringBuilder builder =
-        new StringBuilder(event.getClient().getWarning() + " Playlist Management Commands:\n");
+        new StringBuilder(thunder.getConfig().getWarning() + " Playlist Management Commands:\n");
     for (Command cmd : this.children)
       builder
           .append("\n`")
-          .append(event.getClient().getPrefix())
+          .append(thunder.getConfig().getPrefix())
           .append(name)
           .append(" ")
           .append(cmd.getName())
           .append(" ")
-          .append(cmd.getArguments() == null ? "" : cmd.getArguments())
+          .append(Argument.arrayToString(cmd.getArguments()))
           .append("` - ")
           .append(cmd.getHelp());
-    event.reply(builder.toString());
+    SenderUtil.reply(event, builder.toString());
   }
 
-  public class MakelistCommand extends OwnerCommand {
-    public MakelistCommand() {
+  private class MakelistCommand extends OwnerCommand {
+    private MakelistCommand() {
       this.name = "make";
       this.aliases = new String[] {"create"};
       this.help = "makes a new playlist";
-      this.arguments = "<name>";
+      this.arguments =
+          new Argument[] {new Argument("name", Argument.Type.SHORTSTRING, true, 3, 20)};
       this.guildOnly = false;
     }
 
     @Override
-    protected void execute(CommandEvent event) {
-      String pname = event.getArgs().replaceAll("\\s+", "_");
+    protected void execute(Object[] args, MessageReceivedEvent event) {
+      String pname = (String) args[0];
+      pname.replaceAll("\\s+", "_");
       if (thunder.getPlaylistLoader().getPlaylist(pname) == null) {
         try {
           thunder.getPlaylistLoader().createPlaylist(pname);
-          event.reply(
-              event.getClient().getSuccess() + " Successfully created playlist `" + pname + "`!");
+          SenderUtil.replySuccess(event, "Successfully created playlist `" + pname + "`!");
         } catch (IOException e) {
-          event.reply(
-              event.getClient().getError()
-                  + " I was unable to create the playlist: "
-                  + e.getLocalizedMessage());
+          SenderUtil.replyError(
+              event, "I was unable to create the playlist: " + e.getLocalizedMessage());
         }
-      } else
-        event.reply(event.getClient().getError() + " Playlist `" + pname + "` already exists!");
+      } else SenderUtil.replyError(event, "Playlist `" + pname + "` already exists!");
     }
   }
 
-  public class DeletelistCommand extends OwnerCommand {
-    public DeletelistCommand() {
+  private class DeletelistCommand extends OwnerCommand {
+    private DeletelistCommand() {
       this.name = "delete";
       this.aliases = new String[] {"remove"};
       this.help = "deletes an existing playlist";
-      this.arguments = "<name>";
+      this.arguments =
+          new Argument[] {new Argument("name", Argument.Type.SHORTSTRING, true, 3, 20)};
       this.guildOnly = false;
     }
 
     @Override
-    protected void execute(CommandEvent event) {
-      String pname = event.getArgs().replaceAll("\\s+", "_");
+    protected void execute(Object[] args, MessageReceivedEvent event) {
+      String pname = (String) args[0];
+      pname.replaceAll("\\s+", "_");
       if (thunder.getPlaylistLoader().getPlaylist(pname) == null)
-        event.reply(event.getClient().getError() + " Playlist `" + pname + "` doesn't exist!");
+        SenderUtil.replyError(event, "Playlist `" + pname + "` doesn't exist!");
       else {
         try {
           thunder.getPlaylistLoader().deletePlaylist(pname);
-          event.reply(
-              event.getClient().getSuccess() + " Successfully deleted playlist `" + pname + "`!");
+          SenderUtil.replySuccess(event, "Successfully deleted playlist `" + pname + "`!");
         } catch (IOException e) {
-          event.reply(
-              event.getClient().getError()
-                  + " I was unable to delete the playlist: "
-                  + e.getLocalizedMessage());
+          SenderUtil.replyError(
+              event, "I was unable to delete the playlist: " + e.getLocalizedMessage());
         }
       }
     }
   }
 
-  public class AppendlistCommand extends OwnerCommand {
-    public AppendlistCommand() {
+  private class AppendlistCommand extends OwnerCommand {
+    private AppendlistCommand() {
       this.name = "append";
       this.aliases = new String[] {"add"};
       this.help = "appends songs to an existing playlist";
-      this.arguments = "<name> <URL> | <URL> | ...";
+      this.arguments =
+          new Argument[] {
+            new Argument("name> <URL> | <URL> | <...", Argument.Type.LONGSTRING, true)
+          };
       this.guildOnly = false;
     }
 
     @Override
-    protected void execute(CommandEvent event) {
-      String[] parts = event.getArgs().split("\\s+", 2);
+    protected void execute(Object[] args, MessageReceivedEvent event) {
+      String aparts = (String) args[0];
+      String[] parts = aparts.split("\\s+", 2);
       if (parts.length < 2) {
-        event.reply(
-            event.getClient().getError() + " Please include a playlist name and URLs to add!");
+        SenderUtil.replyError(event, "Please include a playlist name and URLs to add!");
         return;
       }
       String pname = parts[0];
       Playlist playlist = thunder.getPlaylistLoader().getPlaylist(pname);
-      if (playlist == null)
-        event.reply(event.getClient().getError() + " Playlist `" + pname + "` doesn't exist!");
+      if (playlist == null) SenderUtil.replyError(event, "Playlist `" + pname + "` doesn't exist!");
       else {
         StringBuilder builder = new StringBuilder();
         playlist.getItems().forEach(item -> builder.append("\r\n").append(item));
@@ -146,25 +146,18 @@ public class PlaylistCommand extends OwnerCommand {
         }
         try {
           thunder.getPlaylistLoader().writePlaylist(pname, builder.toString());
-          event.reply(
-              event.getClient().getSuccess()
-                  + " Successfully added "
-                  + urls.length
-                  + " items to playlist `"
-                  + pname
-                  + "`!");
+          SenderUtil.replySuccess(
+              event, "Successfully added " + urls.length + " items to playlist `" + pname + "`!");
         } catch (IOException e) {
-          event.reply(
-              event.getClient().getError()
-                  + " I was unable to append to the playlist: "
-                  + e.getLocalizedMessage());
+          SenderUtil.replyError(
+              event, "I was unable to append to the playlist: " + e.getLocalizedMessage());
         }
       }
     }
   }
 
-  public class ListCommand extends OwnerCommand {
-    public ListCommand() {
+  private class ListCommand extends OwnerCommand {
+    private ListCommand() {
       this.name = "all";
       this.aliases = new String[] {"available", "list"};
       this.help = "lists all available playlists";
@@ -172,25 +165,21 @@ public class PlaylistCommand extends OwnerCommand {
     }
 
     @Override
-    protected void execute(CommandEvent event) {
+    protected void execute(Object[] args, MessageReceivedEvent event) {
       if (!thunder.getPlaylistLoader().folderExists()) thunder.getPlaylistLoader().createFolder();
       if (!thunder.getPlaylistLoader().folderExists()) {
-        event.reply(
-            event.getClient().getWarning()
-                + " Playlists folder does not exist and could not be created!");
+        SenderUtil.replyWarning(event, "Playlists folder does not exist and could not be created!");
         return;
       }
       List<String> list = thunder.getPlaylistLoader().getPlaylistNames();
-      if (list == null)
-        event.reply(event.getClient().getError() + " Failed to load available playlists!");
+      if (list == null) SenderUtil.replyError(event, "Failed to load available playlists!");
       else if (list.isEmpty())
-        event.reply(
-            event.getClient().getWarning() + " There are no playlists in the Playlists folder!");
+        SenderUtil.replyWarning(event, "There are no playlists in the Playlists folder!");
       else {
         StringBuilder builder =
-            new StringBuilder(event.getClient().getSuccess() + " Available playlists:\n");
+            new StringBuilder(thunder.getConfig().getSuccess() + " Available playlists:\n");
         list.forEach(str -> builder.append("`").append(str).append("` "));
-        event.reply(builder.toString());
+        SenderUtil.reply(event, builder.toString());
       }
     }
   }

@@ -24,6 +24,7 @@ public abstract class Command {
   protected Permission[] botPermissions = new Permission[0];
   protected Category category = null;
   protected int cooldown = 0;
+  protected boolean ownerOnly = false;
   protected boolean usesTopicTags = true;
   protected boolean guildOnly = false;
   protected boolean hidden = false;
@@ -90,6 +91,12 @@ public abstract class Command {
           return;
         }
       }
+    }
+
+    // owner check
+    if (ownerOnly && !(event.getAuthor().getId().equals(Long.toString(config.getOwnerId())))) {
+      SenderUtil.reply(event, config.getError() + " That command is only for the bot owner!");
+      return;
     }
 
     // category check

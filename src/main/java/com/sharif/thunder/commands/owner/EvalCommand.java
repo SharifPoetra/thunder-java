@@ -17,7 +17,7 @@ package com.sharif.thunder.commands.owner;
 
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.Argument;
-import com.sharif.thunder.commands.Command;
+import com.sharif.thunder.commands.OwnerCommand;
 import com.sharif.thunder.utils.SenderUtil;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -25,7 +25,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EvalCommand extends Command {
+public class EvalCommand extends OwnerCommand {
 
   private final Thunder thunder;
 

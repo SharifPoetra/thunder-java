@@ -114,7 +114,10 @@ public class Main extends ListenerAdapter {
           new PoutCommand(thunder),
           new LewdCommand(thunder),
           // owner
-          new EvalCommand(thunder)
+          new EvalCommand(thunder),
+          new RestartCommand(thunder),
+          new PlaylistCommand(thunder),
+          new BotStatusCommand()
         };
 
     CommandClientBuilder client =
@@ -175,12 +178,12 @@ public class Main extends ListenerAdapter {
                 new LyricsCommand(thunder),
                 new RemoveCommand(thunder),
                 new PauseCommand(thunder),
-                new SkiptoCommand(thunder),
-                // owner
-                // new EvalCommand(thunder),
-                new RestartCommand(thunder),
-                new PlaylistCommand(thunder),
-                new BotStatusCommand());
+                new SkiptoCommand(thunder));
+    // owner
+    // new EvalCommand(thunder),
+    // new RestartCommand(thunder),
+    // new PlaylistCommand(thunder),
+    // new BotStatusCommand());
 
     log.info("Loaded config from " + config.getConfigLocation());
 
