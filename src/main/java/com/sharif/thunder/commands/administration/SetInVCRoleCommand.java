@@ -50,9 +50,9 @@ public class SetInVCRoleCommand extends AdministrationCommand {
             + "` role when they're joining a voice channel.");
   }
 
-  private class DisableCommand extends Command {
+  private class DisableCommand extends AdministrationCommand {
 
-    public DisableCommand() {
+    private DisableCommand() {
       this.name = "disable";
       this.help = "disable the role to be given to member when they're joining the voice channel.";
       this.botPermissions = new Permission[] {Permission.MANAGE_ROLES};

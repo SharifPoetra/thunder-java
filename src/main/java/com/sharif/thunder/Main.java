@@ -222,7 +222,6 @@ public class Main extends ListenerAdapter {
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
     if (event.getAuthor() == null) return;
-    boolean isCommand = false;
 
     if (afks.get(event.getAuthor().getId()) != null) {
       event
@@ -291,9 +290,6 @@ public class Main extends ListenerAdapter {
       strippedMessage = strippedMessage.trim();
 
       if (strippedMessage.equalsIgnoreCase("help")) {
-
-        isCommand = true;
-
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(event.getGuild().getSelfMember().getColor());
         eb.setAuthor(
@@ -330,7 +326,6 @@ public class Main extends ListenerAdapter {
             break;
           }
         if (toRun != null) {
-          isCommand = true;
           toRun.run(args[1], event);
         }
       }
