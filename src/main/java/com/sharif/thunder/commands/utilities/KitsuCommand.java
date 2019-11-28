@@ -16,15 +16,14 @@
 package com.sharif.thunder.commands.utilities;
 
 import com.google.gson.JsonObject;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.UtilitiesCommand;
 import com.sharif.thunder.handler.RequestHandler;
 import com.sharif.thunder.handler.entity.RequestProperty;
 import com.sharif.thunder.utils.OtherUtil;
-import net.dv8tion.jda.api.EmbedBuilder;
-import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class KitsuCommand extends UtilitiesCommand {
@@ -42,7 +41,7 @@ public class KitsuCommand extends UtilitiesCommand {
   @Override
   protected void execute(Object[] args, MessageReceivedEvent event) {
     try {
-      String title = (String)args[0];
+      String title = (String) args[0];
       final String url = BASE_URL + OtherUtil.scrub(title, true) + "&page[limit]=1";
       // TODO: rewrite this to use UnirestUtil
       JsonObject json =
@@ -95,7 +94,9 @@ public class KitsuCommand extends UtilitiesCommand {
                   event.getMember().getUser().getEffectiveAvatarUrl());
       event.getChannel().sendMessage(embed.build()).queue();
     } catch (Exception ex) {
-      SenderUtil.replyWarning(event, "Shomething went wrong when trying to fetch the kitsu API, Please try with another queries.");
+      SenderUtil.replyWarning(
+          event,
+          "Shomething went wrong when trying to fetch the kitsu API, Please try with another queries.");
       System.out.println("Shomething went wrong when trying to fetch the kitsu API: " + ex);
     }
   }

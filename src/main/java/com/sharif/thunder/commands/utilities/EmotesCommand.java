@@ -15,10 +15,10 @@
  */
 package com.sharif.thunder.commands.utilities;
 
-import com.sharif.thunder.commands.Argument;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.UtilitiesCommand;
+import com.sharif.thunder.utils.SenderUtil;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.TimeZone;
@@ -26,10 +26,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import net.dv8tion.jda.api.utils.TimeUtil;
-import com.sharif.thunder.utils.SenderUtil;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class EmotesCommand extends UtilitiesCommand {
 
@@ -48,8 +47,8 @@ public class EmotesCommand extends UtilitiesCommand {
 
   @Override
   protected void execute(Object[] args, MessageReceivedEvent event) {
-    
-    input = (String)args[0];
+
+    input = (String) args[0];
 
     if (input.isEmpty()) {
       SenderUtil.replyError(event, "You must specify the emote to see the information about it!");

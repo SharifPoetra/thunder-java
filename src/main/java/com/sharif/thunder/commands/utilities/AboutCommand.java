@@ -15,7 +15,6 @@
  */
 package com.sharif.thunder.commands.utilities;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.JDAUtilitiesInfo;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
@@ -31,12 +30,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ApplicationInfo;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import com.sharif.thunder.commands.Argument;
-import com.sharif.thunder.utils.SenderUtil;
 
 @CommandInfo(name = "About", description = "Gets information about the bot.")
 @Author("Sharif")

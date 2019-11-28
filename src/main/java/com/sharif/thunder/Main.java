@@ -119,17 +119,17 @@ public class Main extends ListenerAdapter {
           new PlaylistCommand(thunder),
           new BotStatusCommand(),
           // utilities
-                new AboutCommand(
-                    thunder,
-                    Color.BLUE,
-                    "a simple but powerfull multipurpose bot",
-                    new String[] {"Music", "Utilities", "Lots of fun!"},
-                    RECOMMENDED_PERMS),
-                new PingCommand(thunder),
-                new EmotesCommand(thunder),
-                new AFKCommand(afks),
-                new KitsuCommand(thunder),
-                new AvatarCommand(thunder),
+          new AboutCommand(
+              thunder,
+              Color.BLUE,
+              "a simple but powerfull multipurpose bot",
+              new String[] {"Music", "Utilities", "Lots of fun!"},
+              RECOMMENDED_PERMS),
+          new PingCommand(thunder),
+          new EmotesCommand(thunder),
+          new AFKCommand(afks),
+          new KitsuCommand(thunder),
+          new AvatarCommand(thunder),
         };
 
     CommandClientBuilder client =

@@ -15,22 +15,19 @@
  */
 package com.sharif.thunder.commands.utilities;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.sharif.thunder.Thunder;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.UtilitiesCommand;
-import java.util.List;
+import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import com.sharif.thunder.commands.Argument;
-import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class AvatarCommand extends UtilitiesCommand {
 
   private final Thunder thunder;
   private static Member member;
-  
+
   public AvatarCommand(Thunder thunder) {
     this.thunder = thunder;
     this.name = "avatar";
@@ -42,7 +39,7 @@ public class AvatarCommand extends UtilitiesCommand {
   @Override
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
-      member = (Member)args[0];
+      member = (Member) args[0];
       if (member == null) {
         member = event.getMember();
       }
@@ -60,7 +57,8 @@ public class AvatarCommand extends UtilitiesCommand {
                 event.getChannel().sendMessage(eb.build()).queue();
               });
     } catch (Exception e) {
-      SenderUtil.replyError(event, "Something went wrong: `" + e.getMessage() + "` please try again later!");
+      SenderUtil.replyError(
+          event, "Something went wrong: `" + e.getMessage() + "` please try again later!");
     }
   }
 }
