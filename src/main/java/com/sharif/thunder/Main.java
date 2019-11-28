@@ -117,7 +117,19 @@ public class Main extends ListenerAdapter {
           new EvalCommand(thunder),
           new RestartCommand(thunder),
           new PlaylistCommand(thunder),
-          new BotStatusCommand()
+          new BotStatusCommand(),
+          // utilities
+                new AboutCommand(
+                    thunder,
+                    Color.BLUE,
+                    "a simple but powerfull multipurpose bot",
+                    new String[] {"Music", "Utilities", "Lots of fun!"},
+                    RECOMMENDED_PERMS),
+                new PingCommand(thunder),
+                new EmotesCommand(thunder),
+                new AFKCommand(afks),
+                new KitsuCommand(thunder),
+                new AvatarCommand(thunder),
         };
 
     CommandClientBuilder client =
@@ -144,18 +156,18 @@ public class Main extends ListenerAdapter {
                 // new BobRossCommand(thunder),
                 // new ChooseCommand(thunder),
                 // new BatSlapCommand(thunder),
-                // utilities
-                new AboutCommand(
-                    thunder,
-                    Color.BLUE,
-                    "a simple but powerfull multipurpose bot",
-                    new String[] {"Music", "Utilities", "Lots of fun!"},
-                    RECOMMENDED_PERMS),
-                new PingCommand(thunder),
-                new EmotesCommand(thunder),
-                new AFKCommand(afks),
-                new KitsuCommand(thunder),
-                new AvatarCommand(thunder),
+                // // utilities
+                // new AboutCommand(
+                //     thunder,
+                //     Color.BLUE,
+                //     "a simple but powerfull multipurpose bot",
+                //     new String[] {"Music", "Utilities", "Lots of fun!"},
+                //     RECOMMENDED_PERMS),
+                // new PingCommand(thunder),
+                // new EmotesCommand(thunder),
+                // new AFKCommand(afks),
+                // new KitsuCommand(thunder),
+                // new AvatarCommand(thunder),
                 // music
                 new PlayCommand(thunder, config.getLoading()),
                 new PlaylistsCommand(thunder),

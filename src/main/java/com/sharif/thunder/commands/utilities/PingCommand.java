@@ -19,6 +19,9 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.UtilitiesCommand;
 import java.time.temporal.ChronoUnit;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import com.sharif.thunder.commands.Argument;
 
 public class PingCommand extends UtilitiesCommand {
 
@@ -36,17 +39,16 @@ public class PingCommand extends UtilitiesCommand {
     this.thunder = thunder;
     this.name = "ping";
     this.help = "cheks the latency of the bot.";
-    this.arguments = "[fancy]";
+    this.arguments = new Argument[] {new Argument("fancy", Argument.Type.SHORTSTRING, false)};
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  protected void execute(Object[] args, MessageReceivedEvent event) {
 
-    String args = event.getArgs();
+    String fancy = (String)args[0];
 
-    if (args.matches("fancy")) {
-      event.reply(
-          "Checking ping...",
+    if (fancy != null && fancy.matches("fancy")) {
+      event.getChannel().sendMessage("Checking ping...").queue(
           message -> {
             int pings = 5;
             int lastResult;
@@ -77,9 +79,8 @@ public class PingCommand extends UtilitiesCommand {
                 .queue();
           });
     } else {
-      event.reply(
-          "Ping: ...",
-          m -> {
+      event.getChannel().sendMessage("Ping: ...").queue(
+            m -> {
             long ping =
                 event.getMessage().getTimeCreated().until(m.getTimeCreated(), ChronoUnit.MILLIS);
             m.editMessage(

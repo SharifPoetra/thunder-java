@@ -23,6 +23,9 @@ import com.sharif.thunder.handler.RequestHandler;
 import com.sharif.thunder.handler.entity.RequestProperty;
 import com.sharif.thunder.utils.OtherUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
+import com.sharif.thunder.commands.Argument;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class KitsuCommand extends UtilitiesCommand {
 
@@ -33,13 +36,14 @@ public class KitsuCommand extends UtilitiesCommand {
     this.thunder = thunder;
     this.name = "kitsu";
     this.help = "fetches anime or manga from kitsu.io.";
-    this.arguments = "<title> | show <title> | character <name>";
+    this.arguments = new Argument[] {new Argument("title", Argument.Type.LONGSTRING, true)};
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  protected void execute(Object[] args, MessageReceivedEvent event) {
     try {
-      final String url = BASE_URL + OtherUtil.scrub(event.getArgs(), true) + "&page[limit]=1";
+      String title = (String)args[0];
+      final String url = BASE_URL + OtherUtil.scrub(title, true) + "&page[limit]=1";
       // TODO: rewrite this to use UnirestUtil
       JsonObject json =
           new RequestHandler(
@@ -48,7 +52,7 @@ public class KitsuCommand extends UtilitiesCommand {
                   new RequestProperty("Content-Type", "application/vnd.api+json"))
               .getJsonObject();
       if (json == null || json.getAsJsonArray("data").size() < 1) {
-        event.replyWarning("No results found for **" + event.getArgs() + "**");
+        SenderUtil.replyWarning(event, "No results found for **" + title + "**");
         return;
       }
       JsonObject data =
@@ -85,14 +89,13 @@ public class KitsuCommand extends UtilitiesCommand {
               .addField("Status", status, true)
               .addField("Start Date", startDate, true)
               .addField("End Date", endDate, true)
-              .setColor(event.getSelfMember().getColor())
+              .setColor(event.getGuild().getSelfMember().getColor())
               .setFooter(
                   "Requested by " + event.getMember().getEffectiveName(),
                   event.getMember().getUser().getEffectiveAvatarUrl());
-      event.reply(embed.build());
+      event.getChannel().sendMessage(embed.build()).queue();
     } catch (Exception ex) {
-      event.replyWarning(
-          "Shomething went wrong when trying to fetch the kitsu API, Please try with another queries.");
+      SenderUtil.replyWarning(event, "Shomething went wrong when trying to fetch the kitsu API, Please try with another queries.");
       System.out.println("Shomething went wrong when trying to fetch the kitsu API: " + ex);
     }
   }

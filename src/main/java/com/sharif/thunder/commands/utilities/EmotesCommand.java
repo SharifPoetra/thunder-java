@@ -15,6 +15,7 @@
  */
 package com.sharif.thunder.commands.utilities;
 
+import com.sharif.thunder.commands.Argument;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.UtilitiesCommand;
@@ -27,30 +28,35 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import net.dv8tion.jda.api.utils.TimeUtil;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class EmotesCommand extends UtilitiesCommand {
 
   private final Thunder thunder;
   private static final Pattern emojiPatten = Pattern.compile("<:.*:(\\d+)>");
   private static final Pattern animatedEmojiPatten = Pattern.compile("<a:.*:(\\d+)>");
+  private static String input;
 
   public EmotesCommand(Thunder thunder) {
     this.thunder = thunder;
     this.name = "emote";
-    this.arguments = "<emotes>";
+    this.arguments = new Argument[] {new Argument("emotes", Argument.Type.SHORTSTRING, true)};
     this.aliases = new String[] {"emotes", "emoji", "charinfo"};
     this.help = "shows detailed information about an emote, emoji, or character.";
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  protected void execute(Object[] args, MessageReceivedEvent event) {
+    
+    input = (String)args[0];
 
-    if (event.getArgs().isEmpty()) {
-      event.replyError("You must specify the emote to see the information about it!");
+    if (input.isEmpty()) {
+      SenderUtil.replyError(event, "You must specify the emote to see the information about it!");
       return;
     }
-    Matcher staticMatcher = emojiPatten.matcher(event.getArgs());
-    Matcher animMatcher = animatedEmojiPatten.matcher(event.getArgs());
+    Matcher staticMatcher = emojiPatten.matcher(input);
+    Matcher animMatcher = animatedEmojiPatten.matcher(input);
 
     if (staticMatcher.matches()) {
       custom(staticMatcher, event);
@@ -61,12 +67,12 @@ public class EmotesCommand extends UtilitiesCommand {
     }
   }
 
-  private void animated(Matcher matcher, CommandEvent event) {
+  private void animated(Matcher matcher, MessageReceivedEvent event) {
     EmbedBuilder eb = new EmbedBuilder();
     String id = matcher.replaceFirst("$1");
     String url = "https://cdn.discordapp.com/emojis/" + id + ".gif";
     eb.setThumbnail(url);
-    eb.setColor(event.getSelfMember().getColor());
+    eb.setColor(event.getGuild().getSelfMember().getColor());
 
     DateTimeFormatter formatter =
         DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
@@ -88,15 +94,15 @@ public class EmotesCommand extends UtilitiesCommand {
               "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
               emote.getName(), date, id, emote.getGuild(), url));
     }
-    event.reply(eb.build());
+    event.getChannel().sendMessage(eb.build()).queue();
   }
 
-  private void custom(Matcher matcher, CommandEvent event) {
+  private void custom(Matcher matcher, MessageReceivedEvent event) {
     EmbedBuilder eb = new EmbedBuilder();
     String id = matcher.replaceFirst("$1");
     String url = "https://cdn.discordapp.com/emojis/" + id + ".png";
     eb.setThumbnail(url);
-    eb.setColor(event.getSelfMember().getColor());
+    eb.setColor(event.getGuild().getSelfMember().getColor());
 
     DateTimeFormatter formatter =
         DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
@@ -118,18 +124,17 @@ public class EmotesCommand extends UtilitiesCommand {
               "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
               emote.getName(), date, id, emote.getGuild(), url));
     }
-    event.reply(eb.build());
+    event.getChannel().sendMessage(eb.build()).queue();
   }
 
-  private void unicode(CommandEvent event) {
+  private void unicode(MessageReceivedEvent event) {
     EmbedBuilder eb = new EmbedBuilder();
-    eb.setColor(event.getSelfMember().getColor());
-    if (event.getArgs().codePoints().count() > 10) {
-      event.replyError("Invalid emote, or input is too long");
+    eb.setColor(event.getGuild().getSelfMember().getColor());
+    if (input.codePoints().count() > 10) {
+      SenderUtil.replyError(event, "Invalid emote, or input is too long");
     } else {
       StringBuilder builder = new StringBuilder("Emoji/Character info:");
-      event
-          .getArgs()
+      input
           .codePoints()
           .forEachOrdered(
               code -> {
@@ -151,7 +156,7 @@ public class EmotesCommand extends UtilitiesCommand {
                     .append("_");
               });
       eb.setDescription(builder.toString());
-      event.reply(eb.build());
+      event.getChannel().sendMessage(eb.build()).queue();
     }
   }
 }
