@@ -21,6 +21,9 @@ import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.audio.QueuedTrack;
 import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.queue.FairQueue;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import com.sharif.thunder.utils.SenderUtil;
+import com.sharif.thunder.commands.Argument;
 
 public class MoveTrackCommand extends MusicCommand {
 
@@ -28,7 +31,7 @@ public class MoveTrackCommand extends MusicCommand {
     super(thunder);
     this.name = "movetrack";
     this.help = "move a track in the current queue to a different position.";
-    this.arguments = "<from> <to>";
+    this.arguments = new Argument[] {new Argument("from> <to", Argument.Type.SHORTSTRING, true)};
     this.aliases = new String[] {"move"};
     this.guildOnly = true;
     this.beListening = true;
@@ -36,13 +39,14 @@ public class MoveTrackCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
     int from;
     int to;
 
-    String[] parts = event.getArgs().split("\\s+", 2);
+    String aparts = (String) args[0];
+    String[] parts = aparts.split("\\s+", 2);
     if (parts.length < 2) {
-      event.replyError("Please include two valid indexes.");
+      SenderUtil.replyError(event, "Please include two valid indexes.");
       return;
     }
 
@@ -51,12 +55,12 @@ public class MoveTrackCommand extends MusicCommand {
       from = Integer.parseInt(parts[0]);
       to = Integer.parseInt(parts[1]);
     } catch (NumberFormatException e) {
-      event.replyError("Please provide two valid indexes.");
+      SenderUtil.replyError(event, "Please provide two valid indexes.");
       return;
     }
 
     if (from == to) {
-      event.replyError("Can't move a track to the same position.");
+      SenderUtil.replyError(event, "Can't move a track to the same position.");
       return;
     }
 
@@ -65,12 +69,12 @@ public class MoveTrackCommand extends MusicCommand {
     FairQueue<QueuedTrack> queue = handler.getQueue();
     if (isUnavailablePosition(queue, from)) {
       String reply = String.format("`%d` is not a valid position in the queue!", from);
-      event.replyError(reply);
+      SenderUtil.replyError(event, reply);
       return;
     }
     if (isUnavailablePosition(queue, to)) {
       String reply = String.format("`%d` is not a valid position in the queue!", to);
-      event.replyError(reply);
+      SenderUtil.replyError(event, reply);
       return;
     }
 
@@ -78,7 +82,7 @@ public class MoveTrackCommand extends MusicCommand {
     QueuedTrack track = queue.moveItem(from - 1, to - 1);
     String trackTitle = track.getTrack().getInfo().title;
     String reply = String.format("Moved **%s** from position `%d` to `%d`.", trackTitle, from, to);
-    event.replySuccess(reply);
+    SenderUtil.replySuccess(event, reply);
   }
 
   private static boolean isUnavailablePosition(FairQueue<QueuedTrack> queue, int position) {

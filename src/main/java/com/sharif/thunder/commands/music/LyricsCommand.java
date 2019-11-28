@@ -21,9 +21,12 @@ import com.jagrosh.jlyrics.LyricsClient;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.commands.Argument;
 import java.util.concurrent.ExecutionException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import com.sharif.thunder.utils.SenderUtil;
 
 public class LyricsCommand extends MusicCommand {
   private Lyrics lyrics;
@@ -31,8 +34,8 @@ public class LyricsCommand extends MusicCommand {
   public LyricsCommand(Thunder thunder) {
     super(thunder);
     this.name = "lyrics";
-    this.arguments = "[song name]";
     this.help = "shows the lyrics to the currently-playing song.";
+    this.arguments = new Argument[] {new Argument("song name", Argument.Type.LONGSTRING, true)};
     this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
     this.guildOnly = true;
     this.beListening = false;
@@ -40,12 +43,12 @@ public class LyricsCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
     LyricsClient client = new LyricsClient();
 
     event.getChannel().sendTyping().queue();
     String title;
-    if (event.getArgs().isEmpty()
+    if (args.length == 0
         && ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
             .isMusicPlaying(event.getJDA()))
       title =
@@ -54,29 +57,29 @@ public class LyricsCommand extends MusicCommand {
               .getPlayingTrack()
               .getInfo()
               .title;
-    else title = event.getArgs();
+    else title = (String) args[0];
     if (title.isEmpty()) {
-      event.replyError("You must specify what lyrics you want to search!");
+      SenderUtil.replyError(event, "You must specify what lyrics you want to search!");
       return;
     }
     try {
       lyrics = client.getLyrics(title).get();
     } catch (InterruptedException | ExecutionException e) {
-      event.replyError("Shomething went wrong when trying fetching the lyrics: " + e.getMessage());
+      SenderUtil.replyError(event, "Shomething went wrong when trying fetching the lyrics: " + e.getMessage());
     }
 
     if (lyrics == null) {
-      event.replyError("Lyrics for `" + title + "` could not be found!");
+      SenderUtil.replyError(event, "Lyrics for `" + title + "` could not be found!");
       return;
     }
 
     EmbedBuilder eb =
         new EmbedBuilder()
             .setAuthor(lyrics.getAuthor())
-            .setColor(event.getSelfMember().getColor())
+            .setColor(event.getGuild().getSelfMember().getColor())
             .setTitle(lyrics.getTitle(), lyrics.getURL());
     if (lyrics.getContent().length() > 15000) {
-      event.replyWarning(
+      SenderUtil.replyWarning(event,
           "Lyrics for `" + title + "` found but likely not correct: " + lyrics.getURL());
     } else if (lyrics.getContent().length() > 2000) {
       String content = lyrics.getContent().trim();
@@ -85,11 +88,11 @@ public class LyricsCommand extends MusicCommand {
         if (index == -1) index = content.lastIndexOf("\n", 2000);
         if (index == -1) index = content.lastIndexOf(" ", 2000);
         if (index == -1) index = 2000;
-        event.reply(eb.setDescription(content.substring(0, index).trim()).build());
+        event.getChannel().sendMessage(eb.setDescription(content.substring(0, index).trim()).build()).queue();
         content = content.substring(index).trim();
         eb.setAuthor(null).setTitle(null, null);
       }
-      event.reply(eb.setDescription(content).build());
-    } else event.reply(eb.setDescription(lyrics.getContent()).build());
+      event.getChannel().sendMessage(eb.setDescription(content).build()).queue();
+    } else event.getChannel().sendMessage(eb.setDescription(lyrics.getContent()).build()).queue();
   }
 }

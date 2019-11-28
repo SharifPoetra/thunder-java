@@ -130,6 +130,29 @@ public class Main extends ListenerAdapter {
           new AFKCommand(afks),
           new KitsuCommand(thunder),
           new AvatarCommand(thunder),
+          // music
+                new PlayCommand(thunder, config.getLoading()),
+                new PlaylistsCommand(thunder),
+                new NowplayingCommand(thunder),
+                new VolumeCommand(thunder),
+                new SkipCommand(thunder),
+                new StopCommand(thunder),
+                new ShuffleCommand(thunder),
+                new QueueCommand(thunder),
+                new SearchCommand(thunder, config.getSearching()),
+                new SCSearchCommand(thunder, config.getSearching()),
+                new RepeatCommand(thunder),
+                new NightcoreCommand(thunder),
+                new PitchCommand(thunder),
+                new KaraokeCommand(thunder),
+                new VaporwaveCommand(thunder),
+                new BassboostCommand(thunder),
+                new MoveTrackCommand(thunder),
+                new PlaynextCommand(thunder, config.getLoading()),
+                new LyricsCommand(thunder),
+                new RemoveCommand(thunder),
+                new PauseCommand(thunder),
+                new SkiptoCommand(thunder)
         };
 
     CommandClientBuilder client =
@@ -169,33 +192,34 @@ public class Main extends ListenerAdapter {
                 // new KitsuCommand(thunder),
                 // new AvatarCommand(thunder),
                 // music
-                new PlayCommand(thunder, config.getLoading()),
-                new PlaylistsCommand(thunder),
-                new NowplayingCommand(thunder),
-                new VolumeCommand(thunder),
-                new SkipCommand(thunder),
-                new StopCommand(thunder),
-                new ShuffleCommand(thunder),
-                new QueueCommand(thunder),
-                new SearchCommand(thunder, config.getSearching()),
-                new SCSearchCommand(thunder, config.getSearching()),
-                new RepeatCommand(thunder),
-                new NightcoreCommand(thunder),
-                new PitchCommand(thunder),
-                new KaraokeCommand(thunder),
-                new VaporwaveCommand(thunder),
-                new BassboostCommand(thunder),
-                new MoveTrackCommand(thunder),
-                new PlaynextCommand(thunder, config.getLoading()),
-                new LyricsCommand(thunder),
-                new RemoveCommand(thunder),
-                new PauseCommand(thunder),
-                new SkiptoCommand(thunder));
-    // owner
-    // new EvalCommand(thunder),
-    // new RestartCommand(thunder),
-    // new PlaylistCommand(thunder),
-    // new BotStatusCommand());
+                // new PlayCommand(thunder, config.getLoading()),
+                // new PlaylistsCommand(thunder),
+                // new NowplayingCommand(thunder),
+                // new VolumeCommand(thunder),
+                // new SkipCommand(thunder),
+                // new StopCommand(thunder),
+                // new ShuffleCommand(thunder),
+                // new QueueCommand(thunder),
+                // new SearchCommand(thunder, config.getSearching()),
+                // new SCSearchCommand(thunder, config.getSearching()),
+                // new RepeatCommand(thunder),
+                // new NightcoreCommand(thunder),
+                // new PitchCommand(thunder),
+                // new KaraokeCommand(thunder),
+                // new VaporwaveCommand(thunder),
+                // new BassboostCommand(thunder),
+                // new MoveTrackCommand(thunder),
+                // new PlaynextCommand(thunder, config.getLoading()),
+                // new LyricsCommand(thunder),
+                // new RemoveCommand(thunder),
+                // new PauseCommand(thunder),
+                // new SkiptoCommand(thunder),;
+                // owner
+                // new EvalCommand(thunder),
+                // new RestartCommand(thunder),
+                // new PlaylistCommand(thunder),
+                // new BotStatusCommand()
+                );
 
     log.info("Loaded config from " + config.getConfigLocation());
 

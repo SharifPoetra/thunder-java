@@ -15,7 +15,7 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.Command;
+import com.sharif.thunder.commands.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.ButtonMenu;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -34,18 +34,24 @@ import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import com.sharif.thunder.utils.SenderUtil;
+import com.sharif.thunder.commands.Argument;
 
 public class PlayCommand extends MusicCommand {
   private static final String LOAD = "\uD83D\uDCE5"; // 📥
   private static final String CANCEL = "\uD83D\uDEAB"; // 🚫
 
   private final String loadingEmoji;
+  private static String input;
 
   public PlayCommand(Thunder thunder, String loadingEmoji) {
     super(thunder);
     this.loadingEmoji = loadingEmoji;
     this.name = "play";
-    this.arguments = "<title|URL|subcommand>";
+    this.arguments = new Argument[] {
+      new Argument("title|URL", Argument.Type.LONGSTRING, false)
+    };
     this.help = "plays the provided song.";
     this.aliases = new String[] {"p"};
     this.guildOnly = true;
@@ -55,66 +61,61 @@ public class PlayCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
-    if (event.getArgs().isEmpty() && event.getMessage().getAttachments().isEmpty()) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
+    input = (String) args[0];
+    if (input.isEmpty() && event.getMessage().getAttachments().isEmpty()) {
       AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
       handler.setAnnouncingChannel(event.getChannel().getIdLong());
       if (handler.getPlayer().getPlayingTrack() != null && handler.getPlayer().isPaused()) {
         handler.getPlayer().setPaused(false);
-        event.reply(
-            ""
-                + thunder.getConfig().getMusic()
-                + " Resumed **"
-                + handler.getPlayer().getPlayingTrack().getInfo().title
-                + "**.");
+        SenderUtil.reply(event, thunder.getConfig().getMusic() + " Resumed **" + handler.getPlayer().getPlayingTrack().getInfo().title + "**.");
         return;
       }
       StringBuilder builder =
-          new StringBuilder(event.getClient().getWarning() + " Play Commands:\n");
+          new StringBuilder(thunder.getConfig().getWarning() + " Play Commands:\n");
       builder
           .append("\n`")
-          .append(event.getClient().getPrefix())
+          .append(thunder.getConfig().getPrefix())
           .append(name)
           .append(" <song title>` - plays the first result from Youtube");
       builder
           .append("\n`")
-          .append(event.getClient().getPrefix())
+          .append(thunder.getConfig().getPrefix())
           .append(name)
           .append(" <URL>` - plays the provided song, playlist, or stream");
       for (Command cmd : children)
         builder
             .append("\n`")
-            .append(event.getClient().getPrefix())
+            .append(thunder.getConfig().getPrefix())
             .append(name)
             .append(" ")
             .append(cmd.getName())
             .append(" ")
-            .append(cmd.getArguments())
+            .append(Argument.arrayToString(cmd.getArguments()))
             .append("` - ")
             .append(cmd.getHelp());
-      event.reply(builder.toString());
+      event.getChannel().sendMessage(builder.toString()).queue();
       return;
     }
-    String args =
-        event.getArgs().startsWith("<") && event.getArgs().endsWith(">")
-            ? event.getArgs().substring(1, event.getArgs().length() - 1)
-            : event.getArgs().isEmpty()
+    String arg =
+        input.startsWith("<") && input.endsWith(">")
+            ? input.substring(1, input.length() - 1)
+            : input.isEmpty()
                 ? event.getMessage().getAttachments().get(0).getUrl()
-                : event.getArgs();
-    event.reply(
-        loadingEmoji + " Loading... `[" + args + "]`",
+                : input;
+    event.getChannel().sendMessage(loadingEmoji + " Loading... `[" + arg + "]`").queue(
         m ->
             thunder
                 .getPlayerManager()
-                .loadItemOrdered(event.getGuild(), args, new ResultHandler(m, event, false)));
+                .loadItemOrdered(event.getGuild(), arg, new ResultHandler(m, event, false)));
   }
 
   private class ResultHandler implements AudioLoadResultHandler {
     private final Message m;
-    private final CommandEvent event;
+    private final MessageReceivedEvent event;
     private final boolean ytsearch;
 
-    private ResultHandler(Message m, CommandEvent event, boolean ytsearch) {
+    private ResultHandler(Message m, MessageReceivedEvent event, boolean ytsearch) {
       this.m = m;
       this.event = event;
       this.ytsearch = ytsearch;
@@ -124,7 +125,7 @@ public class PlayCommand extends MusicCommand {
       if (thunder.getConfig().isTooLong(track)) {
         m.editMessage(
                 FormatUtil.filterEveryone(
-                    event.getClient().getWarning()
+                    thunder.getConfig().getWarning()
                         + " This track (**"
                         + track.getInfo().title
                         + "**) is longer than the allowed maximum: `"
@@ -149,6 +150,7 @@ public class PlayCommand extends MusicCommand {
                   + (pos == 0 ? "" : " to the queue at position " + pos));
       if (playlist == null
           || !event
+              .getGuild()
               .getSelfMember()
               .hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
         m.editMessage(addMsg)
@@ -161,7 +163,7 @@ public class PlayCommand extends MusicCommand {
             .setText(
                 addMsg
                     + "\n"
-                    + event.getClient().getWarning()
+                    + thunder.getConfig().getWarning()
                     + " This track has a playlist of **"
                     + playlist.getTracks().size()
                     + "** tracks attached. Select "
@@ -176,7 +178,7 @@ public class PlayCommand extends MusicCommand {
                     m.editMessage(
                             addMsg
                                 + "\n"
-                                + event.getClient().getSuccess()
+                                + thunder.getConfig().getSuccess()
                                 + " Loaded **"
                                 + loadPlaylist(playlist, track)
                                 + "** additional tracks!")
@@ -234,7 +236,7 @@ public class PlayCommand extends MusicCommand {
         if (count == 0) {
           m.editMessage(
                   FormatUtil.filterEveryone(
-                      event.getClient().getWarning()
+                      thunder.getConfig().getWarning()
                           + " All entries in this playlist "
                           + (playlist.getName() == null ? "" : "(**" + playlist.getName() + "**) ")
                           + "were longer than the allowed maximum (`"
@@ -244,7 +246,7 @@ public class PlayCommand extends MusicCommand {
         } else {
           m.editMessage(
                   FormatUtil.filterEveryone(
-                      event.getClient().getSuccess()
+                      thunder.getConfig().getSuccess()
                           + " Found "
                           + (playlist.getName() == null
                               ? "a playlist"
@@ -254,7 +256,7 @@ public class PlayCommand extends MusicCommand {
                           + "` entries; added to the queue!"
                           + (count < playlist.getTracks().size()
                               ? "\n"
-                                  + event.getClient().getWarning()
+                                  + thunder.getConfig().getWarning()
                                   + " Tracks longer than the allowed maximum (`"
                                   + thunder.getConfig().getMaxTime()
                                   + "`) have been omitted."
@@ -269,47 +271,49 @@ public class PlayCommand extends MusicCommand {
       if (ytsearch)
         m.editMessage(
                 FormatUtil.filterEveryone(
-                    event.getClient().getWarning()
+                    thunder.getConfig().getWarning()
                         + " No results found for `"
-                        + event.getArgs()
+                        + input
                         + "`."))
             .queue();
       else
         thunder
             .getPlayerManager()
             .loadItemOrdered(
-                event.getGuild(), "ytsearch:" + event.getArgs(), new ResultHandler(m, event, true));
+                event.getGuild(), "ytsearch:" + input, new ResultHandler(m, event, true));
     }
 
     @Override
     public void loadFailed(FriendlyException throwable) {
       if (throwable.severity == Severity.COMMON)
-        m.editMessage(event.getClient().getError() + " Error loading: " + throwable.getMessage())
+        m.editMessage(thunder.getConfig().getError() + " Error loading: " + throwable.getMessage())
             .queue();
-      else m.editMessage(event.getClient().getError() + " Error loading track.").queue();
+      else m.editMessage(thunder.getConfig().getError() + " Error loading track.").queue();
     }
   }
 
-  public class PlaylistCommand extends MusicCommand {
-    public PlaylistCommand(Thunder thunder) {
+  private class PlaylistCommand extends MusicCommand {
+    
+    private String pname;
+    
+    private PlaylistCommand(Thunder thunder) {
       super(thunder);
       this.name = "playlist";
       this.aliases = new String[] {"pl"};
-      this.arguments = "<name>";
+      this.arguments = new Argument[] {
+        new Argument("name", Argument.Type.SHORTSTRING, true)
+      };
       this.help = "plays the provided playlist";
       this.beListening = true;
       this.bePlaying = false;
     }
 
     @Override
-    public void doCommand(CommandEvent event) {
-      if (event.getArgs().isEmpty()) {
-        event.reply(event.getClient().getError() + " Please include a playlist name.");
-        return;
-      }
-      Playlist playlist = thunder.getPlaylistLoader().getPlaylist(event.getArgs());
+    public void doCommand(Object[] args, MessageReceivedEvent event) {
+      pname = (String) args[0];
+      Playlist playlist = thunder.getPlaylistLoader().getPlaylist(pname);
       if (playlist == null) {
-        event.replyError("I could not find `" + event.getArgs() + ".txt` in the Playlists folder.");
+        SenderUtil.replyError(event, "I could not find `" + pname + ".txt` in the Playlists folder.");
         return;
       }
       event
@@ -317,7 +321,7 @@ public class PlayCommand extends MusicCommand {
           .sendMessage(
               loadingEmoji
                   + " Loading playlist **"
-                  + event.getArgs()
+                  + pname
                   + "**... ("
                   + playlist.getItems().size()
                   + " items)")
@@ -333,8 +337,8 @@ public class PlayCommand extends MusicCommand {
                       StringBuilder builder =
                           new StringBuilder(
                               playlist.getTracks().isEmpty()
-                                  ? event.getClient().getWarning() + " No tracks were loaded!"
-                                  : event.getClient().getSuccess()
+                                  ? thunder.getConfig().getWarning() + " No tracks were loaded!"
+                                  : thunder.getConfig().getSuccess()
                                       + " Loaded **"
                                       + playlist.getTracks().size()
                                       + "** tracks!");
