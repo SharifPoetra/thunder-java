@@ -30,7 +30,10 @@ public class MoveTrackCommand extends MusicCommand {
     super(thunder);
     this.name = "movetrack";
     this.help = "move a track in the current queue to a different position.";
-    this.arguments = new Argument[] {new Argument("from> <to", Argument.Type.SHORTSTRING, true)};
+    this.arguments = new Argument[] {
+      new Argument("from", Argument.Type.SHORTSTRING, true), 
+      new Argument("to", Argument.Type.SHORTSTRING, true)
+    };
     this.aliases = new String[] {"move"};
     this.guildOnly = true;
     this.beListening = true;
@@ -41,18 +44,13 @@ public class MoveTrackCommand extends MusicCommand {
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     int from;
     int to;
-
-    String aparts = (String) args[0];
-    String[] parts = aparts.split("\\s+", 2);
-    if (parts.length < 2) {
-      SenderUtil.replyError(event, "Please include two valid indexes.");
-      return;
-    }
+    String part0 = (String) args[0];
+    String part1 = (String) args[1];
 
     try {
       // Validate the args
-      from = Integer.parseInt(parts[0]);
-      to = Integer.parseInt(parts[1]);
+      from = Integer.parseInt(part0);
+      to = Integer.parseInt(part1);
     } catch (NumberFormatException e) {
       SenderUtil.replyError(event, "Please provide two valid indexes.");
       return;
