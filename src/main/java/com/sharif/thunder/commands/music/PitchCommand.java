@@ -15,16 +15,15 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
-import com.sharif.thunder.commands.MusicCommand;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import com.sharif.thunder.utils.SenderUtil;
 import com.sharif.thunder.commands.Argument;
+import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class PitchCommand extends MusicCommand {
-  
+
   private int f;
 
   public PitchCommand(Thunder thunder) {

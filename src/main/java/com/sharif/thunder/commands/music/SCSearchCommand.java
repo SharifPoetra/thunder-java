@@ -23,7 +23,7 @@ public class SCSearchCommand extends SearchCommand {
     this.searchPrefix = "scsearch:";
     this.name = "scsearch";
     this.help = "searches Soundcloud for a provided query.";
-    this.aliases = new String[] {};
+    this.aliases = new String[] {"soundcloud"};
     this.guildOnly = true;
     this.beListening = true;
     this.bePlaying = false;

@@ -18,7 +18,7 @@
 
 <br>
 
-# ⚠️ Currently on rewrite status, I do NOT recommend you clone it right now! ⚠️
+# ⚠️ Currently on rewrite status, I do NOT recommend you clone it right now! Use the latest [releases](https://github.com/SharifPoetra/thunder-java/releases) instead. ⚠️
 
 # Selfhosting  
 

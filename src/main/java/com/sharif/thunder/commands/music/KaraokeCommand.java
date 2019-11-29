@@ -15,13 +15,11 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.commands.MusicCommand;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class KaraokeCommand extends MusicCommand {
   public KaraokeCommand(Thunder thunder) {
@@ -31,15 +29,16 @@ public class KaraokeCommand extends MusicCommand {
     this.guildOnly = true;
     this.beListening = true;
     this.bePlaying = true;
-    // this.children = new Command[] {new KaraokeLevelCommand(thunder), new KaraokeMonoCommand(thunder)};
+    // this.children = new Command[] {new KaraokeLevelCommand(thunder), new
+    // KaraokeMonoCommand(thunder)};
   }
 
   @Override
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.setKaraoke(!handler.isKaraoke());
-    SenderUtil.replySuccess(event,
-        "Karaoke mode is now `" + (!handler.isKaraoke() ? "disabled" : "enabled") + "`.");
+    SenderUtil.replySuccess(
+        event, "Karaoke mode is now `" + (!handler.isKaraoke() ? "disabled" : "enabled") + "`.");
   }
 
   // public class KaraokeLevelCommand extends MusicCommand {
@@ -58,7 +57,8 @@ public class KaraokeCommand extends MusicCommand {
   //       event.replyError("The given argument must be a valid integer!");
   //       return;
   //     }
-  //     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+  //     AudioHandler handler = (AudioHandler)
+  // event.getGuild().getAudioManager().getSendingHandler();
   //     handler.setKaraokeLevel(f);
 
   //     if (f == 1) {
@@ -85,7 +85,8 @@ public class KaraokeCommand extends MusicCommand {
   //       event.replyError("The given argument must be a valid integer!");
   //       return;
   //     }
-  //     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+  //     AudioHandler handler = (AudioHandler)
+  // event.getGuild().getAudioManager().getSendingHandler();
   //     handler.setKaraokeMono(f);
 
   //     if (f == 1) {

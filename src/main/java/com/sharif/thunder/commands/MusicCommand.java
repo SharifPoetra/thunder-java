@@ -17,11 +17,11 @@ package com.sharif.thunder.commands;
 
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
+import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 public abstract class MusicCommand extends Command {
   protected final Thunder thunder;
@@ -56,7 +56,8 @@ public abstract class MusicCommand extends Command {
         try {
           event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
         } catch (PermissionException ex) {
-          SenderUtil.replyError(event, "I am unable to connect to **" + userState.getChannel().getName() + "**!");
+          SenderUtil.replyError(
+              event, "I am unable to connect to **" + userState.getChannel().getName() + "**!");
           return;
         }
       }

@@ -15,12 +15,11 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.commands.MusicCommand;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class PauseCommand extends MusicCommand {
   public PauseCommand(Thunder thunder) {
@@ -36,14 +35,16 @@ public class PauseCommand extends MusicCommand {
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     if (handler.getPlayer().isPaused()) {
-      SenderUtil.replyWarning(event,
+      SenderUtil.replyWarning(
+          event,
           "The player is already paused! Use `"
               + thunder.getConfig().getPrefix()
               + "play` to unpause!");
       return;
     }
     handler.getPlayer().setPaused(true);
-    SenderUtil.replySuccess(event,
+    SenderUtil.replySuccess(
+        event,
         "Paused **"
             + handler.getPlayer().getPlayingTrack().getInfo().title
             + "**. Type `"

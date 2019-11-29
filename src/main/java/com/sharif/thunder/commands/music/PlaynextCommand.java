@@ -15,7 +15,6 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -23,13 +22,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.audio.QueuedTrack;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.OtherUtil;
+import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import com.sharif.thunder.utils.SenderUtil;
-import com.sharif.thunder.commands.Argument;
 
 public class PlaynextCommand extends MusicCommand {
   private final String loadingEmoji;
@@ -39,9 +38,7 @@ public class PlaynextCommand extends MusicCommand {
     super(thunder);
     this.loadingEmoji = loadingEmoji;
     this.name = "playnext";
-    this.arguments = new Argument[] {
-      new Argument("title|URL", Argument.Type.LONGSTRING, false)
-    };
+    this.arguments = new Argument[] {new Argument("title|URL", Argument.Type.LONGSTRING, false)};
     this.help = "plays a single song next.";
     this.guildOnly = true;
     this.beListening = true;
@@ -58,14 +55,15 @@ public class PlaynextCommand extends MusicCommand {
     String arg =
         input.startsWith("<") && input.endsWith(">")
             ? input.substring(1, input.length() - 1)
-            : input.isEmpty()
-                ? event.getMessage().getAttachments().get(0).getUrl()
-                : input;
-    event.getChannel().sendMessage(loadingEmoji + " Loading... `[" + arg + "]`").queue(
-        m ->
-            thunder
-                .getPlayerManager()
-                .loadItemOrdered(event.getGuild(), arg, new ResultHandler(m, event, false)));
+            : input.isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : input;
+    event
+        .getChannel()
+        .sendMessage(loadingEmoji + " Loading... `[" + arg + "]`")
+        .queue(
+            m ->
+                thunder
+                    .getPlayerManager()
+                    .loadItemOrdered(event.getGuild(), arg, new ResultHandler(m, event, false)));
   }
 
   private class ResultHandler implements AudioLoadResultHandler {
@@ -136,10 +134,7 @@ public class PlaynextCommand extends MusicCommand {
       if (ytsearch)
         m.editMessage(
                 FormatUtil.filterEveryone(
-                    thunder.getConfig().getWarning()
-                        + " No results found for `"
-                        + input
-                        + "`."))
+                    thunder.getConfig().getWarning() + " No results found for `" + input + "`."))
             .queue();
       else
         thunder

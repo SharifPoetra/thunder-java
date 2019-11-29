@@ -15,13 +15,11 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.utils.SenderUtil;
 import java.util.List;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import com.sharif.thunder.utils.SenderUtil;
-import com.sharif.thunder.commands.Argument;
 
 public class PlaylistsCommand extends MusicCommand {
   public PlaylistsCommand(Thunder thunder) {
@@ -42,13 +40,11 @@ public class PlaylistsCommand extends MusicCommand {
       return;
     }
     List<String> list = thunder.getPlaylistLoader().getPlaylistNames();
-    if (list == null)
-      SenderUtil.replyError(event, "Failed to load available playlists!");
+    if (list == null) SenderUtil.replyError(event, "Failed to load available playlists!");
     else if (list.isEmpty())
       SenderUtil.replyWarning(event, "There are no playlists in the Playlists folder!");
     else {
-      StringBuilder builder =
-          new StringBuilder("Available playlists:\n\n");
+      StringBuilder builder = new StringBuilder("Available playlists:\n\n");
       list.forEach(str -> builder.append("`").append(str).append("` "));
       builder
           .append("\n\nType `")

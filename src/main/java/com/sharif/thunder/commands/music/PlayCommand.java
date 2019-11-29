@@ -15,8 +15,6 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.sharif.thunder.commands.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.ButtonMenu;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -26,17 +24,18 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.audio.QueuedTrack;
+import com.sharif.thunder.commands.Argument;
+import com.sharif.thunder.commands.Command;
 import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.playlist.PlaylistLoader.Playlist;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.OtherUtil;
+import com.sharif.thunder.utils.SenderUtil;
 import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import com.sharif.thunder.utils.SenderUtil;
-import com.sharif.thunder.commands.Argument;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 public class PlayCommand extends MusicCommand {
   private static final String LOAD = "\uD83D\uDCE5"; // 📥
@@ -49,9 +48,7 @@ public class PlayCommand extends MusicCommand {
     super(thunder);
     this.loadingEmoji = loadingEmoji;
     this.name = "play";
-    this.arguments = new Argument[] {
-      new Argument("title|URL", Argument.Type.LONGSTRING, false)
-    };
+    this.arguments = new Argument[] {new Argument("title|URL", Argument.Type.LONGSTRING, false)};
     this.help = "plays the provided song.";
     this.aliases = new String[] {"p"};
     this.guildOnly = true;
@@ -68,7 +65,12 @@ public class PlayCommand extends MusicCommand {
       handler.setAnnouncingChannel(event.getChannel().getIdLong());
       if (handler.getPlayer().getPlayingTrack() != null && handler.getPlayer().isPaused()) {
         handler.getPlayer().setPaused(false);
-        SenderUtil.reply(event, thunder.getConfig().getMusic() + " Resumed **" + handler.getPlayer().getPlayingTrack().getInfo().title + "**.");
+        SenderUtil.reply(
+            event,
+            thunder.getConfig().getMusic()
+                + " Resumed **"
+                + handler.getPlayer().getPlayingTrack().getInfo().title
+                + "**.");
         return;
       }
       StringBuilder builder =
@@ -100,14 +102,15 @@ public class PlayCommand extends MusicCommand {
     String arg =
         input.startsWith("<") && input.endsWith(">")
             ? input.substring(1, input.length() - 1)
-            : input.isEmpty()
-                ? event.getMessage().getAttachments().get(0).getUrl()
-                : input;
-    event.getChannel().sendMessage(loadingEmoji + " Loading... `[" + arg + "]`").queue(
-        m ->
-            thunder
-                .getPlayerManager()
-                .loadItemOrdered(event.getGuild(), arg, new ResultHandler(m, event, false)));
+            : input.isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : input;
+    event
+        .getChannel()
+        .sendMessage(loadingEmoji + " Loading... `[" + arg + "]`")
+        .queue(
+            m ->
+                thunder
+                    .getPlayerManager()
+                    .loadItemOrdered(event.getGuild(), arg, new ResultHandler(m, event, false)));
   }
 
   private class ResultHandler implements AudioLoadResultHandler {
@@ -271,10 +274,7 @@ public class PlayCommand extends MusicCommand {
       if (ytsearch)
         m.editMessage(
                 FormatUtil.filterEveryone(
-                    thunder.getConfig().getWarning()
-                        + " No results found for `"
-                        + input
-                        + "`."))
+                    thunder.getConfig().getWarning() + " No results found for `" + input + "`."))
             .queue();
       else
         thunder
@@ -293,16 +293,14 @@ public class PlayCommand extends MusicCommand {
   }
 
   private class PlaylistCommand extends MusicCommand {
-    
+
     private String pname;
-    
+
     private PlaylistCommand(Thunder thunder) {
       super(thunder);
       this.name = "playlist";
       this.aliases = new String[] {"pl"};
-      this.arguments = new Argument[] {
-        new Argument("name", Argument.Type.SHORTSTRING, true)
-      };
+      this.arguments = new Argument[] {new Argument("name", Argument.Type.SHORTSTRING, true)};
       this.help = "plays the provided playlist";
       this.beListening = true;
       this.bePlaying = false;
@@ -313,7 +311,8 @@ public class PlayCommand extends MusicCommand {
       pname = (String) args[0];
       Playlist playlist = thunder.getPlaylistLoader().getPlaylist(pname);
       if (playlist == null) {
-        SenderUtil.replyError(event, "I could not find `" + pname + ".txt` in the Playlists folder.");
+        SenderUtil.replyError(
+            event, "I could not find `" + pname + ".txt` in the Playlists folder.");
         return;
       }
       event

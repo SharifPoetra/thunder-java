@@ -15,18 +15,17 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jlyrics.Lyrics;
 import com.jagrosh.jlyrics.LyricsClient;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
-import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.commands.Argument;
+import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.utils.SenderUtil;
 import java.util.concurrent.ExecutionException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import com.sharif.thunder.utils.SenderUtil;
 
 public class LyricsCommand extends MusicCommand {
   private Lyrics lyrics;
@@ -65,7 +64,8 @@ public class LyricsCommand extends MusicCommand {
     try {
       lyrics = client.getLyrics(title).get();
     } catch (InterruptedException | ExecutionException e) {
-      SenderUtil.replyError(event, "Shomething went wrong when trying fetching the lyrics: " + e.getMessage());
+      SenderUtil.replyError(
+          event, "Shomething went wrong when trying fetching the lyrics: " + e.getMessage());
     }
 
     if (lyrics == null) {
@@ -79,8 +79,8 @@ public class LyricsCommand extends MusicCommand {
             .setColor(event.getGuild().getSelfMember().getColor())
             .setTitle(lyrics.getTitle(), lyrics.getURL());
     if (lyrics.getContent().length() > 15000) {
-      SenderUtil.replyWarning(event,
-          "Lyrics for `" + title + "` found but likely not correct: " + lyrics.getURL());
+      SenderUtil.replyWarning(
+          event, "Lyrics for `" + title + "` found but likely not correct: " + lyrics.getURL());
     } else if (lyrics.getContent().length() > 2000) {
       String content = lyrics.getContent().trim();
       while (content.length() > 2000) {
@@ -88,7 +88,10 @@ public class LyricsCommand extends MusicCommand {
         if (index == -1) index = content.lastIndexOf("\n", 2000);
         if (index == -1) index = content.lastIndexOf(" ", 2000);
         if (index == -1) index = 2000;
-        event.getChannel().sendMessage(eb.setDescription(content.substring(0, index).trim()).build()).queue();
+        event
+            .getChannel()
+            .sendMessage(eb.setDescription(content.substring(0, index).trim()).build())
+            .queue();
         content = content.substring(index).trim();
         eb.setAuthor(null).setTitle(null, null);
       }
