@@ -13,7 +13,7 @@ repositories {
 }
     
 dependencies {
-    implementation 'net.dv8tion:JDA:4.0.0_64'
+    implementation 'net.dv8tion:JDA:4.0.0_67'
     implementation 'com.jagrosh:jda-utilities:3.0.2'
     implementation 'com.sparkjava:spark-core:2.9.1'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
