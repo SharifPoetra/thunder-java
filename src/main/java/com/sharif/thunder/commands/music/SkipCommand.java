@@ -15,11 +15,12 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class SkipCommand extends MusicCommand {
   public SkipCommand(Thunder thunder) {
@@ -33,19 +34,17 @@ public class SkipCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     if (event.getAuthor().getIdLong() == handler.getRequester()) {
-      event.reply(
-          event.getClient().getSuccess()
-              + " Skipped **"
-              + handler.getPlayer().getPlayingTrack().getInfo().title
-              + "**");
+      SenderUtil.replySuccess(
+          event, "Skipped **" + handler.getPlayer().getPlayingTrack().getInfo().title + "**");
       handler.stopTrack();
     } else {
       int listeners =
           (int)
               event
+                  .getGuild()
                   .getSelfMember()
                   .getVoiceState()
                   .getChannel()
@@ -55,14 +54,15 @@ public class SkipCommand extends MusicCommand {
                   .count();
       String msg;
       if (handler.getVotes().contains(event.getAuthor().getId()))
-        msg = event.getClient().getWarning() + " You already voted to skip this song `[";
+        msg = thunder.getConfig().getWarning() + " You already voted to skip this song `[";
       else {
-        msg = event.getClient().getSuccess() + " You voted to skip the song `[";
+        msg = thunder.getConfig().getSuccess() + " You voted to skip the song `[";
         handler.getVotes().add(event.getAuthor().getId());
       }
       int skippers =
           (int)
               event
+                  .getGuild()
                   .getSelfMember()
                   .getVoiceState()
                   .getChannel()
@@ -76,7 +76,7 @@ public class SkipCommand extends MusicCommand {
         User u = event.getJDA().getUserById(handler.getRequester());
         msg +=
             "\n"
-                + event.getClient().getSuccess()
+                + thunder.getConfig().getSuccess()
                 + " Skipped **"
                 + handler.getPlayer().getPlayingTrack().getInfo().title
                 + "**"
@@ -87,7 +87,7 @@ public class SkipCommand extends MusicCommand {
                         + ")");
         handler.getPlayer().stopTrack();
       }
-      event.reply(msg);
+      SenderUtil.reply(event, msg);
     }
   }
 }

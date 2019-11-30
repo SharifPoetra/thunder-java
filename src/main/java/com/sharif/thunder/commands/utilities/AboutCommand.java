@@ -15,7 +15,6 @@
  */
 package com.sharif.thunder.commands.utilities;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.JDAUtilitiesInfo;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
@@ -31,6 +30,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ApplicationInfo;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +81,7 @@ public class AboutCommand extends UtilitiesCommand {
   }
 
   @Override
-  protected void execute(CommandEvent event) {
+  protected void execute(Object[] args, MessageReceivedEvent event) {
     long free = rt.freeMemory() / (1024 * 1024);
     long total = rt.totalMemory() / (1024 * 1024);
     long used = total - free;
@@ -100,28 +100,28 @@ public class AboutCommand extends UtilitiesCommand {
     builder.setColor(
         event.getGuild() == null ? color : event.getGuild().getSelfMember().getColor());
     builder.setAuthor(
-        "All about " + event.getSelfUser().getName() + "!",
+        "All about " + event.getJDA().getSelfUser().getName() + "!",
         null,
-        event.getSelfUser().getAvatarUrl());
+        event.getJDA().getSelfUser().getAvatarUrl());
     boolean join =
-        !(event.getClient().getServerInvite() == null
-            || event.getClient().getServerInvite().isEmpty());
+        !(thunder.getConfig().getServerInvite() == null
+            || thunder.getConfig().getServerInvite().isEmpty());
     boolean inv = !oauthLink.isEmpty();
     String invline =
         "\n"
             + (join
-                ? "Join my server [`here`](" + event.getClient().getServerInvite() + ")"
+                ? "Join my server [`here`](" + thunder.getConfig().getServerInvite() + ")"
                 : (inv ? "Please " : ""))
             + (inv ? (join ? ", or " : "") + "[`invite`](" + oauthLink + ") me to your server" : "")
             + "!";
     String author =
-        event.getJDA().getUserById(event.getClient().getOwnerId()) == null
-            ? "<@" + event.getClient().getOwnerId() + ">"
-            : event.getJDA().getUserById(event.getClient().getOwnerId()).getName();
+        event.getJDA().getUserById(thunder.getConfig().getOwnerId()) == null
+            ? "<@" + thunder.getConfig().getOwnerId() + ">"
+            : event.getJDA().getUserById(thunder.getConfig().getOwnerId()).getName();
     StringBuilder descr =
         new StringBuilder()
             .append("Hello! I am **")
-            .append(event.getSelfUser().getName())
+            .append(event.getJDA().getSelfUser().getName())
             .append("**, ")
             .append(description)
             .append("\nI ")
@@ -140,8 +140,8 @@ public class AboutCommand extends UtilitiesCommand {
             .append(") using JVM version ")
             .append(jvmVersion)
             .append("\nType `")
-            .append(event.getClient().getTextualPrefix())
-            .append(event.getClient().getHelpWord())
+            .append(thunder.getConfig().getPrefix())
+            .append("help")
             .append("` to see my commands!")
             .append(join || inv ? invline : "")
             .append("\n\nSome of my features include: ```css");
@@ -149,9 +149,9 @@ public class AboutCommand extends UtilitiesCommand {
       descr
           .append("\n")
           .append(
-              event.getClient().getSuccess().startsWith("<")
+              thunder.getConfig().getSuccess().startsWith("<")
                   ? REPLACEMENT_ICON
-                  : event.getClient().getSuccess())
+                  : thunder.getConfig().getSuccess())
           .append(" ")
           .append(feature);
     descr.append(" ```");
@@ -193,7 +193,7 @@ public class AboutCommand extends UtilitiesCommand {
         "Free: " + free + "MB\n" + "Allocated: " + total + "MB\n" + "Used: " + used + "MB",
         true);
     builder.setFooter("Last restart", null);
-    builder.setTimestamp(event.getClient().getStartTime());
-    event.reply(builder.build());
+    builder.setTimestamp(thunder.getReadyAt());
+    event.getChannel().sendMessage(builder.build()).queue();
   }
 }

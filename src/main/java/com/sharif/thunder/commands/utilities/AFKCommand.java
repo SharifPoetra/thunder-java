@@ -15,9 +15,11 @@
  */
 package com.sharif.thunder.commands.utilities;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.UtilitiesCommand;
 import com.sharif.thunder.datasources.AFKs;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class AFKCommand extends UtilitiesCommand {
   private final AFKs afks;
@@ -26,13 +28,14 @@ public class AFKCommand extends UtilitiesCommand {
     this.afks = afks;
     this.name = "afk";
     this.help = "relays mentions via DM; can autoreply message.";
-    this.arguments = "[message]";
+    this.arguments = new Argument[] {new Argument("message", Argument.Type.LONGSTRING, false)};
   }
 
   @Override
-  protected void execute(CommandEvent event) {
-    String message = event.getArgs() == null ? null : event.getArgs();
-    afks.set(new String[] {event.getAuthor().getId(), message});
-    event.reply("⌨️ | " + event.getAuthor().getAsMention() + ", I've set you to AFK mode.");
+  protected void execute(Object[] args, MessageReceivedEvent event) {
+    String message = (String) args[0];
+    afks.set(new String[] {event.getAuthor().getId(), message == null ? null : message});
+    SenderUtil.reply(
+        event, "⌨️ | " + event.getAuthor().getAsMention() + ", I've set you to AFK mode.");
   }
 }

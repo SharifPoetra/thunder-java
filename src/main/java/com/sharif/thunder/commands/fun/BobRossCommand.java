@@ -32,7 +32,7 @@ public class BobRossCommand extends FunCommand {
     this.thunder = thunder;
     this.name = "bobross";
     this.help = "Draws a user's avatar over 'Bob Ross' canvas.";
-    this.arguments = new Argument[] {new Argument("user", Argument.Type.MEMBER, true)};
+    this.arguments = new Argument[] {new Argument("user", Argument.Type.USER, true)};
   }
 
   public void execute(Object[] args, MessageReceivedEvent event) {

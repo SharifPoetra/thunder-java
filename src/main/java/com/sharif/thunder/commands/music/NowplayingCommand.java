@@ -15,12 +15,12 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.commands.MusicCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class NowplayingCommand extends MusicCommand {
   public NowplayingCommand(Thunder thunder) {
@@ -35,14 +35,17 @@ public class NowplayingCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     Message m = handler.getNowPlaying(event.getJDA());
     if (m == null) {
-      event.reply(handler.getNoMusicPlaying(event.getJDA()));
+      event.getChannel().sendMessage(handler.getNoMusicPlaying(event.getJDA())).queue();
       thunder.getNowplayingHandler().clearLastNPMessage(event.getGuild());
     } else {
-      event.reply(m, msg -> thunder.getNowplayingHandler().setLastNPMessage(msg));
+      event
+          .getChannel()
+          .sendMessage(m)
+          .queue(msg -> thunder.getNowplayingHandler().setLastNPMessage(msg));
     }
   }
 }
