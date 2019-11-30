@@ -18,8 +18,6 @@
 
 <br>
 
-# ⚠️ Currently on rewrite status, I do NOT recommend you clone it right now! Use the latest [releases](https://github.com/SharifPoetra/thunder-java/releases) instead. ⚠️
-
 # Selfhosting  
 
 Download the latest releases [here](https://github.com/SharifPoetra/thunder-java/releases) (it should be `thunder.jar` and `config.txt.example`. `playlist_file.txt.example` is just an example for how playlists works)
