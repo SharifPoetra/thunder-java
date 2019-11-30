@@ -41,6 +41,7 @@ public class KaraokeCommand extends MusicCommand {
         event, "Karaoke mode is now `" + (!handler.isKaraoke() ? "disabled" : "enabled") + "`.");
   }
 
+  // TODO:
   // public class KaraokeLevelCommand extends MusicCommand {
 
   //   public KaraokeLevelCommand(Thunder thunder) {
