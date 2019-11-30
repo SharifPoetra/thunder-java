@@ -48,7 +48,7 @@ public class PlaynextCommand extends MusicCommand {
   @Override
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     input = (String) args[0];
-    if (input.isEmpty() && event.getMessage().getAttachments().isEmpty()) {
+    if (input == null && event.getMessage().getAttachments().isEmpty()) {
       SenderUtil.replyWarning(event, "Please include a song title or URL!");
       return;
     }

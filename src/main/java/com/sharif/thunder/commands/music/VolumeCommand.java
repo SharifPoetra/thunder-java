@@ -40,7 +40,7 @@ public class VolumeCommand extends MusicCommand {
     String vo = (String) args[0];
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     int volume = handler.getPlayer().getVolume();
-    if (vo.isEmpty()) {
+    if (vo == null) {
       SenderUtil.reply(
           event, FormatUtil.volumeIcon(volume) + " Current volume is `" + volume + "`");
     } else {

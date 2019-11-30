@@ -60,7 +60,7 @@ public class PlayCommand extends MusicCommand {
   @Override
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     input = (String) args[0];
-    if (input.isEmpty() && event.getMessage().getAttachments().isEmpty()) {
+    if (input == null && event.getMessage().getAttachments().isEmpty()) {
       AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
       handler.setAnnouncingChannel(event.getChannel().getIdLong());
       if (handler.getPlayer().getPlayingTrack() != null && handler.getPlayer().isPaused()) {
