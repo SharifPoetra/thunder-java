@@ -47,7 +47,7 @@ public class SkiptoCommand extends MusicCommand {
     }
 
     if (event.getAuthor().getIdLong() == handler.getRequester()) {
-      handler.getQueue().skip((int)index - 1);
+      handler.getQueue().skip((int) index - 1);
       SenderUtil.replySuccess(
           event, "Skipped to **" + handler.getQueue().get(0).getTrack().getInfo().title + "**");
       handler.getPlayer().stopTrack();

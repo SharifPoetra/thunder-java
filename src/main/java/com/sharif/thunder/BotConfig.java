@@ -103,7 +103,7 @@ public class BotConfig {
   public String getPrefix() {
     return prefix;
   }
-  
+
   public String getAltPrefix() {
     return altPrefix;
   }

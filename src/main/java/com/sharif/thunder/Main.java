@@ -17,7 +17,6 @@ package com.sharif.thunder;
 
 import static spark.Spark.*;
 
-import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sharif.thunder.commands.Command;
 import com.sharif.thunder.commands.Command.Category;
@@ -261,7 +260,7 @@ public class Main extends ListenerAdapter {
 
     if (strippedMessage != null && !event.getAuthor().isBot()) {
       strippedMessage = strippedMessage.trim();
-      
+
       // help command
       if (strippedMessage.equalsIgnoreCase("help")) {
         EmbedBuilder eb = new EmbedBuilder();
