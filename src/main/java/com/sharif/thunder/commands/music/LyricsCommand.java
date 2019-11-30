@@ -34,7 +34,7 @@ public class LyricsCommand extends MusicCommand {
     super(thunder);
     this.name = "lyrics";
     this.help = "shows the lyrics to the currently-playing song.";
-    this.arguments = new Argument[] {new Argument("song name", Argument.Type.LONGSTRING, true)};
+    this.arguments = new Argument[] {new Argument("song name", Argument.Type.LONGSTRING, false)};
     this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
     this.guildOnly = true;
     this.beListening = false;
@@ -57,7 +57,7 @@ public class LyricsCommand extends MusicCommand {
               .getInfo()
               .title;
     else title = (String) args[0];
-    if (title.isEmpty()) {
+    if (title == null) {
       SenderUtil.replyError(event, "You must specify what lyrics you want to search!");
       return;
     }
