@@ -159,7 +159,6 @@ public class Main extends ListenerAdapter {
     try {
       JDA jda =
           new JDABuilder(AccountType.BOT)
-              // .addEventListeners()
               .setToken(config.getToken())
               .addEventListeners(new Main(), waiter)
               .build()
