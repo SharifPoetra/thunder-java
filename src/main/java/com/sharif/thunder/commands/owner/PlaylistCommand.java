@@ -30,7 +30,6 @@ public class PlaylistCommand extends OwnerCommand {
 
   public PlaylistCommand(Thunder thunder) {
     this.thunder = thunder;
-    this.guildOnly = false;
     this.name = "playlist";
     this.help = "playlist management.";
     this.hidden = true;
@@ -65,7 +64,6 @@ public class PlaylistCommand extends OwnerCommand {
       this.help = "makes a new playlist";
       this.arguments =
           new Argument[] {new Argument("name", Argument.Type.SHORTSTRING, true, 3, 20)};
-      this.guildOnly = false;
     }
 
     @Override
@@ -91,7 +89,6 @@ public class PlaylistCommand extends OwnerCommand {
       this.help = "deletes an existing playlist";
       this.arguments =
           new Argument[] {new Argument("name", Argument.Type.SHORTSTRING, true, 3, 20)};
-      this.guildOnly = false;
     }
 
     @Override
@@ -121,7 +118,6 @@ public class PlaylistCommand extends OwnerCommand {
           new Argument[] {
             new Argument("name> <URL> | <URL> | <...", Argument.Type.LONGSTRING, true)
           };
-      this.guildOnly = false;
     }
 
     @Override
@@ -161,7 +157,6 @@ public class PlaylistCommand extends OwnerCommand {
       this.name = "all";
       this.aliases = new String[] {"available", "list"};
       this.help = "lists all available playlists";
-      this.guildOnly = true;
     }
 
     @Override
