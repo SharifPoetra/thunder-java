@@ -15,10 +15,11 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class BassboostCommand extends MusicCommand {
   public BassboostCommand(Thunder thunder) {
@@ -26,16 +27,16 @@ public class BassboostCommand extends MusicCommand {
     this.name = "bassboost";
     this.help = "toggles bassboost mode.";
     this.aliases = new String[] {"bb"};
-    this.guildOnly = true;
     this.beListening = true;
     this.bePlaying = true;
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.setBassboost(!handler.isBassboost());
-    event.replySuccess(
+    SenderUtil.replySuccess(
+        event,
         "Bassboost mode is now `" + (!handler.isBassboost() ? "disabled" : "enabled") + "`.");
   }
 }

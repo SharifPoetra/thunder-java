@@ -6,7 +6,6 @@
 [![Discord](https://discordapp.com/api/guilds/582372920047829014/embed.png)](https://discord.gg/ZEFrfj5)
 [![Dependabot](https://api.dependabot.com/badges/status?host=github&repo=SharifPoetra/thunder-java&identifier=210757811)](https://dependabot.com)
 [![CircleCI](https://img.shields.io/circleci/build/github/SharifPoetra/thunder-java)](https://circleci.com/gh/SharifPoetra/thunder-java)
-[![CodeFactor](https://www.codefactor.io/repository/github/sharifpoetra/thunder-java/badge)](https://www.codefactor.io/repository/github/sharifpoetra/thunder-java)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/SharifPoetra/thunder-java)
 ![GitHub repo size](https://img.shields.io/github/repo-size/SharifPoetra/thunder-java)
 ![Uptime Robot ratio (7 days)](https://img.shields.io/uptimerobot/ratio/7/m783516155-547dfefe9aaa2d503b9aea20)
@@ -17,8 +16,6 @@
 > You can invite the bot [here](https://discordapp.com/oauth2/authorize?client_id=580626972741337088&scope=bot&permissions=70642768&guild_id=0)
 
 <br>
-
-# ⚠️ Currently on rewrite status, I do NOT recommend you clone it right now! ⚠️
 
 # Selfhosting  
 

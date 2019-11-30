@@ -15,18 +15,20 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class SkiptoCommand extends MusicCommand {
   public SkiptoCommand(Thunder thunder) {
     super(thunder);
     this.name = "skipto";
     this.help = "skips to the specified song.";
-    this.arguments = "<position>";
+    this.arguments = new Argument[] {new Argument("position", Argument.Type.INTEGER, true)};
     this.aliases = new String[] {"jumpto"};
     this.guildOnly = true;
     this.beListening = true;
@@ -34,30 +36,26 @@ public class SkiptoCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
-    int index = 0;
-    try {
-      index = Integer.parseInt(event.getArgs());
-    } catch (NumberFormatException e) {
-      event.replyError("The provided argument is not a valid integer!");
-      return;
-    }
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
+    long index = (long) args[0];
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     if (index < 1 || index > handler.getQueue().size()) {
-      event.replyError(
+      SenderUtil.replyError(
+          event,
           "Position must be a valid integer between 1 and " + handler.getQueue().size() + "!");
       return;
     }
 
     if (event.getAuthor().getIdLong() == handler.getRequester()) {
-      handler.getQueue().skip(index - 1);
-      event.replySuccess(
-          "Skipped to **" + handler.getQueue().get(0).getTrack().getInfo().title + "**");
+      handler.getQueue().skip((int) index - 1);
+      SenderUtil.replySuccess(
+          event, "Skipped to **" + handler.getQueue().get(0).getTrack().getInfo().title + "**");
       handler.getPlayer().stopTrack();
     } else {
       int listeners =
           (int)
               event
+                  .getGuild()
                   .getSelfMember()
                   .getVoiceState()
                   .getChannel()
@@ -67,14 +65,15 @@ public class SkiptoCommand extends MusicCommand {
                   .count();
       String msg;
       if (handler.getVotes().contains(event.getAuthor().getId()))
-        msg = event.getClient().getWarning() + " You already voted to skip this song `[";
+        msg = thunder.getConfig().getWarning() + " You already voted to skip this song `[";
       else {
-        msg = event.getClient().getSuccess() + " You voted to skip the song `[";
+        msg = thunder.getConfig().getSuccess() + " You voted to skip the song `[";
         handler.getVotes().add(event.getAuthor().getId());
       }
       int skippers =
           (int)
               event
+                  .getGuild()
                   .getSelfMember()
                   .getVoiceState()
                   .getChannel()
@@ -88,7 +87,7 @@ public class SkiptoCommand extends MusicCommand {
         User u = event.getJDA().getUserById(handler.getRequester());
         msg +=
             "\n"
-                + event.getClient().getSuccess()
+                + thunder.getConfig().getSuccess()
                 + " Skipped **"
                 + handler.getPlayer().getPlayingTrack().getInfo().title
                 + "**"
@@ -99,7 +98,7 @@ public class SkiptoCommand extends MusicCommand {
                         + ")");
         handler.getPlayer().stopTrack();
       }
-      event.reply(msg);
+      SenderUtil.reply(event, msg);
     }
   }
 }

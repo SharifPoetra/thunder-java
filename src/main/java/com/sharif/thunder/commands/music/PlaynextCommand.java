@@ -15,7 +15,6 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -23,19 +22,23 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.audio.QueuedTrack;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.OtherUtil;
+import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class PlaynextCommand extends MusicCommand {
   private final String loadingEmoji;
+  private static String input;
 
   public PlaynextCommand(Thunder thunder, String loadingEmoji) {
     super(thunder);
     this.loadingEmoji = loadingEmoji;
     this.name = "playnext";
-    this.arguments = "<title|URL>";
+    this.arguments = new Argument[] {new Argument("title|URL", Argument.Type.LONGSTRING, false)};
     this.help = "plays a single song next.";
     this.guildOnly = true;
     this.beListening = true;
@@ -43,31 +46,32 @@ public class PlaynextCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
-    if (event.getArgs().isEmpty() && event.getMessage().getAttachments().isEmpty()) {
-      event.replyWarning("Please include a song title or URL!");
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
+    input = (String) args[0];
+    if (input == null && event.getMessage().getAttachments().isEmpty()) {
+      SenderUtil.replyWarning(event, "Please include a song title or URL!");
       return;
     }
-    String args =
-        event.getArgs().startsWith("<") && event.getArgs().endsWith(">")
-            ? event.getArgs().substring(1, event.getArgs().length() - 1)
-            : event.getArgs().isEmpty()
-                ? event.getMessage().getAttachments().get(0).getUrl()
-                : event.getArgs();
-    event.reply(
-        loadingEmoji + " Loading... `[" + args + "]`",
-        m ->
-            thunder
-                .getPlayerManager()
-                .loadItemOrdered(event.getGuild(), args, new ResultHandler(m, event, false)));
+    String arg =
+        input.startsWith("<") && input.endsWith(">")
+            ? input.substring(1, input.length() - 1)
+            : input.isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : input;
+    event
+        .getChannel()
+        .sendMessage(loadingEmoji + " Loading... `[" + arg + "]`")
+        .queue(
+            m ->
+                thunder
+                    .getPlayerManager()
+                    .loadItemOrdered(event.getGuild(), arg, new ResultHandler(m, event, false)));
   }
 
   private class ResultHandler implements AudioLoadResultHandler {
     private final Message m;
-    private final CommandEvent event;
+    private final MessageReceivedEvent event;
     private final boolean ytsearch;
 
-    private ResultHandler(Message m, CommandEvent event, boolean ytsearch) {
+    private ResultHandler(Message m, MessageReceivedEvent event, boolean ytsearch) {
       this.m = m;
       this.event = event;
       this.ytsearch = ytsearch;
@@ -77,7 +81,7 @@ public class PlaynextCommand extends MusicCommand {
       if (thunder.getConfig().isTooLong(track)) {
         m.editMessage(
                 FormatUtil.filterEveryone(
-                    event.getClient().getWarning()
+                    thunder.getConfig().getWarning()
                         + " This track (**"
                         + track.getInfo().title
                         + "**) is longer than the allowed maximum: `"
@@ -93,7 +97,7 @@ public class PlaynextCommand extends MusicCommand {
       int pos = handler.addTrackToFront(new QueuedTrack(track, event.getAuthor())) + 1;
       String addMsg =
           FormatUtil.filterEveryone(
-              event.getClient().getSuccess()
+              thunder.getConfig().getSuccess()
                   + " Added **"
                   + track.getInfo().title
                   + "** (`"
@@ -130,24 +134,21 @@ public class PlaynextCommand extends MusicCommand {
       if (ytsearch)
         m.editMessage(
                 FormatUtil.filterEveryone(
-                    event.getClient().getWarning()
-                        + " No results found for `"
-                        + event.getArgs()
-                        + "`."))
+                    thunder.getConfig().getWarning() + " No results found for `" + input + "`."))
             .queue();
       else
         thunder
             .getPlayerManager()
             .loadItemOrdered(
-                event.getGuild(), "ytsearch:" + event.getArgs(), new ResultHandler(m, event, true));
+                event.getGuild(), "ytsearch:" + input, new ResultHandler(m, event, true));
     }
 
     @Override
     public void loadFailed(FriendlyException throwable) {
       if (throwable.severity == FriendlyException.Severity.COMMON)
-        m.editMessage(event.getClient().getError() + " Error loading: " + throwable.getMessage())
+        m.editMessage(thunder.getConfig().getError() + " Error loading: " + throwable.getMessage())
             .queue();
-      else m.editMessage(event.getClient().getError() + " Error loading track.").queue();
+      else m.editMessage(thunder.getConfig().getError() + " Error loading track.").queue();
     }
   }
 }

@@ -15,9 +15,10 @@
  */
 package com.sharif.thunder.commands.owner;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.OwnerCommand;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class RestartCommand extends OwnerCommand {
 
@@ -25,14 +26,14 @@ public class RestartCommand extends OwnerCommand {
 
   public RestartCommand(Thunder thunder) {
     this.thunder = thunder;
-    this.name = "reload";
+    this.name = "restart";
     this.help = "Kills the current instance and launches a fresh instance of this bot.";
     this.hidden = true;
   }
 
   @Override
-  protected void execute(CommandEvent event) {
-    event.replySuccess("Restarting the bot one moment...");
+  protected void execute(Object[] args, MessageReceivedEvent event) {
+    SenderUtil.replySuccess(event, "Restarting the bot one moment...");
     System.exit(11);
   }
 }

@@ -15,10 +15,11 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class ShuffleCommand extends MusicCommand {
   public ShuffleCommand(Thunder thunder) {
@@ -31,18 +32,18 @@ public class ShuffleCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     int s = handler.getQueue().shuffle(event.getAuthor().getIdLong());
     switch (s) {
       case 0:
-        event.replyError("You don't have any music in the queue to shuffle!");
+        SenderUtil.replyError(event, "You don't have any music in the queue to shuffle!");
         break;
       case 1:
-        event.replyWarning("You only have one song in the queue!");
+        SenderUtil.replyWarning(event, "You only have one song in the queue!");
         break;
       default:
-        event.replySuccess("You successfully shuffled your " + s + " entries.");
+        SenderUtil.replySuccess(event, "You successfully shuffled your " + s + " entries.");
         break;
     }
   }
