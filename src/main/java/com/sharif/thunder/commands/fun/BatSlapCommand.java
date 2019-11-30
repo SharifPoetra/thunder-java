@@ -32,7 +32,7 @@ public class BatSlapCommand extends FunCommand {
     this.thunder = thunder;
     this.name = "batslap";
     this.help = "Slap someone with batslap template.";
-    this.arguments = new Argument[] {new Argument("user", Argument.Type.MEMBER, true)};
+    this.arguments = new Argument[] {new Argument("user", Argument.Type.USER, true)};
   }
 
   public void execute(Object[] args, MessageReceivedEvent event) {

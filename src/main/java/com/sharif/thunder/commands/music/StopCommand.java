@@ -15,10 +15,11 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.utils.SenderUtil;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class StopCommand extends MusicCommand {
   public StopCommand(Thunder thunder) {
@@ -32,10 +33,10 @@ public class StopCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.stopAndClear();
     event.getGuild().getAudioManager().closeAudioConnection();
-    event.replySuccess("The player has stopped and the queue has been cleared.");
+    SenderUtil.replySuccess(event, "The player has stopped and the queue has been cleared.");
   }
 }

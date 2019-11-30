@@ -15,12 +15,12 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.sharif.thunder.Main;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.audio.QueuedTrack;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.utils.FormatUtil;
 import java.util.List;
@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
 public class QueueCommand extends MusicCommand {
@@ -38,7 +39,7 @@ public class QueueCommand extends MusicCommand {
     super(thunder);
     this.name = "queue";
     this.help = "shows the current queue.";
-    this.arguments = "[pagenum]";
+    this.arguments = new Argument[] {new Argument("pagenum", Argument.Type.SHORTSTRING, false)};
     this.aliases = new String[] {"q", "list"};
     this.guildOnly = true;
     this.beListening = false;
@@ -64,10 +65,11 @@ public class QueueCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
+    String page = (String) args[0];
     int pagenum = 1;
     try {
-      pagenum = Integer.parseInt(event.getArgs());
+      pagenum = Integer.parseInt(page);
     } catch (NumberFormatException ignore) {
     }
     AudioHandler ah = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
@@ -77,14 +79,16 @@ public class QueueCommand extends MusicCommand {
       Message nonowp = ah.getNoMusicPlaying(event.getJDA());
       Message built =
           new MessageBuilder()
-              .setContent(event.getClient().getWarning() + " There is no music in the queue!")
+              .setContent(thunder.getConfig().getWarning() + " There is no music in the queue!")
               .setEmbed((nowp == null ? nonowp : nowp).getEmbeds().get(0))
               .build();
-      event.reply(
-          built,
-          m -> {
-            if (nowp != null) thunder.getNowplayingHandler().setLastNPMessage(m);
-          });
+      event
+          .getChannel()
+          .sendMessage(built)
+          .queue(
+              m -> {
+                if (nowp != null) thunder.getNowplayingHandler().setLastNPMessage(m);
+              });
       return;
     }
     String[] songs = new String[list.size()];
@@ -96,10 +100,10 @@ public class QueueCommand extends MusicCommand {
     long fintotal = total;
     builder
         .setText(
-            (i1, i2) -> getQueueTitle(ah, event.getClient().getSuccess(), songs.length, fintotal))
+            (i1, i2) -> getQueueTitle(ah, thunder.getConfig().getSuccess(), songs.length, fintotal))
         .setItems(songs)
         .setUsers(event.getAuthor())
-        .setColor(event.getSelfMember().getColor());
+        .setColor(event.getGuild().getSelfMember().getColor());
     builder.build().paginate(event.getChannel(), pagenum);
   }
 

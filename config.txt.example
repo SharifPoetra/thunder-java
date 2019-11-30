@@ -1,7 +1,8 @@
 token = your-bot-token-here
 owner = your-id
-prefix = "prefix-here"
-altprefix = "@mention"
+serverinvite = "https://discord.gg/ZEFrfj5"
+prefix = "~"
+altprefix = "./"
 success = "🎶"
 warning = "💡"
 error = "🚫"

@@ -15,20 +15,23 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.audio.QueuedTrack;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.MusicCommand;
+import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class RemoveCommand extends MusicCommand {
   public RemoveCommand(Thunder thunder) {
     super(thunder);
     this.name = "remove";
     this.help = "removes a song from the queue.";
-    this.arguments = "<position|ALL>";
+    this.arguments =
+        new Argument[] {new Argument("position|ALL", Argument.Type.SHORTSTRING, false)};
     this.aliases = new String[] {"delete"};
     this.guildOnly = true;
     this.beListening = true;
@@ -36,26 +39,28 @@ public class RemoveCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
+    String position = (String) args[0];
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     if (handler.getQueue().isEmpty()) {
-      event.replyError("There is nothing in the queue!");
+      SenderUtil.replyError(event, "There is nothing in the queue!");
       return;
     }
-    if (event.getArgs().equalsIgnoreCase("all")) {
+    if (position.equalsIgnoreCase("all")) {
       int count = handler.getQueue().removeAll(event.getAuthor().getIdLong());
-      if (count == 0) event.replyWarning("You don't have any songs in the queue!");
-      else event.replySuccess("Successfully removed your " + count + " entries.");
+      if (count == 0) SenderUtil.replyWarning(event, "You don't have any songs in the queue!");
+      else SenderUtil.replySuccess(event, "Successfully removed your " + count + " entries.");
       return;
     }
     int pos;
     try {
-      pos = Integer.parseInt(event.getArgs());
+      pos = Integer.parseInt(position);
     } catch (NumberFormatException e) {
       pos = 0;
     }
     if (pos < 1 || pos > handler.getQueue().size()) {
-      event.replyError(
+      SenderUtil.replyError(
+          event,
           "Position must be a valid integer between 1 and " + handler.getQueue().size() + "!");
       return;
     }
@@ -63,7 +68,8 @@ public class RemoveCommand extends MusicCommand {
     QueuedTrack qt = handler.getQueue().get(pos - 1);
     if (qt.getIdentifier() == event.getAuthor().getIdLong()) {
       handler.getQueue().remove(pos - 1);
-      event.replySuccess("Removed **" + qt.getTrack().getInfo().title + "** from the queue");
+      SenderUtil.replySuccess(
+          event, "Removed **" + qt.getTrack().getInfo().title + "** from the queue");
     } else if (isDJ) {
       handler.getQueue().remove(pos - 1);
       User u;
@@ -72,14 +78,16 @@ public class RemoveCommand extends MusicCommand {
       } catch (Exception e) {
         u = null;
       }
-      event.replySuccess(
+      SenderUtil.replySuccess(
+          event,
           "Removed **"
               + qt.getTrack().getInfo().title
               + "** from the queue (requested by "
               + (u == null ? "someone" : "**" + u.getName() + "**")
               + ")");
     } else {
-      event.replyError(
+      SenderUtil.replyError(
+          event,
           "You cannot remove **"
               + qt.getTrack().getInfo().title
               + "** because you don't have `Manage Server` permission and you're not the requester of that song!");

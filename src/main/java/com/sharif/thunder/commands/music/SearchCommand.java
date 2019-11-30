@@ -15,7 +15,6 @@
  */
 package com.sharif.thunder.commands.music;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -25,23 +24,27 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.audio.AudioHandler;
 import com.sharif.thunder.audio.QueuedTrack;
+import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.MusicCommand;
 import com.sharif.thunder.utils.FormatUtil;
+import com.sharif.thunder.utils.SenderUtil;
 import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class SearchCommand extends MusicCommand {
   protected String searchPrefix = "ytsearch:";
   private final OrderedMenu.Builder builder;
   private final String searchingEmoji;
+  private static String input;
 
   public SearchCommand(Thunder thunder, String searchingEmoji) {
     super(thunder);
     this.searchingEmoji = searchingEmoji;
     this.name = "search";
     this.aliases = new String[] {"ytsearch"};
-    this.arguments = "<query>";
+    this.arguments = new Argument[] {new Argument("query", Argument.Type.LONGSTRING, true)};
     this.help = "searches Youtube for a provided query.";
     this.guildOnly = true;
     this.beListening = true;
@@ -57,25 +60,24 @@ public class SearchCommand extends MusicCommand {
   }
 
   @Override
-  public void doCommand(CommandEvent event) {
-    if (event.getArgs().isEmpty()) {
-      event.replyError("Please include a query.");
-      return;
-    }
-    event.reply(
-        searchingEmoji + " Searching... `[" + event.getArgs() + "]`",
-        m ->
-            thunder
-                .getPlayerManager()
-                .loadItemOrdered(
-                    event.getGuild(), searchPrefix + event.getArgs(), new ResultHandler(m, event)));
+  public void doCommand(Object[] args, MessageReceivedEvent event) {
+    input = (String) args[0];
+    event
+        .getChannel()
+        .sendMessage(searchingEmoji + " Searching... `[" + input + "]`")
+        .queue(
+            m ->
+                thunder
+                    .getPlayerManager()
+                    .loadItemOrdered(
+                        event.getGuild(), searchPrefix + input, new ResultHandler(m, event)));
   }
 
   private class ResultHandler implements AudioLoadResultHandler {
     private final Message m;
-    private final CommandEvent event;
+    private final MessageReceivedEvent event;
 
-    private ResultHandler(Message m, CommandEvent event) {
+    private ResultHandler(Message m, MessageReceivedEvent event) {
       this.m = m;
       this.event = event;
     }
@@ -85,7 +87,7 @@ public class SearchCommand extends MusicCommand {
       if (thunder.getConfig().isTooLong(track)) {
         m.editMessage(
                 FormatUtil.filterEveryone(
-                    event.getClient().getWarning()
+                    thunder.getConfig().getWarning()
                         + " This track (**"
                         + track.getInfo().title
                         + "**) is longer than the allowed maximum: `"
@@ -100,7 +102,7 @@ public class SearchCommand extends MusicCommand {
       int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
       m.editMessage(
               FormatUtil.filterEveryone(
-                  event.getClient().getSuccess()
+                  thunder.getConfig().getSuccess()
                       + " Added **"
                       + track.getInfo().title
                       + "** (`"
@@ -113,19 +115,17 @@ public class SearchCommand extends MusicCommand {
     @Override
     public void playlistLoaded(AudioPlaylist playlist) {
       builder
-          .setColor(event.getSelfMember().getColor())
+          .setColor(event.getGuild().getSelfMember().getColor())
           .setText(
               FormatUtil.filterEveryone(
-                  event.getClient().getSuccess()
-                      + " Search results for `"
-                      + event.getArgs()
-                      + "`:"))
+                  thunder.getConfig().getSuccess() + " Search results for `" + input + "`:"))
           .setChoices(new String[0])
           .setSelection(
               (msg, i) -> {
                 AudioTrack track = playlist.getTracks().get(i - 1);
                 if (thunder.getConfig().isTooLong(track)) {
-                  event.replyWarning(
+                  SenderUtil.replyWarning(
+                      event,
                       "This track (**"
                           + track.getInfo().title
                           + "**) is longer than the allowed maximum: `"
@@ -138,7 +138,8 @@ public class SearchCommand extends MusicCommand {
                 AudioHandler handler =
                     (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
                 int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor())) + 1;
-                event.replySuccess(
+                SenderUtil.replySuccess(
+                    event,
                     "Added **"
                         + track.getInfo().title
                         + "** (`"
@@ -166,19 +167,16 @@ public class SearchCommand extends MusicCommand {
     public void noMatches() {
       m.editMessage(
               FormatUtil.filterEveryone(
-                  event.getClient().getWarning()
-                      + " No results found for `"
-                      + event.getArgs()
-                      + "`."))
+                  thunder.getConfig().getWarning() + " No results found for `" + input + "`."))
           .queue();
     }
 
     @Override
     public void loadFailed(FriendlyException throwable) {
       if (throwable.severity == Severity.COMMON)
-        m.editMessage(event.getClient().getError() + " Error loading: " + throwable.getMessage())
+        m.editMessage(thunder.getConfig().getError() + " Error loading: " + throwable.getMessage())
             .queue();
-      else m.editMessage(event.getClient().getError() + " Error loading track.").queue();
+      else m.editMessage(thunder.getConfig().getError() + " Error loading track.").queue();
     }
   }
 }

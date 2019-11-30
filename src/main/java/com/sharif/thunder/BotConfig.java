@@ -26,6 +26,7 @@ public class BotConfig {
   private String token,
       prefix,
       altPrefix,
+      serverInvite,
       successEmoji,
       warningEmoji,
       errorEmoji,
@@ -57,6 +58,7 @@ public class BotConfig {
 
       token = config.getString("token");
       owner = config.getLong("owner");
+      serverInvite = config.getString("serverinvite");
       prefix = config.getString("prefix");
       altPrefix = config.getString("altprefix");
       successEmoji = config.getString("success");
@@ -92,6 +94,10 @@ public class BotConfig {
 
   public long getOwnerId() {
     return owner;
+  }
+
+  public String getServerInvite() {
+    return serverInvite;
   }
 
   public String getPrefix() {

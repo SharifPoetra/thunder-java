@@ -17,11 +17,9 @@ package com.sharif.thunder;
 
 import static spark.Spark.*;
 
-import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sharif.thunder.commands.Command;
 import com.sharif.thunder.commands.Command.Category;
-import com.sharif.thunder.commands.CommandListeners;
 import com.sharif.thunder.commands.administration.*;
 import com.sharif.thunder.commands.fun.*;
 import com.sharif.thunder.commands.interaction.*;
@@ -96,6 +94,7 @@ public class Main extends ListenerAdapter {
     afks.read();
     inVcRoles.read();
 
+    // lists all the commands
     commands =
         new Command[] {
           // administration
@@ -117,82 +116,51 @@ public class Main extends ListenerAdapter {
           new EvalCommand(thunder),
           new RestartCommand(thunder),
           new PlaylistCommand(thunder),
-          new BotStatusCommand()
+          new BotStatusCommand(),
+          // utilities
+          new AboutCommand(
+              thunder,
+              Color.BLUE,
+              "a simple but powerfull multipurpose bot",
+              new String[] {"Music", "Utilities", "Lots of fun!"},
+              RECOMMENDED_PERMS),
+          new PingCommand(thunder),
+          new EmotesCommand(thunder),
+          new AFKCommand(afks),
+          new KitsuCommand(thunder),
+          new AvatarCommand(thunder),
+          // music
+          new PlayCommand(thunder, config.getLoading()),
+          new PlaylistsCommand(thunder),
+          new NowplayingCommand(thunder),
+          new VolumeCommand(thunder),
+          new SkipCommand(thunder),
+          new StopCommand(thunder),
+          new ShuffleCommand(thunder),
+          new QueueCommand(thunder),
+          new SearchCommand(thunder, config.getSearching()),
+          new SCSearchCommand(thunder, config.getSearching()),
+          new RepeatCommand(thunder),
+          new NightcoreCommand(thunder),
+          new PitchCommand(thunder),
+          new KaraokeCommand(thunder),
+          new VaporwaveCommand(thunder),
+          new BassboostCommand(thunder),
+          new MoveTrackCommand(thunder),
+          new PlaynextCommand(thunder, config.getLoading()),
+          new LyricsCommand(thunder),
+          new RemoveCommand(thunder),
+          new PauseCommand(thunder),
+          new SkiptoCommand(thunder)
         };
-
-    CommandClientBuilder client =
-        new CommandClientBuilder()
-            .setOwnerId(Long.toString(config.getOwnerId()))
-            .setPrefix(config.getPrefix())
-            .setAlternativePrefix(config.getAltPrefix())
-            .setEmojis(config.getSuccess(), config.getWarning(), config.getError())
-            .setListener(new CommandListeners())
-            .setShutdownAutomatically(false)
-            .useHelpBuilder(false)
-            .addCommands(
-                // interaction
-                // new PatCommand(thunder),
-                // new SlapCommand(thunder),
-                // new BlushCommand(thunder),
-                // new CryCommand(thunder),
-                // new DanceCommand(thunder),
-                // new PoutCommand(thunder),
-                // new LewdCommand(thunder),
-                // administration
-                // new SetInVCRoleCommand(inVcRoles),
-                // fun
-                // new BobRossCommand(thunder),
-                // new ChooseCommand(thunder),
-                // new BatSlapCommand(thunder),
-                // utilities
-                new AboutCommand(
-                    thunder,
-                    Color.BLUE,
-                    "a simple but powerfull multipurpose bot",
-                    new String[] {"Music", "Utilities", "Lots of fun!"},
-                    RECOMMENDED_PERMS),
-                new PingCommand(thunder),
-                new EmotesCommand(thunder),
-                new AFKCommand(afks),
-                new KitsuCommand(thunder),
-                new AvatarCommand(thunder),
-                // music
-                new PlayCommand(thunder, config.getLoading()),
-                new PlaylistsCommand(thunder),
-                new NowplayingCommand(thunder),
-                new VolumeCommand(thunder),
-                new SkipCommand(thunder),
-                new StopCommand(thunder),
-                new ShuffleCommand(thunder),
-                new QueueCommand(thunder),
-                new SearchCommand(thunder, config.getSearching()),
-                new SCSearchCommand(thunder, config.getSearching()),
-                new RepeatCommand(thunder),
-                new NightcoreCommand(thunder),
-                new PitchCommand(thunder),
-                new KaraokeCommand(thunder),
-                new VaporwaveCommand(thunder),
-                new BassboostCommand(thunder),
-                new MoveTrackCommand(thunder),
-                new PlaynextCommand(thunder, config.getLoading()),
-                new LyricsCommand(thunder),
-                new RemoveCommand(thunder),
-                new PauseCommand(thunder),
-                new SkiptoCommand(thunder));
-    // owner
-    // new EvalCommand(thunder),
-    // new RestartCommand(thunder),
-    // new PlaylistCommand(thunder),
-    // new BotStatusCommand());
 
     log.info("Loaded config from " + config.getConfigLocation());
 
     try {
       JDA jda =
           new JDABuilder(AccountType.BOT)
-              .addEventListeners(new Main())
               .setToken(config.getToken())
-              .addEventListeners(waiter, client.build())
+              .addEventListeners(new Main(), waiter)
               .build()
               .awaitReady();
     } catch (LoginException ex) {
@@ -292,6 +260,7 @@ public class Main extends ListenerAdapter {
     if (strippedMessage != null && !event.getAuthor().isBot()) {
       strippedMessage = strippedMessage.trim();
 
+      // help command
       if (strippedMessage.equalsIgnoreCase("help")) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(event.getGuild().getSelfMember().getColor());
