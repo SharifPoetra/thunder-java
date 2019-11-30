@@ -25,8 +25,8 @@ public class BotConfig {
   private Path path = null;
   private String token,
       prefix,
-      serverInvite,
       altPrefix,
+      serverInvite,
       successEmoji,
       warningEmoji,
       errorEmoji,
@@ -103,7 +103,7 @@ public class BotConfig {
   public String getPrefix() {
     return prefix;
   }
-
+  
   public String getAltPrefix() {
     return altPrefix;
   }
