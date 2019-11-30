@@ -37,7 +37,7 @@ public class SkiptoCommand extends MusicCommand {
 
   @Override
   public void doCommand(Object[] args, MessageReceivedEvent event) {
-    int index = (int) args[0];
+    long index = (long) args[0];
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     if (index < 1 || index > handler.getQueue().size()) {
       SenderUtil.replyError(
@@ -47,7 +47,7 @@ public class SkiptoCommand extends MusicCommand {
     }
 
     if (event.getAuthor().getIdLong() == handler.getRequester()) {
-      handler.getQueue().skip(index - 1);
+      handler.getQueue().skip((int)index - 1);
       SenderUtil.replySuccess(
           event, "Skipped to **" + handler.getQueue().get(0).getTrack().getInfo().title + "**");
       handler.getPlayer().stopTrack();
