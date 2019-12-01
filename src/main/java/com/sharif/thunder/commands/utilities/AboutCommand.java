@@ -128,16 +128,9 @@ public class AboutCommand extends UtilitiesCommand {
             .append(IS_AUTHOR ? "was written in Java" : "am owned")
             .append(" by **")
             .append(author)
-            .append(
-                "** using "
-                    + JDAUtilitiesInfo.AUTHOR
-                    + "'s [Commands Extension]("
-                    + JDAUtilitiesInfo.GITHUB
-                    + ") (")
-            .append(JDAUtilitiesInfo.VERSION)
-            .append(") and the [JDA library](https://github.com/DV8FromTheWorld/JDA) (")
+            .append("** using [JDA library](https://github.com/DV8FromTheWorld/JDA) (")
             .append(JDAInfo.VERSION)
-            .append(") using JVM version ")
+            .append(") in JVM version ")
             .append(jvmVersion)
             .append("\nType `")
             .append(thunder.getConfig().getPrefix())

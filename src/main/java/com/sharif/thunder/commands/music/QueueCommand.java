@@ -57,6 +57,7 @@ public class QueueCommand extends MusicCommand {
                   }
                 })
             .setItemsPerPage(10)
+            .setBulkSkipNumber(5)
             .waitOnSinglePage(false)
             .useNumberedItems(true)
             .showPageNumbers(true)
