@@ -44,14 +44,11 @@ public class LyricsCommand extends MusicCommand {
   @Override
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     LyricsClient client = new LyricsClient();
-
     event.getChannel().sendTyping().queue();
-    String title;
-    if (args.length == 0
-        && ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
-            .isMusicPlaying(event.getJDA()))
-      title =
-          ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
+    String title = (String) args[0];
+
+    if (title == null && ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA()))
+      title = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
               .getPlayer()
               .getPlayingTrack()
               .getInfo()
