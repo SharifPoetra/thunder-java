@@ -41,35 +41,29 @@ public class SlapCommand extends InteractionCommand {
   @Override
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      event.getChannel().sendTyping().queue();
       User user = (User) args[0];
+      byte[] data =
+          NetworkUtil.download(
+              "https://emilia.shrf.xyz/api/slap", "Bearer " + thunder.getConfig().getEmiliaKey());
       event
           .getChannel()
-          .sendMessage("Please wait...")
-          .queue(
-              message -> {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/slap", headers);
-                message.delete().queue();
-                event
-                    .getChannel()
-                    .sendFile(image, "slap.gif")
-                    .embed(
-                        new EmbedBuilder()
-                            .setAuthor(
-                                event.getAuthor().getName()
-                                    + " slaps "
-                                    + user.getName()
-                                    + "!! "
-                                    + RandomUtil.randomElement(msg),
-                                null,
-                                event.getAuthor().getEffectiveAvatarUrl())
-                            .setColor(event.getGuild().getSelfMember().getColor())
-                            .setImage("attachment://slap.gif")
-                            .build())
-                    .queue();
-              });
-    } catch (IllegalArgumentException ex) {
+          .sendFile(data, "slap.gif")
+          .embed(
+              new EmbedBuilder()
+                  .setAuthor(
+                      event.getAuthor().getName()
+                          + " slaps "
+                          + user.getName()
+                          + "!! "
+                          + RandomUtil.randomElement(msg),
+                      null,
+                      event.getAuthor().getEffectiveAvatarUrl())
+                  .setColor(event.getGuild().getSelfMember().getColor())
+                  .setImage("attachment://slap.gif")
+                  .build())
+          .queue();
+    } catch (Exception ex) {
       SenderUtil.replyError(
           event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);

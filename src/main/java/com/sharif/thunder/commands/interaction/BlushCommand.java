@@ -15,8 +15,6 @@
  */
 package com.sharif.thunder.commands.interaction;
 
-import static com.sharif.thunder.utils.NetworkUtil.download;
-
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.InteractionCommand;
 import com.sharif.thunder.utils.*;
@@ -40,8 +38,9 @@ public class BlushCommand extends InteractionCommand {
   @Override
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      event.getChannel().sendTyping().queue();
       byte[] data =
-          download(
+          NetworkUtil.download(
               "https://emilia.shrf.xyz/api/blush", "Bearer " + thunder.getConfig().getEmiliaKey());
       event
           .getChannel()

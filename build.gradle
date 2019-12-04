@@ -43,7 +43,9 @@ shadowJar {
    archiveVersion = ''
 }
 
+compileJava.options.encoding = 'UTF-8'
+compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }

@@ -43,30 +43,24 @@ public class LewdCommand extends InteractionCommand {
   @Override
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      event.getChannel().sendTyping().queue();
+      byte[] data =
+          NetworkUtil.download(
+              "https://emilia.shrf.xyz/api/lewd", "Bearer " + thunder.getConfig().getEmiliaKey());
       event
           .getChannel()
-          .sendMessage("Please wait...")
-          .queue(
-              message -> {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/lewd", headers);
-                message.delete().queue();
-                event
-                    .getChannel()
-                    .sendFile(image, "lewd.gif")
-                    .embed(
-                        new EmbedBuilder()
-                            .setAuthor(
-                                event.getAuthor().getName() + RandomUtil.randomElement(msg),
-                                null,
-                                event.getAuthor().getEffectiveAvatarUrl())
-                            .setColor(event.getGuild().getSelfMember().getColor())
-                            .setImage("attachment://lewd.gif")
-                            .build())
-                    .queue();
-              });
-    } catch (IllegalArgumentException ex) {
+          .sendFile(data, "lewd.gif")
+          .embed(
+              new EmbedBuilder()
+                  .setAuthor(
+                      event.getAuthor().getName() + RandomUtil.randomElement(msg),
+                      null,
+                      event.getAuthor().getEffectiveAvatarUrl())
+                  .setColor(event.getGuild().getSelfMember().getColor())
+                  .setImage("attachment://lewd.gif")
+                  .build())
+          .queue();
+    } catch (Exception ex) {
       SenderUtil.replyError(
           event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);

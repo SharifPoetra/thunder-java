@@ -37,23 +37,22 @@ public class BobRossCommand extends FunCommand {
 
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      event.getChannel().sendTyping().queue();
       User user = (User) args[0];
-      Map<String, String> headers = new HashMap<>();
-      headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-      byte[] image =
-          UnirestUtil.getBytes(
+      byte[] data =
+          NetworkUtil.download(
               "https://emilia.shrf.xyz/api/bob-ross?image=" + user.getEffectiveAvatarUrl(),
-              headers);
+              "Bearer " + thunder.getConfig().getEmiliaKey());
       event
           .getChannel()
-          .sendFile(image, "bobross.png")
+          .sendFile(data, "bobross.png")
           .embed(
               new EmbedBuilder()
                   .setColor(event.getMember().getColor())
                   .setImage("attachment://bobross.png")
                   .build())
           .queue();
-    } catch (IllegalArgumentException ex) {
+    } catch (Exception ex) {
       SenderUtil.replyError(
           event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);

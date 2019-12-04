@@ -38,30 +38,24 @@ public class DanceCommand extends InteractionCommand {
   @Override
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      event.getChannel().sendTyping().queue();
+      byte[] data =
+          NetworkUtil.download(
+              "https://emilia.shrf.xyz/api/dance", "Bearer " + thunder.getConfig().getEmiliaKey());
       event
           .getChannel()
-          .sendMessage("Please wait...")
-          .queue(
-              message -> {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/dance", headers);
-                message.delete().submit();
-                event
-                    .getChannel()
-                    .sendFile(image, "dance.gif")
-                    .embed(
-                        new EmbedBuilder()
-                            .setAuthor(
-                                event.getAuthor().getName() + " " + RandomUtil.randomElement(msg),
-                                null,
-                                event.getAuthor().getEffectiveAvatarUrl())
-                            .setColor(event.getGuild().getSelfMember().getColor())
-                            .setImage("attachment://dance.gif")
-                            .build())
-                    .queue();
-              });
-    } catch (IllegalArgumentException ex) {
+          .sendFile(data, "dance.gif")
+          .embed(
+              new EmbedBuilder()
+                  .setAuthor(
+                      event.getAuthor().getName() + " " + RandomUtil.randomElement(msg),
+                      null,
+                      event.getAuthor().getEffectiveAvatarUrl())
+                  .setColor(event.getGuild().getSelfMember().getColor())
+                  .setImage("attachment://dance.gif")
+                  .build())
+          .queue();
+    } catch (Exception ex) {
       SenderUtil.replyError(
           event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);

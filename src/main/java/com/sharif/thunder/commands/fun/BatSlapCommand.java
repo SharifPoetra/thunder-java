@@ -37,19 +37,18 @@ public class BatSlapCommand extends FunCommand {
 
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      event.getChannel().sendTyping().queue();
       User user = (User) args[0];
-      Map<String, String> headers = new HashMap<>();
-      headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-      byte[] image =
-          UnirestUtil.getBytes(
+      byte[] data =
+          NetworkUtil.download(
               "https://emilia.shrf.xyz/api/batslap?slapper="
                   + event.getAuthor().getEffectiveAvatarUrl()
                   + "&slapped="
                   + user.getEffectiveAvatarUrl(),
-              headers);
+              "Bearer " + thunder.getConfig().getEmiliaKey());
       event
           .getChannel()
-          .sendFile(image, "batslap.png")
+          .sendFile(data, "batslap.png")
           .embed(
               new EmbedBuilder()
                   .setAuthor(
@@ -60,7 +59,7 @@ public class BatSlapCommand extends FunCommand {
                   .setImage("attachment://batslap.png")
                   .build())
           .queue();
-    } catch (IllegalArgumentException ex) {
+    } catch (Exception ex) {
       SenderUtil.replyError(
           event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
