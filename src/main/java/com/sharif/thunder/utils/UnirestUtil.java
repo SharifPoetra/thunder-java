@@ -25,4 +25,9 @@ public class UnirestUtil {
     HttpResponse<byte[]> response = Unirest.get(url).headers(headers).asBytes();
     return response.getBody();
   }
+
+  public static byte[] getBytes(String url) {
+    HttpResponse<byte[]> response = Unirest.get(url).asBytes();
+    return response.getBody();
+  }
 }
