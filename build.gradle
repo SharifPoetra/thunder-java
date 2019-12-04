@@ -29,7 +29,7 @@ dependencies {
     implementation 'com.google.guava:guava:23.0'
     implementation 'com.konghq:unirest-java:3.2.00'
     compileOnly 'org.projectlombok:lombok:1.18.10'
- }
+}
 
 group = 'com.sharif'
 mainClassName = 'com.sharif.thunder.Main'
