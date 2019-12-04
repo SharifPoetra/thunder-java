@@ -30,6 +30,7 @@ import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.*;
 import java.awt.Color;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.concurrent.*;
 import javax.security.auth.login.LoginException;
@@ -46,6 +47,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.exceptions.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Spark;
@@ -161,6 +163,7 @@ public class Main extends ListenerAdapter {
           new JDABuilder(AccountType.BOT)
               .setToken(config.getToken())
               .addEventListeners(new Main(), waiter)
+              .setDisabledCacheFlags(EnumSet.of(CacheFlag.ACTIVITY))
               .build()
               .awaitReady();
     } catch (LoginException ex) {

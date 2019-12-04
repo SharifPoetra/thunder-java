@@ -47,8 +47,11 @@ public class LyricsCommand extends MusicCommand {
     event.getChannel().sendTyping().queue();
     String title = (String) args[0];
 
-    if (title == null && ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA()))
-      title = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
+    if (title == null
+        && ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
+            .isMusicPlaying(event.getJDA()))
+      title =
+          ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
               .getPlayer()
               .getPlayingTrack()
               .getInfo()

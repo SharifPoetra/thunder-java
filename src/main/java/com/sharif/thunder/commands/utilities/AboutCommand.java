@@ -15,7 +15,6 @@
  */
 package com.sharif.thunder.commands.utilities;
 
-import com.jagrosh.jdautilities.commons.JDAUtilitiesInfo;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
 import com.sharif.thunder.Thunder;
