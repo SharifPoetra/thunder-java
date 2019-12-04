@@ -43,7 +43,7 @@ public class KitsuCommand extends UtilitiesCommand {
     try {
       String title = (String) args[0];
       final String url = BASE_URL + OtherUtil.scrub(title, true) + "&page[limit]=1";
-      // TODO: rewrite this to use UnirestUtil
+      // TODO: rewrite this to use NetworkUtil
       JsonObject json =
           new RequestHandler(
                   url,
