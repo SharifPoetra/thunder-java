@@ -48,11 +48,17 @@ public class NetworkUtil {
   private static final String SERVER_ERROR_JSON =
       "{\"code\": 500, \"message\": \"Internal Server Error\"}";
 
+  public static byte[] download(String url) throws IOException {
+    Request request = new Request.Builder().addHeader("User-Agent", USER_AGENT).url(url).build();
+    Response response = client.newCall(request).execute();
+    return response.body() == null ? new byte[0] : response.body().bytes();
+  }
+
   public static byte[] download(String url, String authorization) throws IOException {
     Request request =
         new Request.Builder()
-            .header("User-Agent", USER_AGENT)
-            .header("Authorization", authorization)
+            .addHeader("User-Agent", USER_AGENT)
+            .addHeader("Authorization", authorization)
             .url(url)
             .build();
     Response response = client.newCall(request).execute();

@@ -15,6 +15,8 @@
  */
 package com.sharif.thunder.commands.interaction;
 
+import static com.sharif.thunder.utils.NetworkUtil.download;
+
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.InteractionCommand;
 import com.sharif.thunder.utils.*;
@@ -38,30 +40,23 @@ public class BlushCommand extends InteractionCommand {
   @Override
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
+      byte[] data =
+          download(
+              "https://emilia.shrf.xyz/api/blush", "Bearer " + thunder.getConfig().getEmiliaKey());
       event
           .getChannel()
-          .sendMessage("Please wait...")
-          .queue(
-              message -> {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("authorization", "Bearer " + thunder.getConfig().getEmiliaKey());
-                byte[] image = UnirestUtil.getBytes("https://emilia.shrf.xyz/api/blush", headers);
-                message.delete().queue();
-                event
-                    .getChannel()
-                    .sendFile(image, "blush.gif")
-                    .embed(
-                        new EmbedBuilder()
-                            .setAuthor(
-                                event.getAuthor().getName() + RandomUtil.randomElement(msg),
-                                null,
-                                event.getAuthor().getEffectiveAvatarUrl())
-                            .setColor(event.getGuild().getSelfMember().getColor())
-                            .setImage("attachment://blush.gif")
-                            .build())
-                    .queue();
-              });
-    } catch (IllegalArgumentException ex) {
+          .sendFile(data, "blush.gif")
+          .embed(
+              new EmbedBuilder()
+                  .setAuthor(
+                      event.getAuthor().getName() + RandomUtil.randomElement(msg),
+                      null,
+                      event.getAuthor().getEffectiveAvatarUrl())
+                  .setColor(event.getGuild().getSelfMember().getColor())
+                  .setImage("attachment://blush.gif")
+                  .build())
+          .queue();
+    } catch (Exception ex) {
       SenderUtil.replyError(
           event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
