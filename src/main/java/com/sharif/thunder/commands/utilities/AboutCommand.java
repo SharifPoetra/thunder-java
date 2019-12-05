@@ -21,7 +21,7 @@ import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.UtilitiesCommand;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sun.management.OperatingSystemMXBean;
-import java.awt.*;
+import java.awt.Color;
 import java.lang.management.ManagementFactory;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;

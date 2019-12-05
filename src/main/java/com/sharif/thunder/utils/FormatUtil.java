@@ -18,7 +18,12 @@ package com.sharif.thunder.utils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class FormatUtil {
 

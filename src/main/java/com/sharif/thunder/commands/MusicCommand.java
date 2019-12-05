@@ -36,9 +36,7 @@ public abstract class MusicCommand extends Command {
 
   @Override
   protected void execute(Object[] args, MessageReceivedEvent event) {
-    thunder
-        .getPlayerManager()
-        .setUpHandler(event.getGuild()); // no point constantly checking for this later
+    thunder.getPlayerManager().setUpHandler(event.getGuild());
     if (bePlaying
         && !((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
             .isMusicPlaying(event.getJDA())) {

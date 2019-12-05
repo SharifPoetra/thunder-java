@@ -17,8 +17,9 @@ package com.sharif.thunder.commands.interaction;
 
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.InteractionCommand;
-import com.sharif.thunder.utils.*;
-import java.util.*;
+import com.sharif.thunder.utils.NetworkUtil;
+import com.sharif.thunder.utils.RandomUtil;
+import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
