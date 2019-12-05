@@ -42,7 +42,6 @@ public class KitsuCommand extends UtilitiesCommand {
     try {
       String title = (String) args[0];
       final String url = BASE_URL + OtherUtil.scrub(title, true) + "&page[limit]=1";
-      System.out.println(url);
 
       String kitsuData = new String(NetworkUtil.download(url));
       KitsuResponse response = GsonUtil.fromJSON(kitsuData, KitsuResponse.class);
