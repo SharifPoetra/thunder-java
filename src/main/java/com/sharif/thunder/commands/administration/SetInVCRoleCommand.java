@@ -19,7 +19,7 @@ import com.sharif.thunder.commands.AdministrationCommand;
 import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.Command;
 import com.sharif.thunder.datasources.InVCRoles;
-import com.sharif.thunder.utils.*;
+import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

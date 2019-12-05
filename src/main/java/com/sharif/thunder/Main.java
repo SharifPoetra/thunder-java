@@ -15,8 +15,6 @@
  */
 package com.sharif.thunder;
 
-import static spark.Spark.*;
-
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sharif.thunder.commands.Command;
 import com.sharif.thunder.commands.Command.Category;
@@ -27,12 +25,12 @@ import com.sharif.thunder.commands.music.*;
 import com.sharif.thunder.commands.owner.*;
 import com.sharif.thunder.commands.utilities.*;
 import com.sharif.thunder.datasources.*;
-import com.sharif.thunder.utils.*;
+import com.sharif.thunder.utils.FormatUtil;
+import com.sharif.thunder.utils.SenderUtil;
 import java.awt.Color;
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Objects;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -40,12 +38,12 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.events.*;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
-import net.dv8tion.jda.api.exceptions.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
@@ -80,9 +78,7 @@ public class Main extends ListenerAdapter {
   private static AFKs afks;
   private static InVCRoles inVcRoles;
 
-  public static void main(String[] args)
-      throws Exception, IOException, IllegalArgumentException, LoginException,
-          RateLimitedException {
+  public static void main(String[] args) throws Exception {
     config = new BotConfig();
     Logger log = LoggerFactory.getLogger(Main.class);
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
@@ -179,7 +175,7 @@ public class Main extends ListenerAdapter {
     }
 
     Spark.port(3000);
-    get("/", (req, res) -> "{\"message\": \"Hello World\"}");
+    Spark.get("/", (req, res) -> "{\"message\": \"Hello World\"}");
   }
 
   @Override
@@ -326,7 +322,7 @@ public class Main extends ListenerAdapter {
                     .getRoleById(inVcRoles.get(event.getGuild().getId())[InVCRoles.ROLEID]))
             .queue();
       }
-    } catch (ErrorResponseException | InsufficientPermissionException | HierarchyException ex) {
+    } catch (Exception ex) {
       System.out.println("Error when giving a member voice role: " + ex.toString());
     }
   }
@@ -345,7 +341,7 @@ public class Main extends ListenerAdapter {
                     .getRoleById(inVcRoles.get(event.getGuild().getId())[InVCRoles.ROLEID]))
             .queue();
       }
-    } catch (ErrorResponseException | InsufficientPermissionException | HierarchyException ex) {
+    } catch (Exception ex) {
       System.out.println("Error when removing a member voice role: " + ex.toString());
     }
   }

@@ -25,11 +25,15 @@ public class GsonUtil {
   public static Gson gson;
 
   static {
-    gson = new GsonBuilder().disableHtmlEscaping().create();
+    gson = new GsonBuilder().serializeNulls().disableHtmlEscaping().create();
   }
 
   public static String toJSON(Object object) {
     return gson.toJson(object);
+  }
+
+  public static String toJSON(String string) {
+    return gson.toJson(string);
   }
 
   public static <T> T fromJSON(byte[] data, Class<T> object) {
