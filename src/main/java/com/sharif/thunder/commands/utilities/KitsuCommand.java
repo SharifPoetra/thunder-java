@@ -71,7 +71,7 @@ public class KitsuCommand extends UtilitiesCommand {
                   data.attributes.youtubeVideoId == null
                       ? ""
                       : "https://www.youtube.com/watch?v=" + data.attributes.youtubeVideoId)
-              .setImage(data.attributes.posterImage.original)
+              .setImage(data.attributes.posterImage.large)
               .setDescription(data.attributes.synopsis)
               .addField("Age Rating", ageRating, true)
               .addField("Episodes", episodes, true)
@@ -97,17 +97,6 @@ public class KitsuCommand extends UtilitiesCommand {
 
   public class KitsuResponse {
     private Data[] data;
-    private KitsuResponseMeta meta;
-  }
-
-  public class KitsuResponseMeta {
-    private int count;
-  }
-
-  public class KitsuResponseLinks {
-    private String first;
-    private String next;
-    private String last;
   }
 
   public class Data {
@@ -133,16 +122,10 @@ public class KitsuCommand extends UtilitiesCommand {
   }
 
   public class Titles {
-    private String en;
-    private String en_jp;
     private String ja_jp;
   }
 
   public class PosterImage {
-    private String tiny;
-    private String small;
-    private String medium;
     private String large;
-    private String original;
   }
 }
