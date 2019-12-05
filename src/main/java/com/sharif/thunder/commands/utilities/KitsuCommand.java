@@ -15,20 +15,15 @@
  */
 package com.sharif.thunder.commands.utilities;
 
-import com.google.gson.JsonObject;
-import com.google.gson.GsonBuilder;
 import com.sharif.thunder.Thunder;
 import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.UtilitiesCommand;
-import com.sharif.thunder.handler.RequestHandler;
-import com.sharif.thunder.handler.entity.RequestProperty;
+import com.sharif.thunder.utils.GsonUtil;
+import com.sharif.thunder.utils.NetworkUtil;
 import com.sharif.thunder.utils.OtherUtil;
 import com.sharif.thunder.utils.SenderUtil;
-import com.sharif.thunder.utils.NetworkUtil;
-import com.sharif.thunder.utils.GsonUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import java.util.List;
 
 public class KitsuCommand extends UtilitiesCommand {
 
@@ -51,14 +46,14 @@ public class KitsuCommand extends UtilitiesCommand {
 
       String kitsuData = new String(NetworkUtil.download(url));
       KitsuResponse response = GsonUtil.fromJSON(kitsuData, KitsuResponse.class);
-      
+
       Data data = response.data[0];
-      
+
       if (data == null) {
         SenderUtil.replyWarning(event, "No results found for **" + title + "**");
         return;
       }
-      
+
       final String ageRating = data.attributes.ageRating + ": " + data.attributes.ageRatingGuide;
       final String episodes = data.attributes.episodeCount;
       final String episodeLength = data.attributes.episodeLength + " minutes";
@@ -68,10 +63,14 @@ public class KitsuCommand extends UtilitiesCommand {
       final String status = data.attributes.status;
       final String startDate = data.attributes.startDate;
       final String endDate = data.attributes.endDate;
-      
+
       EmbedBuilder embed =
           new EmbedBuilder()
-              .setTitle(data.attributes.canonicalTitle + " | " + data.attributes.titles.ja_jp, data.attributes.youtubeVideoId == null ? "" : "https://www.youtube.com/watch?v=" + data.attributes.youtubeVideoId)
+              .setTitle(
+                  data.attributes.canonicalTitle + " | " + data.attributes.titles.ja_jp,
+                  data.attributes.youtubeVideoId == null
+                      ? ""
+                      : "https://www.youtube.com/watch?v=" + data.attributes.youtubeVideoId)
               .setImage(data.attributes.posterImage.original)
               .setDescription(data.attributes.synopsis)
               .addField("Age Rating", ageRating, true)
@@ -95,26 +94,26 @@ public class KitsuCommand extends UtilitiesCommand {
       System.out.println("Shomething went wrong when trying to fetch the kitsu API: " + ex);
     }
   }
-  
+
   public class KitsuResponse {
     private Data[] data;
     private KitsuResponseMeta meta;
   }
-  
+
   public class KitsuResponseMeta {
     private int count;
   }
-  
+
   public class KitsuResponseLinks {
     private String first;
     private String next;
     private String last;
   }
-  
+
   public class Data {
     private Attributes attributes;
   }
-  
+
   public class Attributes {
     private String canonicalTitle;
     private String synopsis;
@@ -132,13 +131,13 @@ public class KitsuCommand extends UtilitiesCommand {
     private String youtubeVideoId;
     private PosterImage posterImage;
   }
-  
+
   public class Titles {
     private String en;
     private String en_jp;
     private String ja_jp;
   }
-  
+
   public class PosterImage {
     private String tiny;
     private String small;
@@ -146,5 +145,4 @@ public class KitsuCommand extends UtilitiesCommand {
     private String large;
     private String original;
   }
-  
 }

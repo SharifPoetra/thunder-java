@@ -31,7 +31,7 @@ public class GsonUtil {
   public static String toJSON(Object object) {
     return gson.toJson(object);
   }
-  
+
   public static String toJSON(String string) {
     return gson.toJson(string);
   }
