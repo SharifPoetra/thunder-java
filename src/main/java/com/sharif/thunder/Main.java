@@ -31,6 +31,7 @@ import java.awt.Color;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.concurrent.Executors;
+import java.util.Collections;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -48,10 +49,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spark.Spark;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class Main extends ListenerAdapter {
-  public static final String PLAY_EMOJI = "\u25B6"; // ▶
+  public static final String PLAY_EMOJI = "\u25B6"; // ▶;
   public static final String PAUSE_EMOJI = "\u23F8"; // ⏸
   public static final String STOP_EMOJI = "\u23F9"; // ⏹
   public static final Permission[] RECOMMENDED_PERMS =
@@ -79,6 +82,13 @@ public class Main extends ListenerAdapter {
   private static InVCRoles inVcRoles;
 
   public static void main(String[] args) throws Exception {
+    
+    // Spring boot application
+    SpringApplication app = new SpringApplication(Main.class);
+    app.setDefaultProperties(Collections.singletonMap("server.port", 3000));
+    app.run(args);
+    
+    // Configuration initializations
     config = new BotConfig();
     Logger log = LoggerFactory.getLogger(Main.class);
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
@@ -174,8 +184,6 @@ public class Main extends ListenerAdapter {
       System.exit(1);
     }
 
-    Spark.port(3000);
-    Spark.get("/", (req, res) -> "{\"message\": \"Hello World\"}");
   }
 
   @Override
