@@ -28,10 +28,10 @@ import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.SenderUtil;
 import java.awt.Color;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.concurrent.Executors;
-import java.util.Collections;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -82,12 +82,12 @@ public class Main extends ListenerAdapter {
   private static InVCRoles inVcRoles;
 
   public static void main(String[] args) throws Exception {
-    
+
     // Spring boot application
     SpringApplication app = new SpringApplication(Main.class);
     app.setDefaultProperties(Collections.singletonMap("server.port", 3000));
     app.run(args);
-    
+
     // Configuration initializations
     config = new BotConfig();
     Logger log = LoggerFactory.getLogger(Main.class);
@@ -183,7 +183,6 @@ public class Main extends ListenerAdapter {
               + config.getConfigLocation());
       System.exit(1);
     }
-
   }
 
   @Override
