@@ -54,7 +54,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Main extends ListenerAdapter {
-  public static final String PLAY_EMOJI = "\u25B6"; // ▶;
+  public static final String PLAY_EMOJI = "\u25B6"; // ▶
   public static final String PAUSE_EMOJI = "\u23F8"; // ⏸
   public static final String STOP_EMOJI = "\u23F9"; // ⏹
   public static final Permission[] RECOMMENDED_PERMS =
