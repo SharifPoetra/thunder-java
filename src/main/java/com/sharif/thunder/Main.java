@@ -48,7 +48,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spark.Spark;
 
 public class Main extends ListenerAdapter {
   public static final String PLAY_EMOJI = "\u25B6"; // ▶
@@ -79,20 +78,26 @@ public class Main extends ListenerAdapter {
   private static InVCRoles inVcRoles;
 
   public static void main(String[] args) throws Exception {
+
+    // Configuration initializations
+    Logger logger = LoggerFactory.getLogger(Main.class);
     config = new BotConfig();
-    Logger log = LoggerFactory.getLogger(Main.class);
+    logger.info("Loaded config from " + config.getConfigLocation());
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
     thunder = new Thunder(waiter, config);
 
     // datasources initializations
+    logger.info("Initializing datasources...");
     afks = new AFKs();
     inVcRoles = new InVCRoles();
 
     // reading datasources
+    logger.info("Reading datasources...");
     afks.read();
     inVcRoles.read();
 
     // lists all the commands
+    logger.info("Loading all commands...");
     commands =
         new Command[] {
           // administration
@@ -152,9 +157,8 @@ public class Main extends ListenerAdapter {
           new SkiptoCommand(thunder)
         };
 
-    log.info("Loaded config from " + config.getConfigLocation());
-
     try {
+      logger.info("Running JDABuilder...");
       JDA jda =
           new JDABuilder(AccountType.BOT)
               .setToken(config.getToken())
@@ -162,20 +166,18 @@ public class Main extends ListenerAdapter {
               .setDisabledCacheFlags(EnumSet.of(CacheFlag.ACTIVITY))
               .build()
               .awaitReady();
+      thunder.setJDA(jda);
     } catch (LoginException ex) {
-      log.error("Something went wrong when tried to login to discord: " + ex);
+      logger.error("Something went wrong when tried to login to discord: " + ex);
       System.exit(1);
     } catch (IllegalArgumentException ex) {
-      log.error(
+      logger.error(
           "Some aspect of the configuration is invalid: "
               + ex
               + "\nConfig Location: "
               + config.getConfigLocation());
       System.exit(1);
     }
-
-    Spark.port(3000);
-    Spark.get("/", (req, res) -> "{\"message\": \"Hello World\"}");
   }
 
   @Override
@@ -224,7 +226,7 @@ public class Main extends ListenerAdapter {
     if (event.getChannelType() != ChannelType.PRIVATE
         && !event.getMessage().getMentionedUsers().isEmpty()
         && !event.getAuthor().isBot()) {
-      StringBuilder builder = new StringBuilder("");
+      StringBuilder builder = new StringBuilder();
       event
           .getMessage()
           .getMentionedUsers()

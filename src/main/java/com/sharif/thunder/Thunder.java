@@ -20,18 +20,15 @@ import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBu
 import com.sharif.thunder.audio.NowplayingHandler;
 import com.sharif.thunder.audio.PlayerManager;
 import com.sharif.thunder.playlist.PlaylistLoader;
-import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.exceptions.RateLimitedException;
 
 public class Thunder {
 
   private final OffsetDateTime readyAt = OffsetDateTime.now();
-  private JDA jda;
+  private static JDA jda;
   private final BotConfig config;
   private final ScheduledExecutorService threadpool;
   private final PlayerManager players;
@@ -39,9 +36,7 @@ public class Thunder {
   private final NowplayingHandler nowplaying;
   private final EventWaiter waiter;
 
-  public Thunder(EventWaiter waiter, BotConfig config)
-      throws Exception, IOException, IllegalArgumentException, LoginException,
-          RateLimitedException {
+  public Thunder(EventWaiter waiter, BotConfig config) throws Exception {
     this.waiter = waiter;
     this.config = config;
     this.playlists = new PlaylistLoader(config);
