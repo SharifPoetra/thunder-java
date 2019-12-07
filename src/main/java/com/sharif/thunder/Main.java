@@ -182,12 +182,16 @@ public class Main extends ListenerAdapter {
               + config.getConfigLocation());
       System.exit(1);
     }
-    
-    // Spring boot application
-    logger.info("Initializing SpringBootApplication...");
-    SpringApplication app = new SpringApplication(Main.class);
-    app.setDefaultProperties(Collections.singletonMap("server.port", 3000));
-    app.run(args);
+
+    try {
+      // Spring boot application
+      logger.info("Initializing SpringBootApplication...");
+      SpringApplication app = new SpringApplication(Main.class);
+      app.setDefaultProperties(Collections.singletonMap("server.port", 3000));
+      app.run(args);
+    } catch (Exception ex) {
+      logger.error("Something went wrong when tried start SpringBootApplication: " + ex);
+    }
   }
 
   @Override
