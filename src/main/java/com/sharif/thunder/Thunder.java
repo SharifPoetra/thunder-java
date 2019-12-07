@@ -55,7 +55,7 @@ public class Thunder {
     players.getConfiguration().setOpusEncodingQuality(10);
     players.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
   }
-
+  
   public NowplayingHandler getNowplayingHandler() {
     return nowplaying;
   }

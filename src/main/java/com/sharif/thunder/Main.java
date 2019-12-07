@@ -160,21 +160,17 @@ public class Main extends ListenerAdapter {
           new PauseCommand(thunder),
           new SkiptoCommand(thunder)
         };
-    
-    // Spring boot application
-    logger.info("Initializing SpringBootApplication...");
-    SpringApplication app = new SpringApplication(Main.class);
-    app.setDefaultProperties(Collections.singletonMap("server.port", 3000));
-    app.run(args);
-    
+
     try {
       logger.info("Running JDABuilder...");
-      JDA jda = new JDABuilder(AccountType.BOT)
+      JDA jda =
+          new JDABuilder(AccountType.BOT)
               .setToken(config.getToken())
               .addEventListeners(new Main(), waiter)
               .setDisabledCacheFlags(EnumSet.of(CacheFlag.ACTIVITY))
               .build()
               .awaitReady();
+      thunder.setJDA(jda);
     } catch (LoginException ex) {
       logger.error("Something went wrong when tried to login to discord: " + ex);
       System.exit(1);
@@ -186,6 +182,12 @@ public class Main extends ListenerAdapter {
               + config.getConfigLocation());
       System.exit(1);
     }
+    
+    // Spring boot application
+    logger.info("Initializing SpringBootApplication...");
+    SpringApplication app = new SpringApplication(Main.class);
+    app.setDefaultProperties(Collections.singletonMap("server.port", 3000));
+    app.run(args);
   }
 
   @Override
