@@ -28,7 +28,6 @@ import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.SenderUtil;
 import java.awt.Color;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.concurrent.Executors;
