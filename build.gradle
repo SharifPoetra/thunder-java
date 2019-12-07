@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.sherter.google-java-format' version '0.8'
-    id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 repositories {
@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation ('net.dv8tion:JDA:4.0.0_70') {
+    implementation ('net.dv8tion:JDA:4.0.0_71') {
       exclude module: 'opus-java'
     }
     implementation 'com.jagrosh:jda-utilities:3.0.2'
@@ -27,9 +27,7 @@ dependencies {
     implementation 'io.undertow:undertow-core:2.0.28.Final'
     implementation 'com.google.guava:guava:23.0'
     compileOnly 'org.projectlombok:lombok:1.18.10'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.2.1.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.2.1.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-devtools:2.2.1.RELEASE'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.2.1.RELEASE'
     
 }
@@ -40,7 +38,7 @@ version = '1.0.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-bootJar {
+shadowJar {
    archiveBaseName = 'thunder'
    classifier = ''
    archiveVersion = ''
