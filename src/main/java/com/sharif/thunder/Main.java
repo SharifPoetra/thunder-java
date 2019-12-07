@@ -49,10 +49,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
 public class Main extends ListenerAdapter {
   public static final String PLAY_EMOJI = "\u25B6"; // ▶
   public static final String PAUSE_EMOJI = "\u23F8"; // ⏸
@@ -181,16 +178,6 @@ public class Main extends ListenerAdapter {
               + "\nConfig Location: "
               + config.getConfigLocation());
       System.exit(1);
-    }
-
-    try {
-      // Spring boot application
-      logger.info("Initializing SpringBootApplication...");
-      SpringApplication app = new SpringApplication(Main.class);
-      app.setDefaultProperties(Collections.singletonMap("server.port", 3000));
-      app.run(args);
-    } catch (Exception ex) {
-      logger.error("Something went wrong when tried start SpringBootApplication: " + ex);
     }
   }
 
