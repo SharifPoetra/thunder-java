@@ -16,6 +16,7 @@
 package com.sharif.thunder;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.sharif.thunder.api.ThunderApi;
 import com.sharif.thunder.commands.Command;
 import com.sharif.thunder.commands.Command.Category;
 import com.sharif.thunder.commands.administration.*;
@@ -48,7 +49,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.sharif.thunder.api.ThunderApi;
 
 public class Main extends ListenerAdapter {
   public static final String PLAY_EMOJI = "\u25B6"; // ▶

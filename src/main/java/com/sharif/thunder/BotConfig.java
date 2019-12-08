@@ -21,14 +21,14 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.AccessLevel;
+import lombok.Getter;
 
 @Getter
 public class BotConfig {
   @Getter(AccessLevel.NONE)
   private Path path = null;
+
   private String token;
   private String prefix;
   private String altPrefix;
@@ -45,10 +45,13 @@ public class BotConfig {
   private String databaseFolder;
   private String defaultLyrics;
   private String emiliaKey;
+
   @Getter(AccessLevel.NONE)
   private boolean stayInChannel;
+
   @Getter(AccessLevel.NONE)
   private boolean npImages;
+
   private long ownerId;
   private long maxSeconds;
 
@@ -96,7 +99,7 @@ public class BotConfig {
   public String getConfigLocation() {
     return path.toFile().getAbsolutePath();
   }
-  
+
   public boolean useNPImages() {
     return npImages;
   }
@@ -108,7 +111,7 @@ public class BotConfig {
   public String getMaxTime() {
     return FormatUtil.formatTime(maxSeconds * 1000);
   }
-  
+
   public boolean isTooLong(AudioTrack track) {
     if (maxSeconds <= 0) return false;
     return Math.round(track.getDuration() / 1000.0) > maxSeconds;

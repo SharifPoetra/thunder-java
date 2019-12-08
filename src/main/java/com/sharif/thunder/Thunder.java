@@ -23,27 +23,19 @@ import com.sharif.thunder.playlist.PlaylistLoader;
 import java.time.OffsetDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import net.dv8tion.jda.api.JDA;
 import lombok.Getter;
-import lombok.Setter;
+import net.dv8tion.jda.api.JDA;
 
 public class Thunder {
 
-  @Getter
-  private final OffsetDateTime readyAt = OffsetDateTime.now();
+  @Getter private final OffsetDateTime readyAt = OffsetDateTime.now();
   private static JDA jda;
-  @Getter
-  private final BotConfig config;
-  @Getter
-  private final ScheduledExecutorService threadpool;
-  @Getter
-  private final PlayerManager playerManager;
-  @Getter
-  private final PlaylistLoader playlistLoader;
-  @Getter
-  private final NowplayingHandler nowplayingHandler;
-  @Getter
-  private final EventWaiter waiter;
+  @Getter private final BotConfig config;
+  @Getter private final ScheduledExecutorService threadpool;
+  @Getter private final PlayerManager playerManager;
+  @Getter private final PlaylistLoader playlistLoader;
+  @Getter private final NowplayingHandler nowplayingHandler;
+  @Getter private final EventWaiter waiter;
 
   public Thunder(EventWaiter waiter, BotConfig config) throws Exception {
     this.waiter = waiter;

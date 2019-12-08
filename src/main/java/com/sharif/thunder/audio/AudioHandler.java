@@ -70,49 +70,24 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   private Guild guild;
 
   private AudioFrame lastFrame;
-  @Getter
-  @Setter
-  private long announcingChannel;
-  @Setter
-  private AudioPlayer audioPlayer;
-  @Getter
-  @Setter
-  private float nightcore = 1.0f;
-  @Getter
-  @Setter
-  private boolean karaoke = false;
-  @Getter
-  @Setter
-  private boolean vaporwave = false;
-  @Getter
-  @Setter
-  private boolean repeating = false;
-  @Getter
-  @Setter
-  private float karaokeLevel = 1f;
-  @Getter
-  @Setter
-  private float karaokeMono = 1f;
-  @Getter
-  @Setter
-  private float karaokeWidth = 100f;
-  @Getter
-  @Setter
-  private float karaokeBand = 220f;
+  @Getter @Setter private long announcingChannel;
+  @Setter private AudioPlayer audioPlayer;
+  @Getter @Setter private float nightcore = 1.0f;
+  @Getter @Setter private boolean karaoke = false;
+  @Getter @Setter private boolean vaporwave = false;
+  @Getter @Setter private boolean repeating = false;
+  @Getter @Setter private float karaokeLevel = 1f;
+  @Getter @Setter private float karaokeMono = 1f;
+  @Getter @Setter private float karaokeWidth = 100f;
+  @Getter @Setter private float karaokeBand = 220f;
   private static final float[] BASS_BOOST = {
     0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f,
     -0.1f
   };
-  @Getter
-  @Setter
-  private boolean bassboost = false;
+  @Getter @Setter private boolean bassboost = false;
   private boolean deleteMessage = false;
-  @Getter
-  @Setter
-  private int pitch = 0;
-  @Getter
-  @Setter
-  private float tempo = 1.0f;
+  @Getter @Setter private int pitch = 0;
+  @Getter @Setter private float tempo = 1.0f;
   private CompletableFuture<Void> task;
 
   @SerializedName("high-quality-nightcore")
