@@ -33,23 +33,35 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class Command {
 
   private static final BotConfig config = new BotConfig();
-
+  
+  @Getter
   protected String name = "null";
+  @Getter
   protected String help = "no help description provided";
+  @Getter
   protected String[] aliases = new String[0];
+  @Getter
   protected Argument[] arguments = new Argument[0];
+  @Getter
   protected Command[] children = new Command[0];
+  @Getter
   protected Permission[] userPermissions = new Permission[0];
+  @Getter
   protected Permission[] botPermissions = new Permission[0];
+  @Getter
   protected Category category = null;
+  @Getter
   protected int cooldown = 0;
   protected boolean ownerOnly = false;
   protected boolean usesTopicTags = true;
   protected boolean guildOnly = false;
+  @Getter
   protected boolean hidden = false;
 
   private static final String BOT_PERM = "%s I need the %s permission in this %s!";
@@ -595,76 +607,30 @@ public abstract class Command {
     return !topic.contains("{-all}");
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public String getHelp() {
-    return help;
-  }
-
-  public Argument[] getArguments() {
-    return arguments;
-  }
-
-  public int getCooldown() {
-    return cooldown;
-  }
-
-  public Permission[] getUserPermissions() {
-    return userPermissions;
-  }
-
-  public Permission[] getBotPermissions() {
-    return botPermissions;
-  }
-
-  public Category getCategory() {
-    return category;
-  }
-
-  public String[] getAliases() {
-    return aliases;
-  }
-
-  public Command[] getChildren() {
-    return children;
-  }
-
-  public boolean isHidden() {
-    return hidden;
-  }
-
   // Category class
   public static class Category {
+    @Getter
     private final String name;
-    private final String failResponse;
+    @Getter
+    private final String failureResponse;
     private final Predicate<MessageReceivedEvent> predicate;
 
     public Category(String name) {
       this.name = name;
-      this.failResponse = null;
+      this.failureResponse = null;
       this.predicate = null;
     }
 
     public Category(String name, Predicate<MessageReceivedEvent> predicate) {
       this.name = name;
-      this.failResponse = null;
+      this.failureResponse = null;
       this.predicate = predicate;
     }
 
-    public Category(String name, String failResponse, Predicate<MessageReceivedEvent> predicate) {
+    public Category(String name, String failureResponse, Predicate<MessageReceivedEvent> predicate) {
       this.name = name;
-      this.failResponse = failResponse;
+      this.failureResponse = failureResponse;
       this.predicate = predicate;
-    }
-
-    public String getName() {
-      return name;
-    }
-
-    public String getFailureResponse() {
-      return failResponse;
     }
 
     public boolean test(MessageReceivedEvent event) {
@@ -677,14 +643,14 @@ public abstract class Command {
       Category other = (Category) obj;
       return Objects.equals(name, other.name)
           && Objects.equals(predicate, other.predicate)
-          && Objects.equals(failResponse, other.failResponse);
+          && Objects.equals(failureResponse, other.failureResponse);
     }
 
     @Override
     public int hashCode() {
       int hash = 7;
       hash = 17 * hash + Objects.hashCode(this.name);
-      hash = 17 * hash + Objects.hashCode(this.failResponse);
+      hash = 17 * hash + Objects.hashCode(this.failureResponse);
       hash = 17 * hash + Objects.hashCode(this.predicate);
       return hash;
     }
