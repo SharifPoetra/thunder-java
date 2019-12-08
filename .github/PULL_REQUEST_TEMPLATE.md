@@ -1,8 +1,8 @@
 ## Description
 
-Please include a summary of the change and which issue is fixed if any. Please also include relevant motivation and context. List any dependencies that are required for this change.
+Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are added/removed for this change.
 
-Fixes # (issue)
+Fixes #[issue]
 
 ## Type of change
 
@@ -12,8 +12,6 @@ Please delete options that are not relevant.
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 
-## How Has This Been Tested?
-
 ## Checklist:
 
 - [ ] My code follows the style guidelines of this project
@@ -21,4 +19,3 @@ Please delete options that are not relevant.
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] My changes generate no new warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
