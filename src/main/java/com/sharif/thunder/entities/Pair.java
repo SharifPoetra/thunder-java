@@ -15,20 +15,16 @@
  */
 package com.sharif.thunder.entities;
 
+import lombok.Getter;
+
 public class Pair<K, V> {
+  @Getter
   private final K key;
+  @Getter
   private final V value;
 
   public Pair(K key, V value) {
     this.key = key;
     this.value = value;
-  }
-
-  public K getKey() {
-    return key;
-  }
-
-  public V getValue() {
-    return value;
   }
 }
