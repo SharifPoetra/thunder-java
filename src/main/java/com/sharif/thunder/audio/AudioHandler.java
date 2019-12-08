@@ -109,7 +109,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         && audioPlayer.getPlayingTrack() != null;
   }
 
-  // Method
+  // Methods
   public int addTrackToFront(QueuedTrack qtrack) {
     if (audioPlayer.getPlayingTrack() == null) {
       audioPlayer.playTrack(qtrack.getTrack());
@@ -401,6 +401,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     return !(track.getSourceManager() instanceof TwitchStreamAudioSourceManager);
   }
 
+  private Guild guild(JDA jda) {
+    return jda.getGuildById(guildId);
+  }
+
   // Audio send handler methods
   @Override
   public boolean canProvide() {
@@ -419,10 +423,5 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   @Override
   public boolean isOpus() {
     return true;
-  }
-
-  // Private methods
-  private Guild guild(JDA jda) {
-    return jda.getGuildById(guildId);
   }
 }
