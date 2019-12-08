@@ -31,6 +31,7 @@ public class Thunder {
 
   @Getter(AccessLevel.NONE)
   private static JDA jda;
+
   @Getter private final OffsetDateTime readyAt = OffsetDateTime.now();
   @Getter private final BotConfig config;
   @Getter private final ScheduledExecutorService threadpool;

@@ -69,7 +69,6 @@ public class Main extends ListenerAdapter {
         Permission.VOICE_SPEAK,
         Permission.NICKNAME_CHANGE
       };
-
   private static JDA jda;
   private static Command[] commands;
   private static BotConfig config;
