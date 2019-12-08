@@ -13,7 +13,6 @@ shuffle = "🔀"
 repeat = "🔁"
 npimages = false
 stayinchannel = false
-updatealerts = true
 maxtime = 0
 playlistsfolder = Playlists
 databasefolder = data

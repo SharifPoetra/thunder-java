@@ -48,6 +48,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.sharif.thunder.api.ThunderApi;
 
 public class Main extends ListenerAdapter {
   public static final String PLAY_EMOJI = "\u25B6"; // ▶
@@ -69,10 +70,11 @@ public class Main extends ListenerAdapter {
         Permission.NICKNAME_CHANGE
       };
 
-  private JDA jda;
+  private static JDA jda;
   private static Command[] commands;
   private static BotConfig config;
   private static Thunder thunder;
+  private static ThunderApi thunderApi;
   // datasources
   private static AFKs afks;
   private static InVCRoles inVcRoles;
@@ -85,6 +87,7 @@ public class Main extends ListenerAdapter {
     logger.info("Loaded config from " + config.getConfigLocation());
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
     thunder = new Thunder(waiter, config);
+    thunderApi = new ThunderApi(thunder).start();
 
     // datasources initializations
     logger.info("Initializing datasources...");

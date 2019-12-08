@@ -24,67 +24,44 @@ import java.time.OffsetDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import net.dv8tion.jda.api.JDA;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Thunder {
 
+  @Getter
   private final OffsetDateTime readyAt = OffsetDateTime.now();
   private static JDA jda;
+  @Getter
   private final BotConfig config;
+  @Getter
   private final ScheduledExecutorService threadpool;
-  private final PlayerManager players;
-  private final PlaylistLoader playlists;
-  private final NowplayingHandler nowplaying;
+  @Getter
+  private final PlayerManager playerManager;
+  @Getter
+  private final PlaylistLoader playlistLoader;
+  @Getter
+  private final NowplayingHandler nowplayingHandler;
+  @Getter
   private final EventWaiter waiter;
 
   public Thunder(EventWaiter waiter, BotConfig config) throws Exception {
     this.waiter = waiter;
     this.config = config;
-    this.playlists = new PlaylistLoader(config);
+    this.playlistLoader = new PlaylistLoader(config);
     this.threadpool = Executors.newSingleThreadScheduledExecutor();
-    this.players = new PlayerManager(this);
-    this.players.init();
-    this.nowplaying = new NowplayingHandler(this);
-    this.nowplaying.init();
-    players.setFrameBufferDuration(300);
-    players.getConfiguration().setFilterHotSwapEnabled(true);
-    players.getConfiguration().setOpusEncodingQuality(10);
-    players.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
-  }
-
-  public NowplayingHandler getNowplayingHandler() {
-    return nowplaying;
-  }
-
-  public EventWaiter getWaiter() {
-    return waiter;
-  }
-
-  public PlayerManager getPlayerManager() {
-    return players;
-  }
-
-  public BotConfig getConfig() {
-    return config;
-  }
-
-  public ScheduledExecutorService getThreadpool() {
-    return threadpool;
-  }
-
-  public PlaylistLoader getPlaylistLoader() {
-    return playlists;
+    this.playerManager = new PlayerManager(this);
+    this.playerManager.init();
+    this.nowplayingHandler = new NowplayingHandler(this);
+    this.nowplayingHandler.init();
+    playerManager.setFrameBufferDuration(300);
+    playerManager.getConfiguration().setFilterHotSwapEnabled(true);
+    playerManager.getConfiguration().setOpusEncodingQuality(10);
+    playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
   }
 
   public JDA getJDA() {
     return jda;
-  }
-
-  public EventWaiter getEventWaiter() {
-    return waiter;
-  }
-
-  public OffsetDateTime getReadyAt() {
-    return readyAt;
   }
 
   public void setJDA(JDA jda) {

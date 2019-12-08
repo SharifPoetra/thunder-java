@@ -70,25 +70,49 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   private Guild guild;
 
   private AudioFrame lastFrame;
-
-  @Getter private long announcingChannel;
-  @Setter private AudioPlayer audioPlayer;
-  @Getter private float nightcore = 1.0f;
-  @Getter private boolean karaoke = false;
-  @Getter private boolean vaporwave = false;
-  @Getter private boolean repeating = false;
+  @Getter
+  @Setter
+  private long announcingChannel;
+  @Setter
+  private AudioPlayer audioPlayer;
+  @Getter
+  @Setter
+  private float nightcore = 1.0f;
+  @Getter
+  @Setter
+  private boolean karaoke = false;
+  @Getter
+  @Setter
+  private boolean vaporwave = false;
+  @Getter
+  @Setter
+  private boolean repeating = false;
+  @Getter
+  @Setter
   private float karaokeLevel = 1f;
+  @Getter
+  @Setter
   private float karaokeMono = 1f;
+  @Getter
+  @Setter
   private float karaokeWidth = 100f;
+  @Getter
+  @Setter
   private float karaokeBand = 220f;
   private static final float[] BASS_BOOST = {
     0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f,
     -0.1f
   };
-  @Getter private boolean bassboost = false;
+  @Getter
+  @Setter
+  private boolean bassboost = false;
   private boolean deleteMessage = false;
-  @Getter private int pitch = 0;
-  @Getter private float tempo = 1.0f;
+  @Getter
+  @Setter
+  private int pitch = 0;
+  @Getter
+  @Setter
+  private float tempo = 1.0f;
   private CompletableFuture<Void> task;
 
   @SerializedName("high-quality-nightcore")
@@ -101,89 +125,8 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     this.audioPlayer = player;
   }
 
-  // Setters
   public void seek(long position) {
     if (audioPlayer.getPlayingTrack() != null) audioPlayer.getPlayingTrack().setPosition(position);
-  }
-
-  public void setKaraoke(boolean enabled) {
-    this.karaoke = enabled;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setKaraokeLevel(float level) {
-    this.karaokeLevel = level;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setKaraokeMono(float mono) {
-    this.karaokeMono = mono;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setKaraokeWidth(float width) {
-    this.karaokeWidth = width;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setKaraokeBand(float band) {
-    this.karaokeBand = band;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setVaporwave(boolean enabled) {
-    this.vaporwave = enabled;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setTempo(float tempo) {
-    this.tempo = tempo;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setNightcore(float speed) {
-    if (speed <= 0.1 || speed > 3)
-      throw new IllegalArgumentException(
-          "Nightcore speed out of range (0.1-3)!"); // prevent zero division and other
-
-    speed = Math.abs(speed);
-    nightcore = speed;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setBassboost(boolean bassboost) {
-    this.bassboost = bassboost;
-    updateFilters(getPlayingTrack());
-  }
-
-  public void setPitch(int pitch) {
-    this.pitch = pitch;
-    updateFilters(getPlayingTrack());
-  }
-
-  public boolean setRepeating(boolean repeating) {
-    return this.repeating = repeating;
-  }
-
-  public void setAnnouncingChannel(long channelId) {
-    this.announcingChannel = channelId;
-  }
-
-  // Getters
-  public boolean isBassboost() {
-    return bassboost;
-  }
-
-  public boolean isVaporwave() {
-    return vaporwave;
-  }
-
-  public boolean isRepeating() {
-    return repeating;
-  }
-
-  public boolean isKaraoke() {
-    return karaoke;
   }
 
   public boolean isMusicPlaying(JDA jda) {
@@ -191,7 +134,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         && audioPlayer.getPlayingTrack() != null;
   }
 
-  // Methods
+  // Method
   public int addTrackToFront(QueuedTrack qtrack) {
     if (audioPlayer.getPlayingTrack() == null) {
       audioPlayer.playTrack(qtrack.getTrack());
