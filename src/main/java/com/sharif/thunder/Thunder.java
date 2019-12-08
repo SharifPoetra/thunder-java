@@ -23,13 +23,15 @@ import com.sharif.thunder.playlist.PlaylistLoader;
 import java.time.OffsetDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import lombok.AccessLevel;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 
 public class Thunder {
-
-  @Getter private final OffsetDateTime readyAt = OffsetDateTime.now();
+  
+  @Getter(AccessLevel.NONE)
   private static JDA jda;
+  @Getter private final OffsetDateTime readyAt = OffsetDateTime.now();
   @Getter private final BotConfig config;
   @Getter private final ScheduledExecutorService threadpool;
   @Getter private final PlayerManager playerManager;

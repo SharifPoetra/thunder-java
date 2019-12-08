@@ -4,6 +4,7 @@ plugins {
     id 'com.github.sherter.google-java-format' version '0.8'
     id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'io.freefair.lombok' version '4.1.6'
+    id 'com.diffplug.gradle.spotless' version '3.26.1'
 }
 
 repositories {
@@ -37,6 +38,14 @@ mainClassName = 'com.sharif.thunder.Main'
 version = '1.0.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+spotless {
+  java {
+    indentWithSpaces(4)
+    trimTrailingWhitespace()
+    endWithNewline()
+  }
+}
 
 shadowJar {
    archiveBaseName = 'thunder'
