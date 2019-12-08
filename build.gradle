@@ -41,9 +41,10 @@ targetCompatibility = 1.8
 
 spotless {
   java {
-    indentWithSpaces(4)
+    indentWithSpaces(2)
     trimTrailingWhitespace()
     endWithNewline()
+    custom 'Lambda fix', { it.replace('} )', '})').replace('} ,', '},') }
   }
 }
 

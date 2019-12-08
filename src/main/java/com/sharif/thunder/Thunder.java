@@ -28,7 +28,7 @@ import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 
 public class Thunder {
-  
+
   @Getter(AccessLevel.NONE)
   private static JDA jda;
   @Getter private final OffsetDateTime readyAt = OffsetDateTime.now();
