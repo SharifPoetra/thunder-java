@@ -86,6 +86,7 @@ public class Main extends ListenerAdapter {
     logger.info("Loaded config from " + config.getConfigLocation());
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
     thunder = new Thunder(waiter, config);
+    logger.info("Starting ThunderApi...");
     thunderApi = new ThunderApi(thunder).start();
 
     // datasources initializations
