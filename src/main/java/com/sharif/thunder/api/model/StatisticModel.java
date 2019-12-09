@@ -54,27 +54,4 @@ public class StatisticModel {
     this.freeMemory = freeMemory;
     this.usedMemory = usedMemory;
   }
-
-  // @Override
-  // public String toString() {
-  //   return "StatisticModel [guildCount="
-  //       + guildCount
-  //       + ", channelCount="
-  //       + channelCount
-  //       + ", textChannelCount="
-  //       + textChannelCount
-  //       + ", voiceChannelCount="
-  //       + voiceChannelCount
-  //       + ", userCount="
-  //       + userCount
-  //       + ", botCount="
-  //       + botCount
-  //       + ", totalMemory="
-  //       + totalMemory
-  //       + ", freeMemory="
-  //       + freeMemory
-  //       + ", usedMemory="
-  //       + usedMemory
-  //       + "]";
-  // }
 }

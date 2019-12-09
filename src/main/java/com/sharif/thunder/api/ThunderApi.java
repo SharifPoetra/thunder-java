@@ -48,6 +48,10 @@ public class ThunderApi {
     Logger logger = LoggerFactory.getLogger(ThunderApi.class);
 
     port(3000);
+    notFound((req, res) -> {
+      res.type("application/json");
+      return "{\"message\":\"404 Not Found\"}";
+    });
     path(
         "/api",
         () -> {
