@@ -19,7 +19,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBuffer;
 import com.sharif.thunder.audio.NowplayingHandler;
 import com.sharif.thunder.audio.PlayerManager;
-import com.sharif.thunder.database.SQLiteJDBC;
+import com.sharif.thunder.database.DatabaseConnector;
 import com.sharif.thunder.playlist.PlaylistLoader;
 import java.time.OffsetDateTime;
 import java.util.concurrent.Executors;
@@ -40,9 +40,9 @@ public class Thunder {
   @Getter private final PlaylistLoader playlistLoader;
   @Getter private final NowplayingHandler nowplayingHandler;
   @Getter private final EventWaiter waiter;
-  @Getter private final SQLiteJDBC database;
+  @Getter private final DatabaseConnector database;
 
-  public Thunder(EventWaiter waiter, BotConfig config, SQLiteJDBC database) throws Exception {
+  public Thunder(EventWaiter waiter, BotConfig config, DatabaseConnector database) throws Exception {
     this.waiter = waiter;
     this.config = config;
     this.database = database;
