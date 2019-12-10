@@ -14,4 +14,4 @@ data/
 Playlists/
 target/
 config.txt
-database/
+database/*.db

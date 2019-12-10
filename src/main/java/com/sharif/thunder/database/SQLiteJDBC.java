@@ -15,8 +15,8 @@ public class SQLiteJDBC {
 
   public SQLiteJDBC() {
     try {
-      Class.forName("org.h2.Driver");
-      connection = DriverManager.getConnection("jdbc:h2:./database/test");
+      Class.forName("org.sqlite.JDBC");
+      connection = DriverManager.getConnection("jdbc:sqlite:/database/test");
       statement = connection.createStatement();
       statement.setQueryTimeout(30);
     } catch (Exception e) {
