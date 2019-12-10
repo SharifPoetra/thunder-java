@@ -42,7 +42,8 @@ public class Thunder {
   @Getter private final EventWaiter waiter;
   @Getter private final DatabaseConnector database;
 
-  public Thunder(EventWaiter waiter, BotConfig config, DatabaseConnector database) throws Exception {
+  public Thunder(EventWaiter waiter, BotConfig config, DatabaseConnector database)
+      throws Exception {
     this.waiter = waiter;
     this.config = config;
     this.database = database;

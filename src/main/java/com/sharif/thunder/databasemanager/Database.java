@@ -18,9 +18,8 @@ package com.sharif.thunder.databasemanager;
 import com.sharif.thunder.database.DatabaseConnector;
 
 public class Database extends DatabaseConnector {
-  
+
   public Database(String dbPath) throws Exception {
     super(dbPath);
-
   }
 }
