@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sharif.thunder.database;
+package com.sharif.thunder.database.columns;
 
+import com.sharif.thunder.database.SQLColumn;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
