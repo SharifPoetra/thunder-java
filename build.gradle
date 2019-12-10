@@ -1,9 +1,9 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.sherter.google-java-format' version '0.8'
     id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'io.freefair.lombok' version '4.1.6'
+    id 'com.github.sherter.google-java-format' version '0.8'
 }
 
 repositories {
@@ -28,6 +28,7 @@ dependencies {
     implementation 'io.undertow:undertow-core:2.0.28.Final'
     implementation 'com.google.guava:guava:23.0'
     implementation 'com.sparkjava:spark-core:2.9.1'
+    implementation 'org.xerial:sqlite-jdbc:3.28.0'
     compileOnly 'org.projectlombok:lombok:1.18.10'
     
 }
@@ -39,14 +40,15 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 shadowJar {
-   archiveBaseName = 'thunder'
-   classifier = ''
-   archiveVersion = ''
+    archiveBaseName = 'thunder'
+    classifier = ''
+    archiveVersion = ''
 }
 
 compileJava.options.encoding = 'UTF-8'
 compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
 tasks.withType(JavaCompile) {
+    generateLombokConfig.enabled = false
     options.encoding = 'UTF-8'
 }
