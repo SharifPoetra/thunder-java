@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.ResultSet;
 import lombok.Getter;
 
 public class SQLiteJDBC {
@@ -16,7 +15,7 @@ public class SQLiteJDBC {
   public SQLiteJDBC() {
     try {
       Class.forName("org.sqlite.JDBC");
-      connection = DriverManager.getConnection("jdbc:sqlite:/database/test");
+      connection = DriverManager.getConnection("jdbc:sqlite:./database/test");
       statement = connection.createStatement();
       statement.setQueryTimeout(30);
     } catch (Exception e) {
