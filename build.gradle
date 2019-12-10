@@ -28,6 +28,7 @@ dependencies {
     implementation 'io.undertow:undertow-core:2.0.28.Final'
     implementation 'com.google.guava:guava:23.0'
     implementation 'com.sparkjava:spark-core:2.9.1'
+    implementation 'com.h2database:h2:1.4.200'
     compileOnly 'org.projectlombok:lombok:1.18.10'
     
 }

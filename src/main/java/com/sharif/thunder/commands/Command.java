@@ -23,6 +23,7 @@ import com.sharif.thunder.utils.SenderUtil;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -33,36 +34,24 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class Command {
 
   private static final BotConfig config = new BotConfig();
-  
-  @Getter
-  protected String name = "null";
-  @Getter
-  protected String help = "no help description provided";
-  @Getter
-  protected String[] aliases = new String[0];
-  @Getter
-  protected Argument[] arguments = new Argument[0];
-  @Getter
-  protected Command[] children = new Command[0];
-  @Getter
-  protected Permission[] userPermissions = new Permission[0];
-  @Getter
-  protected Permission[] botPermissions = new Permission[0];
-  @Getter
-  protected Category category = null;
-  @Getter
-  protected int cooldown = 0;
+
+  @Getter protected String name = "null";
+  @Getter protected String help = "no help description provided";
+  @Getter protected String[] aliases = new String[0];
+  @Getter protected Argument[] arguments = new Argument[0];
+  @Getter protected Command[] children = new Command[0];
+  @Getter protected Permission[] userPermissions = new Permission[0];
+  @Getter protected Permission[] botPermissions = new Permission[0];
+  @Getter protected Category category = null;
+  @Getter protected int cooldown = 0;
   protected boolean ownerOnly = false;
   protected boolean usesTopicTags = true;
   protected boolean guildOnly = false;
-  @Getter
-  protected boolean hidden = false;
+  @Getter protected boolean hidden = false;
 
   private static final String BOT_PERM = "%s I need the %s permission in this %s!";
   private static final String USER_PERM =
@@ -609,10 +598,8 @@ public abstract class Command {
 
   // Category class
   public static class Category {
-    @Getter
-    private final String name;
-    @Getter
-    private final String failureResponse;
+    @Getter private final String name;
+    @Getter private final String failureResponse;
     private final Predicate<MessageReceivedEvent> predicate;
 
     public Category(String name) {
@@ -627,7 +614,8 @@ public abstract class Command {
       this.predicate = predicate;
     }
 
-    public Category(String name, String failureResponse, Predicate<MessageReceivedEvent> predicate) {
+    public Category(
+        String name, String failureResponse, Predicate<MessageReceivedEvent> predicate) {
       this.name = name;
       this.failureResponse = failureResponse;
       this.predicate = predicate;

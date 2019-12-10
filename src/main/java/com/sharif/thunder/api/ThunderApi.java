@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- package com.sharif.thunder.api;
+package com.sharif.thunder.api;
 
 import static spark.Spark.*;
 
@@ -48,10 +48,11 @@ public class ThunderApi {
     Logger logger = LoggerFactory.getLogger(ThunderApi.class);
 
     port(3000);
-    notFound((req, res) -> {
-      res.type("application/json");
-      return "{\"message\":\"404 Not Found\"}";
-    });
+    notFound(
+        (req, res) -> {
+          res.type("application/json");
+          return "{\"message\":\"404 Not Found\"}";
+        });
     path(
         "/api",
         () -> {

@@ -25,6 +25,7 @@ import com.sharif.thunder.commands.interaction.*;
 import com.sharif.thunder.commands.music.*;
 import com.sharif.thunder.commands.owner.*;
 import com.sharif.thunder.commands.utilities.*;
+import com.sharif.thunder.database.SQLiteJDBC;
 import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.SenderUtil;
@@ -85,7 +86,8 @@ public class Main extends ListenerAdapter {
     config = new BotConfig();
     logger.info("Loaded config from " + config.getConfigLocation());
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
-    thunder = new Thunder(waiter, config);
+    SQLiteJDBC database = new SQLiteJDBC();
+    thunder = new Thunder(waiter, config, database);
     logger.info("Starting ThunderApi...");
     thunderApi = new ThunderApi(thunder).start();
 

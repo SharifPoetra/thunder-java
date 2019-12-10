@@ -44,7 +44,7 @@ public class EvalCommand extends OwnerCommand {
     String toEval = (String) args[0];
     ScriptEngine engine = new ScriptEngineManager().getEngineByName("Nashorn");
     try {
-      engine.put("bot", thunder);
+      engine.put("thunder", thunder);
       engine.put("event", event);
       engine.put("jda", event.getJDA());
       engine.put("guild", event.getGuild());
