@@ -29,10 +29,10 @@ public class DatabaseConnector {
   private final Connection connection;
   protected static final Logger LOG = LoggerFactory.getLogger(DatabaseConnector.class);
 
-  public DatabaseConnector(String db)
+  public DatabaseConnector(String host, String user, String pass)
       throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-    Class.forName("org.sqlite.JDBC");
-    connection = DriverManager.getConnection("jdbc:sqlite:" + db);
+    Class.forName("org.h2.Driver");
+    connection = DriverManager.getConnection("jdbc:h2:"+host, user, pass);
     LOG.info("Connected to database!");
   }
 

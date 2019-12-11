@@ -43,7 +43,9 @@ public class BotConfig {
   private String repeat;
   private String playlistsFolder;
   private String databaseFolder;
-  private String dbFileName;
+  private String dbHost;
+  private String dbUser;
+  private String dbPass;
   private String defaultLyrics;
   private String emiliaKey;
 
@@ -88,7 +90,9 @@ public class BotConfig {
       maxSeconds = config.getLong("maxtime");
       playlistsFolder = config.getString("playlistsfolder");
       databaseFolder = config.getString("databasefolder");
-      dbFileName = config.getString("dbfilename");
+      dbHost = config.getString("dbhost");
+      dbUser = config.getString("dbuser");
+      dbPass = config.getString("dbpass");
       defaultLyrics = config.getString("lyrics.default");
       emiliaKey = config.getString("emiliakey");
 

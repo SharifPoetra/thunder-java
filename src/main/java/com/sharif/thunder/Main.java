@@ -86,7 +86,7 @@ public class Main extends ListenerAdapter {
     config = new BotConfig();
     logger.info("Loaded config from " + config.getConfigLocation());
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
-    Database database = new Database(config.getDbFileName());
+    Database database = new Database(config.getDbHost(), config.getDbUser(), config.getDbPass());
     thunder = new Thunder(waiter, config, database);
     logger.info("Starting ThunderApi...");
     thunderApi = new ThunderApi(thunder).start();

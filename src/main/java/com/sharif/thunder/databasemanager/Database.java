@@ -22,8 +22,8 @@ public class Database extends DatabaseConnector {
 
   public final UserDataManager userData;
 
-  public Database(String dbPath) throws Exception {
-    super(dbPath);
+  public Database(String host, String user, String pass) throws Exception {
+    super(host, user, pass);
 
     userData = new UserDataManager(this);
 
