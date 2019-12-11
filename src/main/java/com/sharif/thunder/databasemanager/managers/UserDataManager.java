@@ -34,6 +34,8 @@ public class UserDataManager extends DataManager {
             rs.moveToInsertRow();
             USER_ID.updateValue(rs, targetId);
             MONEY.updateValue(rs, value < 0 ? 0 : value);
+            rs.insertRow();
+            return new int[] {0, value < 0 ? 0 : value};
           }
         });
   }
@@ -54,10 +56,8 @@ public class UserDataManager extends DataManager {
     return read(
         selectAll(USER_ID.is(targetId)),
         rs -> {
-          if (rs.next()) {
-            return MONEY.getValue(rs);
-            return 0;
-          }
+          if (rs.next()) return MONEY.getValue(rs);
+          return 0;
         });
   }
 }
