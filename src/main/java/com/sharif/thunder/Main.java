@@ -28,6 +28,8 @@ import com.sharif.thunder.commands.utilities.*;
 import com.sharif.thunder.databasemanager.Database;
 import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.FormatUtil;
+import com.sharif.thunder.utils.LevelingUtil;
+import com.sharif.thunder.utils.OtherUtil;
 import com.sharif.thunder.utils.SenderUtil;
 import java.awt.Color;
 import java.util.EnumSet;
@@ -199,6 +201,30 @@ public class Main extends ListenerAdapter {
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
     if (event.getAuthor() == null) return;
+
+    if (!LevelingUtil.isUserHasSpamFilter(event.getAuthor().getIdLong())
+        && !event.getAuthor().isBot()) {
+      int currentLevel = thunder.getDatabase().userData.getLevel(event.getAuthor());
+      int randomXp = (int) LevelingUtil.randomXp(10, 25);
+      int[] newXp = thunder.getDatabase().userData.addXp(event.getAuthor().getIdLong(), randomXp);
+      int newLevel = LevelingUtil.xpToLevels(newXp[1]);
+      if (newLevel > currentLevel) {
+        thunder.getDatabase().userData.addLevel(event.getAuthor().getIdLong(), 1);
+        event
+            .getChannel()
+            .sendMessage(
+                "Congratulations "
+                    + event.getAuthor().getAsMention()
+                    + "! You has leveled up to **"
+                    + newLevel
+                    + "**!")
+            .queue(
+                m -> {
+                  OtherUtil.deleteMessageAfter(m, 1000 * 60);
+                });
+      }
+      LevelingUtil.addUserToSpamFilter(event.getAuthor().getIdLong());
+    }
 
     if (afks.get(event.getAuthor().getId()) != null) {
       event
