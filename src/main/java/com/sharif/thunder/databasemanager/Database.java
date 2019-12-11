@@ -16,10 +16,17 @@
 package com.sharif.thunder.databasemanager;
 
 import com.sharif.thunder.database.DatabaseConnector;
+import com.sharif.thunder.databasemanager.managers.*;
 
 public class Database extends DatabaseConnector {
 
+  public final UserDataManager userData;
+
   public Database(String dbPath) throws Exception {
     super(dbPath);
+
+    userData = new UserDataManager(this);
+
+    init();
   }
 }
