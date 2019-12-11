@@ -26,7 +26,7 @@ public class LevelingUtil {
   private static final List<Long> spamFilter = new ArrayList<>();
 
   public static long xpToNextLevel(int level) {
-    return 5 * (((long) Math.pow(level, 2)) + 10 * level + 20);
+    return 10 * (((long) Math.pow(level, 2)) + 10 * level + 20);
   }
 
   private static long levelsToXp(int levels) {
