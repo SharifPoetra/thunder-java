@@ -11,8 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.21.6] - (unreleased)
 ### Added
-- [+] Add `resetfilters` command
-
+- Add `resetfilters` command
+- Leveling system
+ 
 ### Fixed
 - Fixed where other filters won't work after activating bassboost filter
 - Fixed bassboost command where it still can be used when there no playing music
