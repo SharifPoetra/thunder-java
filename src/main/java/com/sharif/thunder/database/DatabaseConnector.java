@@ -32,7 +32,7 @@ public class DatabaseConnector {
   public DatabaseConnector(String host, String user, String pass)
       throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
     Class.forName("org.h2.Driver");
-    connection = DriverManager.getConnection("jdbc:h2:"+host, user, pass);
+    connection = DriverManager.getConnection("jdbc:h2:" + host, user, pass);
     LOG.info("Connected to database!");
   }
 
