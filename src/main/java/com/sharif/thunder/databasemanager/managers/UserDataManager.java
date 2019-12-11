@@ -11,6 +11,8 @@ public class UserDataManager extends DataManager {
 
   public static final SQLColumn<Long> USER_ID = new LongColumn("USER_ID", false, 0L);
   public static final SQLColumn<Integer> MONEY = new IntegerColumn("MONEY", false, 0);
+  public static final SQLColumn<Integer> XP = new IntegerColumn("XP", false, 0);
+  public static final SQLColumn<Integer> LEVEL = new IntegerColumn("LEVEL", false, 0);
 
   public UserDataManager(DatabaseConnector connector) {
     super(connector, "USERDATA");
@@ -21,6 +23,7 @@ public class UserDataManager extends DataManager {
     return "" + USER_ID + "";
   }
 
+  // Money
   public int[] addMoney(long targetId, int value) {
     return readWrite(
         selectAll(USER_ID.is(targetId)),
@@ -57,6 +60,71 @@ public class UserDataManager extends DataManager {
         selectAll(USER_ID.is(targetId)),
         rs -> {
           if (rs.next()) return MONEY.getValue(rs);
+          return 0;
+        });
+  }
+
+  // Experience
+  public int[] addXp(long targetId, int value) {
+    return readWrite(
+        selectAll(USER_ID.is(targetId)),
+        rs -> {
+          if (rs.next()) {
+            int current = XP.getValue(rs);
+            XP.updateValue(rs, current + value < 0 ? 0 : current + value);
+            rs.updateRow();
+            return new int[] {current, current + value < 0 ? 0 : current + value};
+          } else {
+            rs.moveToInsertRow();
+            USER_ID.updateValue(rs, targetId);
+            XP.updateValue(rs, value < 0 ? 0 : value);
+            rs.insertRow();
+            return new int[] {0, value < 0 ? 0 : value};
+          }
+        });
+  }
+
+  public int getXp(User target) {
+    return getXp(target.getIdLong());
+  }
+
+  public int getXp(long targetId) {
+    return read(
+        selectAll(USER_ID.is(targetId)),
+        rs -> {
+          if (rs.next()) return XP.getValue(rs);
+          return 0;
+        });
+  }
+
+  public int[] addLevel(long targetId, int value) {
+    return readWrite(
+        selectAll(USER_ID.is(targetId)),
+        rs -> {
+          if (rs.next()) {
+            int current = LEVEL.getValue(rs);
+            LEVEL.updateValue(rs, current + value < 0 ? 0 : current + value);
+            rs.updateRow();
+            return new int[] {current, current + value < 0 ? 0 : current + value};
+          } else {
+            rs.moveToInsertRow();
+            USER_ID.updateValue(rs, targetId);
+            LEVEL.updateValue(rs, value < 0 ? 0 : value);
+            rs.insertRow();
+            return new int[] {0, value < 0 ? 0 : value};
+          }
+        });
+  }
+
+  public int getLevel(User target) {
+    return getLevel(target.getIdLong());
+  }
+
+  public int getLevel(long targetId) {
+    return read(
+        selectAll(USER_ID.is(targetId)),
+        rs -> {
+          if (rs.next()) return LEVEL.getValue(rs);
           return 0;
         });
   }
