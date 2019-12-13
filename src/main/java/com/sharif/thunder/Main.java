@@ -16,6 +16,7 @@
 package com.sharif.thunder;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.sharif.thunder.api.ThunderApi;
 import com.sharif.thunder.commands.Command;
 import com.sharif.thunder.commands.Command.Category;
 import com.sharif.thunder.commands.administration.*;
@@ -24,6 +25,7 @@ import com.sharif.thunder.commands.interaction.*;
 import com.sharif.thunder.commands.music.*;
 import com.sharif.thunder.commands.owner.*;
 import com.sharif.thunder.commands.utilities.*;
+import com.sharif.thunder.databasemanager.Database;
 import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.SenderUtil;
@@ -48,7 +50,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.sharif.thunder.api.ThunderApi;
 
 public class Main extends ListenerAdapter {
   public static final String PLAY_EMOJI = "\u25B6"; // ▶
@@ -69,7 +70,6 @@ public class Main extends ListenerAdapter {
         Permission.VOICE_SPEAK,
         Permission.NICKNAME_CHANGE
       };
-
   private static JDA jda;
   private static Command[] commands;
   private static BotConfig config;
@@ -86,7 +86,9 @@ public class Main extends ListenerAdapter {
     config = new BotConfig();
     logger.info("Loaded config from " + config.getConfigLocation());
     EventWaiter waiter = new EventWaiter(Executors.newSingleThreadScheduledExecutor(), false);
-    thunder = new Thunder(waiter, config);
+    Database database = new Database(config.getDbHost(), config.getDbUser(), config.getDbPass());
+    thunder = new Thunder(waiter, config, database);
+    logger.info("Starting ThunderApi...");
     thunderApi = new ThunderApi(thunder).start();
 
     // datasources initializations

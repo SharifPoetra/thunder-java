@@ -1,20 +1,52 @@
+buildscript {
+    ext.kotlin_version = '1.3.61'
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61'
+        classpath 'org.jetbrains.kotlin:kotlin-serialization:1.3.61'
+        classpath 'org.jlleitschuh.gradle:ktlint-gradle:9.1.1'
+    }
+}
+
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.sherter.google-java-format' version '0.8'
     id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'io.freefair.lombok' version '4.1.6'
+    id 'com.github.sherter.google-java-format' version '0.8'
 }
 
+group = 'com.sharif'
+mainClassName = 'com.sharif.thunder.Main'
+version = '1.0.0'
+sourceCompatibility = 1.8
+
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'kotlinx-serialization'
+apply plugin: 'org.jlleitschuh.gradle.ktlint'
+
 repositories {
+    mavenCentral()
     jcenter()
     maven {
-        url 'https://dl.bintray.com/sedmelluq/com.sedmelluq/'
+        url 'https://dl.bintray.com/kotlin/exposed'
+        maven { url 'https://kotlin.bintray.com/kotlinx' }
+    }
+    maven {
+        url 'https://dl.bintray.com/sedmelluq/com.sedmelluq'
     }
 }
 
 dependencies {
-    implementation ('net.dv8tion:JDA:4.0.0_71') {
+    implementation ('net.dv8tion:JDA:4.0.0_73') {
       exclude module: 'opus-java'
     }
     implementation 'com.jagrosh:jda-utilities:3.0.2'
@@ -28,25 +60,37 @@ dependencies {
     implementation 'io.undertow:undertow-core:2.0.28.Final'
     implementation 'com.google.guava:guava:23.0'
     implementation 'com.sparkjava:spark-core:2.9.1'
+    implementation 'com.h2database:h2:1.4.200'
     compileOnly 'org.projectlombok:lombok:1.18.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.3.61'
     
 }
 
-group = 'com.sharif'
-mainClassName = 'com.sharif.thunder.Main'
-version = '1.0.0'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 shadowJar {
-   archiveBaseName = 'thunder'
-   classifier = ''
-   archiveVersion = ''
+    archiveBaseName = 'thunder'
+    classifier = ''
+    archiveVersion = ''
 }
 
 compileJava.options.encoding = 'UTF-8'
 compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
 tasks.withType(JavaCompile) {
+    generateLombokConfig.enabled = false
     options.encoding = 'UTF-8'
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+ktlint {
+    disabledRules = ["no-wildcard-imports"]
 }

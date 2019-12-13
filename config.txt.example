@@ -18,5 +18,10 @@ playlistsfolder = Playlists
 databasefolder = data
 lyrics.default = "A-Z Lyrics"
 
+# h2database
+dbhost = your-db-host
+dbuser = your-db-user
+dbpass = your-db-pass
+
 # Api Keys
 emiliakey = emilia.shrf.xyz api key
