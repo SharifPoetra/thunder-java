@@ -28,8 +28,6 @@ import com.sharif.thunder.commands.utilities.*;
 import com.sharif.thunder.databasemanager.Database;
 import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.FormatUtil;
-import com.sharif.thunder.utils.LevelingUtil;
-import com.sharif.thunder.utils.OtherUtil;
 import com.sharif.thunder.utils.SenderUtil;
 import java.awt.Color;
 import java.util.EnumSet;

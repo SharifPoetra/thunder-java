@@ -20,10 +20,12 @@ import com.sharif.thunder.databasemanager.managers.*;
 
 public class Database extends DatabaseConnector {
 
-  public final UserDataManager userData;
+  GuildSettingsManager guildSettings;
 
   public Database(String host, String user, String pass) throws Exception {
     super(host, user, pass);
+
+    guildSettings = new GuildSettingsManager(this);
 
     init();
   }
