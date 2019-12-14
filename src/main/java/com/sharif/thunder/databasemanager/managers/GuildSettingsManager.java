@@ -27,11 +27,9 @@ import java.time.ZoneId;
 import java.time.zone.ZoneRulesException;
 import java.util.Collection;
 import java.util.Collections;
-import lombok.Getter;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class GuildSettingsManager extends DataManager {
-
   public static final int PREFIX_MAX_LENGTH = 40;
   private static final ZoneId DEFAULT_TIMEZONE = ZoneId.of("GMT-4");
 
@@ -48,6 +46,7 @@ public class GuildSettingsManager extends DataManager {
     super(connector, "GUILD_SETTINGS");
   }
 
+  // Getters
   public GuildSettings getSettings(Guild guild) {
     if (cache.contains(guild.getIdLong())) return cache.get(guild.getIdLong());
     GuildSettings settings =
@@ -58,10 +57,59 @@ public class GuildSettingsManager extends DataManager {
     return settings;
   }
 
-  public class GuildSettings {
+  public boolean hasSettings(Guild guild) {
+    return read(
+        selectAll(GUILD_ID.is(guild.getIdLong())),
+        rs -> {
+          return rs.next();
+        });
+  }
 
+  public void setPrefix(Guild guild, String prefix) {
+    invalidateCache(guild);
+    readWrite(
+        select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, PREFIX),
+        rs -> {
+          if (rs.next()) {
+            PREFIX.updateValue(rs, prefix);
+            rs.updateRow();
+          } else {
+            rs.moveToInsertRow();
+            GUILD_ID.updateValue(rs, guild.getIdLong());
+            PREFIX.updateValue(rs, prefix);
+            rs.insertRow();
+          }
+        });
+  }
+
+  public void setTimezone(Guild guild, ZoneId zone) {
+    invalidateCache(guild);
+    readWrite(
+        select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, TIMEZONE),
+        rs -> {
+          if (rs.next()) {
+            TIMEZONE.updateValue(rs, zone.getId());
+            rs.updateRow();
+          } else {
+            rs.moveToInsertRow();
+            GUILD_ID.updateValue(rs, guild.getIdLong());
+            TIMEZONE.updateValue(rs, zone.getId());
+            rs.insertRow();
+          }
+        });
+  }
+
+  private void invalidateCache(Guild guild) {
+    invalidateCache(guild.getIdLong());
+  }
+
+  private void invalidateCache(long guildId) {
+    cache.pull(guildId);
+  }
+
+  public class GuildSettings {
     private final String prefix;
-    @Getter private final ZoneId timezone;
+    private final ZoneId timezone;
 
     private GuildSettings() {
       this.prefix = null;
@@ -80,6 +128,10 @@ public class GuildSettingsManager extends DataManager {
           zid = DEFAULT_TIMEZONE;
         }
       this.timezone = zid;
+    }
+
+    public ZoneId getTimezone() {
+      return timezone;
     }
 
     public Collection<String> getPrefixes() {
