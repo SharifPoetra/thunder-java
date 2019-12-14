@@ -141,6 +141,7 @@ public class StatsCommand extends UtilitiesCommand {
     public void execute(Object[] args, MessageReceivedEvent event) {
       EmbedBuilder embedBuilder =
           new EmbedBuilder()
+              .setColor(event.getGuild().getSelfMember().getColor())
               .setAuthor(
                   event.getJDA().getSelfUser().getName() + "'s server usage information",
                   null,

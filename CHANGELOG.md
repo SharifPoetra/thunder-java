@@ -9,10 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Fixed
 
-## [1.21.6] - (unreleased)
+## [1.22.0] - (unreleased)
 ### Added
 - Add `resetfilters` command
  
+### Changed
+- Rename `about` command to `stats` and improve the usage statistics
+
 ### Fixed
 - Fixed where other filters won't work after activating bassboost filter
 - Fixed bassboost command where it still can be used when there no playing music
