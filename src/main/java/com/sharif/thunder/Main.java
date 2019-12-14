@@ -29,7 +29,6 @@ import com.sharif.thunder.databasemanager.Database;
 import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.SenderUtil;
-import java.awt.Color;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -126,12 +125,7 @@ public class Main extends ListenerAdapter {
           new PlaylistCommand(thunder),
           new BotStatusCommand(),
           // utilities
-          new AboutCommand(
-              thunder,
-              Color.BLUE,
-              "a simple but powerfull multipurpose bot",
-              new String[] {"Music", "Utilities", "Lots of fun!"},
-              RECOMMENDED_PERMS),
+          new StatsCommand(thunder),
           new PingCommand(thunder),
           new EmotesCommand(thunder),
           new AFKCommand(afks),
@@ -187,6 +181,7 @@ public class Main extends ListenerAdapter {
 
   @Override
   public void onReady(ReadyEvent event) {
+    AsyncInfoMonitor.start();
     System.out.println(event.getJDA().getSelfUser().getAsTag() + " is ready now!");
   }
 
