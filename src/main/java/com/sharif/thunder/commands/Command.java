@@ -73,9 +73,11 @@ public abstract class Command {
           "`" + config.getPrefix() + name + Argument.arrayToString(arguments) + "`",
           true);
       if (aliases.length > 0) {
-        StringBuilder aliasesSb = new StringBuilder();
-        for (String alias : aliases) aliasesSb.append(" `").append(alias).append("`");
-        eb.addField("Aliases", aliasesSb.toString(), true);
+        // StringBuilder aliasesSb = new StringBuilder();
+        // for (String alias : aliases) {
+        //   aliasesSb.append(" `").append(alias).append("`");
+        // }
+        eb.addField("Aliases", "`" + String.join("`, `", aliases) + "`", true);
       }
       eb.setDescription("\n\n*" + help + "*\n");
 
@@ -90,7 +92,8 @@ public abstract class Command {
               .append(child.name)
               .append(Argument.arrayToString(child.arguments))
               .append("` - ")
-              .append(child.help);
+              .append(child.help)
+              .append("\n");
         }
         eb.addField("Subcommands:", subSb.toString(), true);
       }
