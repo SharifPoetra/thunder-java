@@ -73,10 +73,6 @@ public abstract class Command {
           "`" + config.getPrefix() + name + Argument.arrayToString(arguments) + "`",
           true);
       if (aliases.length > 0) {
-        // StringBuilder aliasesSb = new StringBuilder();
-        // for (String alias : aliases) {
-        //   aliasesSb.append(" `").append(alias).append("`");
-        // }
         eb.addField("Aliases", "`" + String.join("`, `", aliases) + "`", true);
       }
       eb.setDescription("\n\n*" + help + "*\n");
