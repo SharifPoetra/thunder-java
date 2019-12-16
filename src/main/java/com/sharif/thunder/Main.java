@@ -54,21 +54,7 @@ public class Main extends ListenerAdapter {
   public static final String PLAY_EMOJI = "\u25B6"; // ▶
   public static final String PAUSE_EMOJI = "\u23F8"; // ⏸
   public static final String STOP_EMOJI = "\u23F9"; // ⏹
-  public static final Permission[] RECOMMENDED_PERMS =
-      new Permission[] {
-        Permission.MESSAGE_READ,
-        Permission.MESSAGE_WRITE,
-        Permission.MESSAGE_HISTORY,
-        Permission.MESSAGE_ADD_REACTION,
-        Permission.MESSAGE_EMBED_LINKS,
-        Permission.MESSAGE_ATTACH_FILES,
-        Permission.MESSAGE_MANAGE,
-        Permission.MESSAGE_EXT_EMOJI,
-        Permission.MANAGE_CHANNEL,
-        Permission.VOICE_CONNECT,
-        Permission.VOICE_SPEAK,
-        Permission.NICKNAME_CHANGE
-      };
+  public static final Permission[] RECOMMENDED_PERMS = new Permission[] {Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE, Permission.MESSAGE_EXT_EMOJI, Permission.MANAGE_CHANNEL, Permission.VOICE_CONNECT, Permission.VOICE_SPEAK, Permission.NICKNAME_CHANGE};
   private static JDA jda;
   private static Command[] commands;
   private static BotConfig config;
@@ -102,79 +88,74 @@ public class Main extends ListenerAdapter {
 
     // lists all the commands
     logger.info("Loading all commands...");
-    commands =
-        new Command[] {
-          // administration
-          new SetInVCRoleCommand(inVcRoles),
-          // fun
-          new SayCommand(thunder),
-          new BobRossCommand(thunder),
-          new ChooseCommand(thunder),
-          new BatSlapCommand(thunder),
-          // interaction
-          new PatCommand(thunder),
-          new SlapCommand(thunder),
-          new BlushCommand(thunder),
-          new CryCommand(thunder),
-          new DanceCommand(thunder),
-          new PoutCommand(thunder),
-          new LewdCommand(thunder),
-          // owner
-          new EvalCommand(thunder),
-          new RestartCommand(thunder),
-          new PlaylistCommand(thunder),
-          new BotStatusCommand(),
-          // utilities
-          new StatsCommand(thunder),
-          new PingCommand(thunder),
-          new EmotesCommand(thunder),
-          new AFKCommand(afks),
-          new KitsuCommand(thunder),
-          new AvatarCommand(thunder),
-          // music
-          new PlayCommand(thunder, config.getLoading()),
-          new PlaylistsCommand(thunder),
-          new NowplayingCommand(thunder),
-          new VolumeCommand(thunder),
-          new SkipCommand(thunder),
-          new StopCommand(thunder),
-          new ShuffleCommand(thunder),
-          new QueueCommand(thunder),
-          new SearchCommand(thunder, config.getSearching()),
-          new SCSearchCommand(thunder, config.getSearching()),
-          new RepeatCommand(thunder),
-          new NightcoreCommand(thunder),
-          new PitchCommand(thunder),
-          new KaraokeCommand(thunder),
-          new VaporwaveCommand(thunder),
-          new BassboostCommand(thunder),
-          new MoveTrackCommand(thunder),
-          new PlaynextCommand(thunder, config.getLoading()),
-          new LyricsCommand(thunder),
-          new RemoveCommand(thunder),
-          new PauseCommand(thunder),
-          new SkiptoCommand(thunder)
-        };
+    commands = new Command[] {
+      // administration
+      new SetInVCRoleCommand(inVcRoles),
+      // fun
+      new SayCommand(thunder),
+      new BobRossCommand(thunder),
+      new ChooseCommand(thunder),
+      new BatSlapCommand(thunder),
+      // interaction
+      new PatCommand(thunder),
+      new SlapCommand(thunder),
+      new BlushCommand(thunder),
+      new CryCommand(thunder),
+      new DanceCommand(thunder),
+      new PoutCommand(thunder),
+      new LewdCommand(thunder),
+      // owner
+      new EvalCommand(thunder),
+      new RestartCommand(thunder),
+      new PlaylistCommand(thunder),
+      new BotStatusCommand(),
+      // utilities
+      new StatsCommand(thunder),
+      new PingCommand(thunder),
+      new EmotesCommand(thunder),
+      new AFKCommand(afks),
+      new KitsuCommand(thunder),
+      new AvatarCommand(thunder),
+      // music
+      new PlayCommand(thunder, config.getLoading()),
+      new PlaylistsCommand(thunder),
+      new NowplayingCommand(thunder),
+      new VolumeCommand(thunder),
+      new SkipCommand(thunder),
+      new StopCommand(thunder),
+      new ShuffleCommand(thunder),
+      new QueueCommand(thunder),
+      new SearchCommand(thunder, config.getSearching()),
+      new SCSearchCommand(thunder, config.getSearching()),
+      new RepeatCommand(thunder),
+      new NightcoreCommand(thunder),
+      new PitchCommand(thunder),
+      new KaraokeCommand(thunder),
+      new VaporwaveCommand(thunder),
+      new BassboostCommand(thunder),
+      new MoveTrackCommand(thunder),
+      new PlaynextCommand(thunder, config.getLoading()),
+      new LyricsCommand(thunder),
+      new RemoveCommand(thunder),
+      new PauseCommand(thunder),
+      new SkiptoCommand(thunder)
+
+    };
 
     try {
       logger.info("Running JDABuilder...");
-      JDA jda =
-          new JDABuilder(AccountType.BOT)
-              .setToken(config.getToken())
-              .addEventListeners(new Main(), waiter)
-              .setDisabledCacheFlags(EnumSet.of(CacheFlag.ACTIVITY))
-              .build()
-              .awaitReady();
+      JDA jda = new JDABuilder(AccountType.BOT)
+        .setToken(config.getToken())
+        .addEventListeners(new Main(), waiter)
+        .setDisabledCacheFlags(EnumSet.of(CacheFlag.ACTIVITY))
+        .build()
+        .awaitReady();
       thunder.setJDA(jda);
     } catch (LoginException ex) {
       logger.error("Something went wrong when tried to login to discord: " + ex);
       System.exit(1);
     } catch (IllegalArgumentException ex) {
-      logger.error(
-          "Some aspect of the configuration is invalid: "
-              + ex
-              + "\nConfig Location: "
-              + config.getConfigLocation());
+      logger.error("Some aspect of the configuration is invalid: " + ex + "\nConfig Location: " + config.getConfigLocation());
       System.exit(1);
     }
   }
@@ -196,66 +177,34 @@ public class Main extends ListenerAdapter {
     if (event.getAuthor() == null) return;
 
     if (afks.get(event.getAuthor().getId()) != null) {
-      event
-          .getChannel()
-          .sendMessage(
-              event.getAuthor().getAsMention() + " Welcome back, I have removed your AFK status.")
-          .queue();
+      event.getChannel().sendMessage(event.getAuthor().getAsMention() + " Welcome back, I have removed your AFK status.").queue();
       afks.remove(event.getAuthor().getId());
     }
     if (event.getChannelType() != ChannelType.PRIVATE && !event.getAuthor().isBot()) {
-      String relate =
-          "__"
-              + event.getGuild().getName()
-              + "__ <#"
-              + event.getTextChannel().getId()
-              + "> **"
-              + event.getAuthor().getAsTag()
-              + "**:\n"
-              + event.getMessage().getContentRaw();
-      event
-          .getMessage()
-          .getMentionedUsers()
-          .stream()
-          .filter((u) -> (afks.get(u.getId()) != null))
-          .forEach(
-              (u) -> {
-                SenderUtil.sendDM(u, relate);
-              });
+      String relate = "__" + event.getGuild().getName() + "__ <#" + event.getTextChannel().getId() + "> **" + event.getAuthor().getAsTag() + "**:\n" + event.getMessage().getContentRaw();
+      event.getMessage().getMentionedUsers().stream().filter((u) -> (afks.get(u.getId()) != null)).forEach((u) -> {
+        SenderUtil.sendDM(u, relate);
+      });
     }
-    if (event.getChannelType() != ChannelType.PRIVATE
-        && !event.getMessage().getMentionedUsers().isEmpty()
-        && !event.getAuthor().isBot()) {
+    if (event.getChannelType() != ChannelType.PRIVATE && !event.getMessage().getMentionedUsers().isEmpty() && !event.getAuthor().isBot()) {
       StringBuilder builder = new StringBuilder();
-      event
-          .getMessage()
-          .getMentionedUsers()
-          .stream()
-          .forEach(
-              u -> {
-                if (afks.get(u.getId()) != null) {
-                  String response = afks.get(u.getId())[AFKs.MESSAGE];
-                  if (response != null)
-                    builder
-                        .append("\n\uD83D\uDCA4 **")
-                        .append(u.getName())
-                        .append("** is currently AFK:\n")
-                        .append(response);
-                }
-              });
+      event.getMessage().getMentionedUsers().stream().forEach(u -> {
+        if (afks.get(u.getId()) != null) {
+          String response = afks.get(u.getId())[AFKs.MESSAGE];
+          if (response != null)
+            builder.append("\n\uD83D\uDCA4 **").append(u.getName()).append("** is currently AFK:\n").append(response);
+          }
+        });
       String afkmessage = builder.toString().trim();
       if (!afkmessage.equals("")) event.getChannel().sendMessage(afkmessage).queue();
     }
 
     // get a prefixes
-    String[] prefixes = new String[] {config.getPrefix(), config.getAltPrefix()};
-
     String strippedMessage = null;
-    for (int i = prefixes.length - 1; i >= 0; i--) {
-      if (event.getMessage().getContentRaw().startsWith(prefixes[i].toLowerCase())) {
-        strippedMessage = event.getMessage().getContentRaw().substring(prefixes[i].length()).trim();
-        break;
-      }
+    String prefix = thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix();
+    if (prefix == null) prefix = config.getPrefix();
+    if (event.getMessage().getContentRaw().startsWith(prefix.toLowerCase())) {
+      strippedMessage = event.getMessage().getContentRaw().substring(prefix.length()).trim();
     }
 
     if (strippedMessage != null && !event.getAuthor().isBot()) {
@@ -265,22 +214,16 @@ public class Main extends ListenerAdapter {
       if (strippedMessage.equalsIgnoreCase("help")) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(event.getGuild().getSelfMember().getColor());
-        eb.setAuthor(
-            event.getGuild().getSelfMember().getUser().getName() + " commands:",
-            null,
-            event.getGuild().getSelfMember().getUser().getEffectiveAvatarUrl());
+        eb.setAuthor(event.getGuild().getSelfMember().getUser().getName() + " commands:", null, event.getGuild().getSelfMember().getUser().getEffectiveAvatarUrl());
         StringBuilder builder = new StringBuilder();
         Category category = null;
         for (Command command : commands) {
           if (command.isHidden()) continue;
           if (!Objects.equals(category, command.getCategory())) {
             category = command.getCategory();
-            builder
-                .append("\n\n**__")
-                .append(category == null ? "No Category" : category.getName())
-                .append("__:**\n");
+            builder.append("\n\n**__").append(category == null ? "No Category" : category.getName()).append("__:**\n");
           }
-          builder.append("`").append(config.getPrefix()).append(command.getName()).append("`  ");
+          builder.append("`").append(prefix).append(command.getName()).append("`  ");
         }
         eb.setDescription(builder.toString());
         eb.setFooter("Do not include <> nor [] - <> means required and [] means optional.");
@@ -315,14 +258,7 @@ public class Main extends ListenerAdapter {
     try {
       if (event.getMember().getUser().isBot()) return;
       if (inVcRoles.get(event.getGuild().getId()) != null) {
-        event
-            .getGuild()
-            .addRoleToMember(
-                event.getMember(),
-                event
-                    .getGuild()
-                    .getRoleById(inVcRoles.get(event.getGuild().getId())[InVCRoles.ROLEID]))
-            .queue();
+        event.getGuild().addRoleToMember(event.getMember(), event.getGuild().getRoleById(inVcRoles.get(event.getGuild().getId())[InVCRoles.ROLEID])).queue();
       }
     } catch (Exception ex) {
       System.out.println("Error when giving a member voice role: " + ex.toString());
@@ -334,14 +270,7 @@ public class Main extends ListenerAdapter {
     try {
       if (event.getMember().getUser().isBot()) return;
       if (inVcRoles.get(event.getGuild().getId()) != null) {
-        event
-            .getGuild()
-            .removeRoleFromMember(
-                event.getMember(),
-                event
-                    .getGuild()
-                    .getRoleById(inVcRoles.get(event.getGuild().getId())[InVCRoles.ROLEID]))
-            .queue();
+        event.getGuild().removeRoleFromMember(event.getMember(), event.getGuild().getRoleById(inVcRoles.get(event.getGuild().getId())[InVCRoles.ROLEID])).queue();
       }
     } catch (Exception ex) {
       System.out.println("Error when removing a member voice role: " + ex.toString());

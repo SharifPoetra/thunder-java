@@ -17,6 +17,7 @@ package com.sharif.thunder.commands;
 
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.sharif.thunder.BotConfig;
+import com.sharif.thunder.Thunder;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.OtherUtil;
 import com.sharif.thunder.utils.SenderUtil;
