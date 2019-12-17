@@ -30,8 +30,7 @@ public class RemoveCommand extends MusicCommand {
     super(thunder);
     this.name = "remove";
     this.help = "removes a song from the queue.";
-    this.arguments =
-        new Argument[] {new Argument("position|ALL", Argument.Type.SHORTSTRING, false)};
+    this.arguments = new Argument[] {new Argument("position|ALL", Argument.Type.SHORTSTRING, false)};
     this.aliases = new String[] {"delete"};
     this.guildOnly = true;
     this.beListening = true;
@@ -59,17 +58,14 @@ public class RemoveCommand extends MusicCommand {
       pos = 0;
     }
     if (pos < 1 || pos > handler.getQueue().size()) {
-      SenderUtil.replyError(
-          event,
-          "Position must be a valid integer between 1 and " + handler.getQueue().size() + "!");
+      SenderUtil.replyError(event, "Position must be a valid integer between 1 and " + handler.getQueue().size() + "!");
       return;
     }
     boolean isDJ = event.getMember().hasPermission(Permission.MANAGE_SERVER);
     QueuedTrack qt = handler.getQueue().get(pos - 1);
     if (qt.getIdentifier() == event.getAuthor().getIdLong()) {
       handler.getQueue().remove(pos - 1);
-      SenderUtil.replySuccess(
-          event, "Removed **" + qt.getTrack().getInfo().title + "** from the queue");
+      SenderUtil.replySuccess(event, "Removed **" + qt.getTrack().getInfo().title + "** from the queue");
     } else if (isDJ) {
       handler.getQueue().remove(pos - 1);
       User u;
@@ -78,19 +74,9 @@ public class RemoveCommand extends MusicCommand {
       } catch (Exception e) {
         u = null;
       }
-      SenderUtil.replySuccess(
-          event,
-          "Removed **"
-              + qt.getTrack().getInfo().title
-              + "** from the queue (requested by "
-              + (u == null ? "someone" : "**" + u.getName() + "**")
-              + ")");
+      SenderUtil.replySuccess(event, "Removed **" + qt.getTrack().getInfo().title + "** from the queue (requested by " + (u == null ? "someone" : "**" + u.getName() + "**") + ")");
     } else {
-      SenderUtil.replyError(
-          event,
-          "You cannot remove **"
-              + qt.getTrack().getInfo().title
-              + "** because you don't have `Manage Server` permission and you're not the requester of that song!");
+      SenderUtil.replyError(event, "You cannot remove **" + qt.getTrack().getInfo().title + "** because you don't have `Manage Server` permission and you're not the requester of that song!");
     }
   }
 }

@@ -34,12 +34,7 @@ public class StringColumn extends SQLColumn<String> {
 
   @Override
   public String getDataDescription() {
-    return "VARCHAR("
-        + maxLength
-        + ")"
-        + (defaultValue == null ? "" : " DEFAULT " + defaultValue)
-        + nullable()
-        + (primaryKey ? " PRIMARY KEY" : "");
+    return "VARCHAR(" + maxLength + ")" + (defaultValue == null ? "" : " DEFAULT " + defaultValue) + nullable() + (primaryKey ? " PRIMARY KEY" : "");
   }
 
   @Override

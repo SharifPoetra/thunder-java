@@ -50,13 +50,12 @@ public class SearchCommand extends MusicCommand {
     this.beListening = true;
     this.bePlaying = false;
     this.botPermissions = new Permission[] {Permission.MESSAGE_EMBED_LINKS};
-    builder =
-        new OrderedMenu.Builder()
-            .allowTextInput(true)
-            .useNumbers()
-            .useCancelButton(true)
-            .setEventWaiter(thunder.getWaiter())
-            .setTimeout(1, TimeUnit.MINUTES);
+    builder = new OrderedMenu.Builder()
+      .allowTextInput(true)
+      .useNumbers()
+      .useCancelButton(true)
+      .setEventWaiter(thunder.getWaiter())
+      .setTimeout(1, TimeUnit.MINUTES);
   }
 
   @Override

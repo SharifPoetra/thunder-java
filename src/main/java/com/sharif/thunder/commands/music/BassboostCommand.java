@@ -35,8 +35,6 @@ public class BassboostCommand extends MusicCommand {
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.setBassboost(!handler.isBassboost());
-    SenderUtil.replySuccess(
-        event,
-        "Bassboost mode is now `" + (!handler.isBassboost() ? "disabled" : "enabled") + "`.");
+    SenderUtil.replySuccess(event, "Bassboost mode is now `" + (!handler.isBassboost() ? "disabled" : "enabled") + "`.");
   }
 }

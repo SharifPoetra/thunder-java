@@ -35,20 +35,10 @@ public class PauseCommand extends MusicCommand {
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     if (handler.getPlayer().isPaused()) {
-      SenderUtil.replyWarning(
-          event,
-          "The player is already paused! Use `"
-              + thunder.getConfig().getPrefix()
-              + "play` to unpause!");
+      SenderUtil.replyWarning(event, "The player is already paused! Use `" + thunder.getConfig().getPrefix() + "play` to unpause!");
       return;
     }
     handler.getPlayer().setPaused(true);
-    SenderUtil.replySuccess(
-        event,
-        "Paused **"
-            + handler.getPlayer().getPlayingTrack().getInfo().title
-            + "**. Type `"
-            + thunder.getConfig().getPrefix()
-            + "play` to unpause!");
+    SenderUtil.replySuccess(event, "Paused **" + handler.getPlayer().getPlayingTrack().getInfo().title + "**. Type `" + thunder.getConfig().getPrefix() + "play` to unpause!");
   }
 }

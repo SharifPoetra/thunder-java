@@ -41,43 +41,22 @@ public class DatabaseConnector {
       for (Field field : this.getClass().getFields()) {
         if (field.get(this).getClass().getSuperclass() == DataManager.class) {
           DataManager manager = DataManager.class.cast(field.get(this));
-          if (!connection
-              .getMetaData()
-              .getTables(null, null, manager.getTableName(), null)
-              .next()) {
+          if (!connection.getMetaData().getTables(null, null, manager.getTableName(), null).next()) {
             LOG.info("Creating table: " + manager.getTableName());
-            Statement s =
-                connection.createStatement(
-                    ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            Statement s = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             s.closeOnCompletion();
-            String str =
-                manager.getColumns()[0].name + " " + manager.getColumns()[0].getDataDescription();
+            String str = manager.getColumns()[0].name + " " + manager.getColumns()[0].getDataDescription();
             for (int i = 1; i < manager.getColumns().length; i++)
-              str +=
-                  ", \""
-                      + manager.getColumns()[i].name
-                      + "\" "
-                      + manager.getColumns()[i].getDataDescription();
+              str += ", \"" + manager.getColumns()[i].name + "\" " + manager.getColumns()[i].getDataDescription();
             if (manager.primaryKey() != null) str += ", PRIMARY KEY (" + manager.primaryKey() + ")";
             s.execute("CREATE TABLE " + manager.getTableName() + "(" + str + ")");
           }
           for (SQLColumn col : manager.getColumns()) {
-            if (!connection
-                .getMetaData()
-                .getColumns(null, null, manager.getTableName(), col.name)
-                .next()) {
+            if (!connection.getMetaData().getColumns(null, null, manager.getTableName(), col.name).next()) {
               LOG.info("Creating column '" + col.name + "' in " + manager.getTableName());
-              Statement st =
-                  connection.createStatement(
-                      ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+              Statement st = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
               st.closeOnCompletion();
-              st.execute(
-                  "ALTER TABLE "
-                      + manager.getTableName()
-                      + " ADD \""
-                      + col.name
-                      + "\" "
-                      + col.getDataDescription());
+              st.execute("ALTER TABLE " + manager.getTableName() + " ADD \"" + col.name + "\" " + col.getDataDescription());
             }
           }
         }

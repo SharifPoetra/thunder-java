@@ -32,33 +32,21 @@ public class DanceCommand extends InteractionCommand {
     this.thunder = thunder;
     this.name = "dance";
     this.help = "Express your emotions.";
-    this.botPermissions =
-        new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
+    this.botPermissions = new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
   }
 
   @Override
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
       event.getChannel().sendTyping().queue();
-      byte[] data =
-          NetworkUtil.download(
-              "https://emilia.shrf.xyz/api/dance", "Bearer " + thunder.getConfig().getEmiliaKey());
-      event
-          .getChannel()
-          .sendFile(data, "dance.gif")
-          .embed(
-              new EmbedBuilder()
-                  .setAuthor(
-                      event.getAuthor().getName() + " " + RandomUtil.randomElement(msg),
-                      null,
-                      event.getAuthor().getEffectiveAvatarUrl())
-                  .setColor(event.getGuild().getSelfMember().getColor())
-                  .setImage("attachment://dance.gif")
-                  .build())
-          .queue();
+      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/dance", "Bearer " + thunder.getConfig().getEmiliaKey());
+      event.getChannel().sendFile(data, "dance.gif").embed(new EmbedBuilder()
+        .setAuthor(event.getAuthor().getName() + " " + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
+        .setColor(event.getGuild().getSelfMember().getColor())
+        .setImage("attachment://dance.gif")
+        .build()).queue();
     } catch (Exception ex) {
-      SenderUtil.replyError(
-          event, "Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }

@@ -73,9 +73,7 @@ public abstract class DataManager {
   }
 
   protected final void readWrite(String query, ResultsConsumer rc) {
-    try (Statement statement =
-            getConnection()
-                .createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+    try (Statement statement = getConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
         ResultSet results = statement.executeQuery(query)) {
       rc.consume(results);
     } catch (SQLException e) {
@@ -88,9 +86,7 @@ public abstract class DataManager {
   }
 
   protected final <T> T readWrite(String query, ResultsFunction<T> rf, T err) {
-    try (Statement statement =
-            getConnection()
-                .createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+    try (Statement statement = getConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
         ResultSet results = statement.executeQuery(query)) {
       return rf.apply(results);
     } catch (SQLException e) {

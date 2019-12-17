@@ -47,15 +47,12 @@ public class LyricsCommand extends MusicCommand {
     event.getChannel().sendTyping().queue();
     String title = (String) args[0];
 
-    if (title == null
-        && ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
-            .isMusicPlaying(event.getJDA()))
-      title =
-          ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
-              .getPlayer()
-              .getPlayingTrack()
-              .getInfo()
-              .title;
+    if (title == null && ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA()))
+      title = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
+        .getPlayer()
+        .getPlayingTrack()
+        .getInfo()
+        .title;
     else title = (String) args[0];
     if (title == null) {
       SenderUtil.replyError(event, "You must specify what lyrics you want to search!");
@@ -64,8 +61,7 @@ public class LyricsCommand extends MusicCommand {
     try {
       lyrics = client.getLyrics(title).get();
     } catch (InterruptedException | ExecutionException e) {
-      SenderUtil.replyError(
-          event, "Shomething went wrong when trying fetching the lyrics: " + e.getMessage());
+      SenderUtil.replyError(event, "Shomething went wrong when trying fetching the lyrics: " + e.getMessage());
     }
 
     if (lyrics == null) {
@@ -73,14 +69,12 @@ public class LyricsCommand extends MusicCommand {
       return;
     }
 
-    EmbedBuilder eb =
-        new EmbedBuilder()
-            .setAuthor(lyrics.getAuthor())
-            .setColor(event.getGuild().getSelfMember().getColor())
-            .setTitle(lyrics.getTitle(), lyrics.getURL());
+    EmbedBuilder eb = new EmbedBuilder()
+      .setAuthor(lyrics.getAuthor())
+      .setColor(event.getGuild().getSelfMember().getColor())
+      .setTitle(lyrics.getTitle(), lyrics.getURL());
     if (lyrics.getContent().length() > 15000) {
-      SenderUtil.replyWarning(
-          event, "Lyrics for `" + title + "` found but likely not correct: " + lyrics.getURL());
+      SenderUtil.replyWarning(event, "Lyrics for `" + title + "` found but likely not correct: " + lyrics.getURL());
     } else if (lyrics.getContent().length() > 2000) {
       String content = lyrics.getContent().trim();
       while (content.length() > 2000) {
@@ -88,10 +82,7 @@ public class LyricsCommand extends MusicCommand {
         if (index == -1) index = content.lastIndexOf("\n", 2000);
         if (index == -1) index = content.lastIndexOf(" ", 2000);
         if (index == -1) index = 2000;
-        event
-            .getChannel()
-            .sendMessage(eb.setDescription(content.substring(0, index).trim()).build())
-            .queue();
+        event.getChannel().sendMessage(eb.setDescription(content.substring(0, index).trim()).build()).queue();
         content = content.substring(index).trim();
         eb.setAuthor(null).setTitle(null, null);
       }

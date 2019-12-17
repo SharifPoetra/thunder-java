@@ -50,11 +50,7 @@ public class FormatUtil {
   public static String appendAttachmentUrls(Message message, String content) {
     if (message.getAttachments() != null && !message.getAttachments().isEmpty()) {
       StringBuilder builder = content == null ? new StringBuilder() : new StringBuilder(content);
-      message
-          .getAttachments()
-          .stream()
-          .map((att) -> " " + att.getUrl())
-          .forEach(url -> builder.append(" ").append(url));
+      message.getAttachments().stream().map((att) -> " " + att.getUrl()).forEach(url -> builder.append(" ").append(url));
       return builder.toString();
     }
     return content;
@@ -63,11 +59,7 @@ public class FormatUtil {
   public static String listOfMembers(List<Member> list, String query) {
     String out = String.format("**Multiple %s found matching \"%s\":**", "members", query);
     for (int i = 0; i < 6 && i < list.size(); i++)
-      out +=
-          "\n - "
-              + list.get(i).getUser().getName()
-              + " #"
-              + list.get(i).getUser().getDiscriminator();
+      out += "\n - " + list.get(i).getUser().getName() + " #" + list.get(i).getUser().getDiscriminator();
     if (list.size() > 6) out += "\n**And " + (list.size() - 6) + " more...**";
     return out;
   }
@@ -150,10 +142,7 @@ public class FormatUtil {
     seconds %= 60 * 60;
     long minutes = seconds / 60;
     seconds %= 60;
-    return (hours > 0 ? hours + ":" : "")
-        + (minutes < 10 ? "0" + minutes : minutes)
-        + ":"
-        + (seconds < 10 ? "0" + seconds : seconds);
+    return (hours > 0 ? hours + ":" : "") + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
   }
 
   public static String progressBar(double percent) {

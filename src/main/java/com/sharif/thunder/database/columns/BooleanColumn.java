@@ -27,9 +27,7 @@ public class BooleanColumn extends SQLColumn<Boolean> {
 
   @Override
   public String getDataDescription() {
-    return "BOOLEAN"
-        + (defaultValue == null ? "" : " DEFAULT " + defaultValue.toString().toUpperCase())
-        + nullable();
+    return "BOOLEAN" + (defaultValue == null ? "" : " DEFAULT " + defaultValue.toString().toUpperCase()) + nullable();
   }
 
   @Override

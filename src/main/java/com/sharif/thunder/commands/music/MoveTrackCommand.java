@@ -30,11 +30,10 @@ public class MoveTrackCommand extends MusicCommand {
     super(thunder);
     this.name = "movetrack";
     this.help = "move a track in the current queue to a different position.";
-    this.arguments =
-        new Argument[] {
-          new Argument("from", Argument.Type.SHORTSTRING, true),
-          new Argument("to", Argument.Type.SHORTSTRING, true)
-        };
+    this.arguments = new Argument[] {
+      new Argument("from", Argument.Type.SHORTSTRING, true),
+      new Argument("to", Argument.Type.SHORTSTRING, true)
+    };
     this.aliases = new String[] {"move"};
     this.guildOnly = true;
     this.beListening = true;

@@ -26,12 +26,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class LewdCommand extends InteractionCommand {
   private final Thunder thunder;
-  private String[] msg = {
-    " thinks thats lewd...",
-    " says, thats lewd!",
-    " is not old enough for that!",
-    "! Cover your eyes! It's too lewd!"
-  };
+  private String[] msg = {" thinks thats lewd...", " says, thats lewd!", " is not old enough for that!", "! Cover your eyes! It's too lewd!" };
 
   public LewdCommand(Thunder thunder) {
     this.thunder = thunder;
@@ -45,25 +40,14 @@ public class LewdCommand extends InteractionCommand {
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
       event.getChannel().sendTyping().queue();
-      byte[] data =
-          NetworkUtil.download(
-              "https://emilia.shrf.xyz/api/lewd", "Bearer " + thunder.getConfig().getEmiliaKey());
-      event
-          .getChannel()
-          .sendFile(data, "lewd.gif")
-          .embed(
-              new EmbedBuilder()
-                  .setAuthor(
-                      event.getAuthor().getName() + RandomUtil.randomElement(msg),
-                      null,
-                      event.getAuthor().getEffectiveAvatarUrl())
-                  .setColor(event.getGuild().getSelfMember().getColor())
-                  .setImage("attachment://lewd.gif")
-                  .build())
-          .queue();
+      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/lewd", "Bearer " + thunder.getConfig().getEmiliaKey());
+      event.getChannel().sendFile(data, "lewd.gif").embed(new EmbedBuilder()
+        .setAuthor(event.getAuthor().getName() + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
+        .setColor(event.getGuild().getSelfMember().getColor())
+        .setImage("attachment://lewd.gif")
+        .build()).queue();
     } catch (Exception ex) {
-      SenderUtil.replyError(
-          event, "Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }

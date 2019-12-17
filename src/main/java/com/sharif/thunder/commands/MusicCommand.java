@@ -37,9 +37,7 @@ public abstract class MusicCommand extends Command {
   @Override
   protected void execute(Object[] args, MessageReceivedEvent event) {
     thunder.getPlayerManager().setUpHandler(event.getGuild());
-    if (bePlaying
-        && !((AudioHandler) event.getGuild().getAudioManager().getSendingHandler())
-            .isMusicPlaying(event.getJDA())) {
+    if (bePlaying && !((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA())) {
       SenderUtil.replyError(event, "There must be music playing to use that!");
       return;
     }
@@ -54,8 +52,7 @@ public abstract class MusicCommand extends Command {
         try {
           event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
         } catch (PermissionException ex) {
-          SenderUtil.replyError(
-              event, "I am unable to connect to **" + userState.getChannel().getName() + "**!");
+          SenderUtil.replyError(event, "I am unable to connect to **" + userState.getChannel().getName() + "**!");
           return;
         }
       }

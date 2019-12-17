@@ -44,25 +44,20 @@ public class QueueCommand extends MusicCommand {
     this.guildOnly = true;
     this.beListening = false;
     this.bePlaying = true;
-    this.botPermissions =
-        new Permission[] {Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS};
-    builder =
-        new Paginator.Builder()
-            .setColumns(1)
-            .setFinalAction(
-                m -> {
-                  try {
-                    m.clearReactions().queue();
-                  } catch (PermissionException ignore) {
-                  }
-                })
-            .setItemsPerPage(10)
-            .setBulkSkipNumber(5)
-            .waitOnSinglePage(false)
-            .useNumberedItems(true)
-            .showPageNumbers(true)
-            .setEventWaiter(thunder.getWaiter())
-            .setTimeout(1, TimeUnit.MINUTES);
+    this.botPermissions = new Permission[] {Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS};
+    builder = new Paginator.Builder().setColumns(1).setFinalAction(m -> {
+      try {
+        m.clearReactions().queue();
+      } catch (PermissionException ignore) {
+      }
+    })
+    .setItemsPerPage(10)
+    .setBulkSkipNumber(5)
+    .waitOnSinglePage(false)
+    .useNumberedItems(true)
+    .showPageNumbers(true)
+    .setEventWaiter(thunder.getWaiter())
+    .setTimeout(1, TimeUnit.MINUTES);
   }
 
   @Override
@@ -78,18 +73,12 @@ public class QueueCommand extends MusicCommand {
     if (list.isEmpty()) {
       Message nowp = ah.getNowPlaying(event.getJDA());
       Message nonowp = ah.getNoMusicPlaying(event.getJDA());
-      Message built =
-          new MessageBuilder()
-              .setContent(thunder.getConfig().getWarning() + " There is no music in the queue!")
-              .setEmbed((nowp == null ? nonowp : nowp).getEmbeds().get(0))
-              .build();
-      event
-          .getChannel()
-          .sendMessage(built)
-          .queue(
-              m -> {
-                if (nowp != null) thunder.getNowplayingHandler().setLastNPMessage(m);
-              });
+      Message built = new MessageBuilder()
+      .setContent(thunder.getConfig().getWarning() + " There is no music in the queue!")
+      .setEmbed((nowp == null ? nonowp : nowp).getEmbeds().get(0)).build();
+      event.getChannel().sendMessage(built).queue(m -> {
+        if (nowp != null) thunder.getNowplayingHandler().setLastNPMessage(m);
+      });
       return;
     }
     String[] songs = new String[list.size()];
@@ -99,30 +88,15 @@ public class QueueCommand extends MusicCommand {
       songs[i] = list.get(i).toString();
     }
     long fintotal = total;
-    builder
-        .setText(
-            (i1, i2) -> getQueueTitle(ah, thunder.getConfig().getSuccess(), songs.length, fintotal))
-        .setItems(songs)
-        .setUsers(event.getAuthor())
-        .setColor(event.getGuild().getSelfMember().getColor());
+    builder.setText((i1, i2) -> getQueueTitle(ah, thunder.getConfig().getSuccess(), songs.length, fintotal)).setItems(songs).setUsers(event.getAuthor()).setColor(event.getGuild().getSelfMember().getColor());
     builder.build().paginate(event.getChannel(), pagenum);
   }
 
   private String getQueueTitle(AudioHandler ah, String success, int songslength, long total) {
     StringBuilder sb = new StringBuilder();
     if (ah.getPlayer().getPlayingTrack() != null) {
-      sb.append(ah.getPlayer().isPaused() ? Main.PAUSE_EMOJI : Main.PLAY_EMOJI)
-          .append(" **")
-          .append(ah.getPlayer().getPlayingTrack().getInfo().title)
-          .append("**\n");
+      sb.append(ah.getPlayer().isPaused() ? Main.PAUSE_EMOJI : Main.PLAY_EMOJI).append(" **").append(ah.getPlayer().getPlayingTrack().getInfo().title).append("**\n");
     }
-    return FormatUtil.filterEveryone(
-        sb.append(success)
-            .append(" Current Queue | ")
-            .append(songslength)
-            .append(" entries | `")
-            .append(FormatUtil.formatTime(total))
-            .append("` ")
-            .toString());
+    return FormatUtil.filterEveryone(sb.append(success).append(" Current Queue | ").append(songslength).append(" entries | `").append(FormatUtil.formatTime(total)).append("` ").toString());
   }
 }

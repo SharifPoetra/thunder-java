@@ -33,7 +33,6 @@ public class OtherUtil {
 
   public static String scrub(String string, boolean encodeBlank) {
     string = string.replaceAll("[!@#$%^&*(),.?\":{}|<>]", "");
-
     return encodeBlank ? string.replace(" ", "%20") : string;
   }
 
@@ -42,8 +41,7 @@ public class OtherUtil {
   }
 
   public static String loadResource(Object clazz, String name) {
-    try (BufferedReader reader =
-        new BufferedReader(new InputStreamReader(clazz.getClass().getResourceAsStream(name)))) {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(clazz.getClass().getResourceAsStream(name)))) {
       StringBuilder sb = new StringBuilder();
       reader.lines().forEach(line -> sb.append("\r\n").append(line));
       return sb.toString().trim();
@@ -57,9 +55,7 @@ public class OtherUtil {
     try {
       URL u = new URL(url);
       URLConnection urlConnection = u.openConnection();
-      urlConnection.setRequestProperty(
-          "user-agent",
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36");
+      urlConnection.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36");
       return urlConnection.getInputStream();
     } catch (IOException | IllegalArgumentException ignore) {
     }
@@ -78,18 +74,15 @@ public class OtherUtil {
     ArrayList<Guild> startswith = new ArrayList<>();
     ArrayList<Guild> contains = new ArrayList<>();
     String lowerQuery = query.toLowerCase();
-    jda.getGuilds()
-        .stream()
-        .forEach(
-            (guild) -> {
-              if (guild.getName().equals(query)) exact.add(guild);
-              else if (guild.getName().equalsIgnoreCase(query) && exact.isEmpty())
-                wrongcase.add(guild);
-              else if (guild.getName().toLowerCase().startsWith(lowerQuery) && wrongcase.isEmpty())
-                startswith.add(guild);
-              else if (guild.getName().toLowerCase().contains(lowerQuery) && startswith.isEmpty())
-                contains.add(guild);
-            });
+    jda.getGuilds().stream().forEach((guild) -> {
+      if (guild.getName().equals(query)) exact.add(guild);
+      else if (guild.getName().equalsIgnoreCase(query) && exact.isEmpty())
+        wrongcase.add(guild);
+      else if (guild.getName().toLowerCase().startsWith(lowerQuery) && wrongcase.isEmpty())
+        startswith.add(guild);
+      else if (guild.getName().toLowerCase().contains(lowerQuery) && startswith.isEmpty())
+        contains.add(guild);
+      });
     if (!exact.isEmpty()) return exact;
     if (!wrongcase.isEmpty()) return wrongcase;
     if (!startswith.isEmpty()) return startswith;

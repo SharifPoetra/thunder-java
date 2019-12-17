@@ -42,10 +42,7 @@ public class NowplayingCommand extends MusicCommand {
       event.getChannel().sendMessage(handler.getNoMusicPlaying(event.getJDA())).queue();
       thunder.getNowplayingHandler().clearLastNPMessage(event.getGuild());
     } else {
-      event
-          .getChannel()
-          .sendMessage(m)
-          .queue(msg -> thunder.getNowplayingHandler().setLastNPMessage(msg));
+      event.getChannel().sendMessage(m).queue(msg -> thunder.getNowplayingHandler().setLastNPMessage(msg));
     }
   }
 }

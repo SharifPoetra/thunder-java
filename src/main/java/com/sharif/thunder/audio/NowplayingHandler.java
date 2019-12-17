@@ -76,8 +76,9 @@ public class NowplayingHandler {
   }
 
   // "event"-based methods
-  /*public void onTrackStart(AudioTrack track, AudioHandler handler) {
-  }*/
+
+  // public void onTrackStart(AudioTrack track, AudioHandler handler) {
+  // }
 
   public void onMessageDelete(Guild guild, long messageId) {
     Pair<Long, Long> pair = lastNP.get(guild.getIdLong());

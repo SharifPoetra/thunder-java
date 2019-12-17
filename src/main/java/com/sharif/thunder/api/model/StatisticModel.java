@@ -22,15 +22,33 @@ import lombok.ToString;
 @ToString
 public class StatisticModel {
 
-  @Getter @Setter private long guildCount;
-  @Getter @Setter private long channelCount;
-  @Getter @Setter private long textChannelCount;
-  @Getter @Setter private long voiceChannelCount;
-  @Getter @Setter private long userCount;
-  @Getter @Setter private long botCount;
-  @Getter @Setter private long totalMemory;
-  @Getter @Setter private long freeMemory;
-  @Getter @Setter private long usedMemory;
+  @Getter 
+  @Setter 
+  private long guildCount;
+  @Getter
+  @Setter 
+  private long channelCount;
+  @Getter
+  @Setter
+  private long textChannelCount;
+  @Getter
+  @Setter
+  private long voiceChannelCount;
+  @Getter
+  @Setter
+  private long userCount;
+  @Getter 
+  @Setter
+  private long botCount;
+  @Getter
+  @Setter
+  private long totalMemory;
+  @Getter
+  @Setter
+  private long freeMemory;
+  @Getter 
+  @Setter
+  private long usedMemory;
 
   public StatisticModel() {}
 
@@ -44,6 +62,7 @@ public class StatisticModel {
       long totalMemory,
       long freeMemory,
       long usedMemory) {
+
     this.guildCount = guildCount;
     this.channelCount = channelCount;
     this.textChannelCount = textChannelCount;

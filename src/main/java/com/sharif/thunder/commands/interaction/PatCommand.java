@@ -36,8 +36,7 @@ public class PatCommand extends InteractionCommand {
     this.name = "pat";
     this.help = "Pats the specified user.";
     this.arguments = new Argument[] {new Argument("user", Argument.Type.USER, true)};
-    this.botPermissions =
-        new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
+    this.botPermissions = new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
   }
 
   @Override
@@ -45,29 +44,14 @@ public class PatCommand extends InteractionCommand {
     try {
       event.getChannel().sendTyping().queue();
       User user = (User) args[0];
-      byte[] data =
-          NetworkUtil.download(
-              "https://emilia.shrf.xyz/api/pat", "Bearer " + thunder.getConfig().getEmiliaKey());
-      event
-          .getChannel()
-          .sendFile(data, "pat.gif")
-          .embed(
-              new EmbedBuilder()
-                  .setAuthor(
-                      event.getAuthor().getName()
-                          + " pets "
-                          + user.getName()
-                          + "! "
-                          + RandomUtil.randomElement(msg),
-                      null,
-                      event.getAuthor().getEffectiveAvatarUrl())
-                  .setColor(event.getGuild().getSelfMember().getColor())
-                  .setImage("attachment://pat.gif")
-                  .build())
-          .queue();
+      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/pat", "Bearer " + thunder.getConfig().getEmiliaKey());
+      event.getChannel().sendFile(data, "pat.gif").embed(new EmbedBuilder()
+        .setAuthor(event.getAuthor().getName() + " pets " + user.getName() + "! " + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
+        .setColor(event.getGuild().getSelfMember().getColor())
+        .setImage("attachment://pat.gif")
+        .build()).queue();
     } catch (Exception ex) {
-      SenderUtil.replyError(
-          event, "Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }
