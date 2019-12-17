@@ -77,18 +77,17 @@ public abstract class DataSource {
   public void setToWrite() {
     if (!writeScheduled) {
       writeScheduled = true;
-      filewriting.submit(
-          new Thread() {
-            @Override
-            public void run() {
-              try {
-                Thread.sleep(30000);
-              } catch (InterruptedException ex) {
-              }
-              write();
-              writeScheduled = false;
-            }
-          });
+      filewriting.submit(new Thread() {
+        @Override
+        public void run() {
+          try {
+            Thread.sleep(30000);
+          } catch (InterruptedException ex) {
+          }
+          write();
+          writeScheduled = false;
+        }
+      });
     }
   }
 
@@ -103,9 +102,7 @@ public abstract class DataSource {
     }
     BufferedReader reader = null;
     try {
-      reader =
-          new BufferedReader(
-              new FileReader(config.getDatabaseFolder() + File.separatorChar + filename));
+      reader = new BufferedReader(new FileReader(config.getDatabaseFolder() + File.separatorChar + filename));
     } catch (FileNotFoundException e) {
       System.err.println("WARNING - " + filename + " not found : " + e.toString());
     }
@@ -125,12 +122,9 @@ public abstract class DataSource {
         reader.close();
         synchronized (data) {
           data.clear();
-          newData
-              .stream()
-              .forEach(
-                  (item) -> {
-                    data.put(generateKey.apply(item), item);
-                  });
+          newData.stream().forEach((item) -> {
+            data.put(generateKey.apply(item), item);
+          });
         }
         return true;
       } catch (IOException e) {
@@ -145,18 +139,15 @@ public abstract class DataSource {
     synchronized (data) {
       copy = new HashMap<>(data);
     }
-    try (BufferedWriter writer =
-        new BufferedWriter(
-            new FileWriter(config.getDatabaseFolder() + File.separatorChar + filename))) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(config.getDatabaseFolder() + File.separatorChar + filename))) {
       for (String[] s : copy.values()) {
         String str = s[0];
         for (int i = 1; i < s.length; i++) {
           str += (char) 31;
           if (s[i] != null)
-            str +=
-                s[i].replace((char) 30 + "", "")
-                    .replace((char) 31 + "", "")
-                    .replace("\n", (char) 30 + "");
+            str += s[i].replace((char) 30 + "", "")
+            .replace((char) 31 + "", "")
+            .replace("\n", (char) 30 + "");
         }
         writer.write(str);
         writer.newLine();
@@ -168,10 +159,7 @@ public abstract class DataSource {
     }
 
     try {
-      Files.copy(
-          new File(config.getDatabaseFolder() + File.separatorChar + filename).toPath(),
-          new File("DataCopies" + File.separatorChar + filename).toPath(),
-          StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(new File(config.getDatabaseFolder() + File.separatorChar + filename).toPath(), new File("DataCopies" + File.separatorChar + filename).toPath(), StandardCopyOption.REPLACE_EXISTING);
     } catch (IOException e) {
       System.err.println("Error making backup of " + filename + " : " + e.toString());
     }

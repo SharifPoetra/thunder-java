@@ -23,11 +23,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class AsyncInfoMonitor {
-  private static final ScheduledExecutorService POOL =
-      Executors.newSingleThreadScheduledExecutor(
-          task -> {
-            return new Thread(task, "AsyncInfoMonitor");
-          });
+  private static final ScheduledExecutorService POOL = Executors.newSingleThreadScheduledExecutor(task -> {
+    return new Thread(task, "AsyncInfoMonitor");
+  });
 
   private static final double gb = 1024 * 1024 * 1024;
   private static int availableProcessors = Runtime.getRuntime().availableProcessors();
@@ -106,22 +104,18 @@ public class AsyncInfoMonitor {
     lastSystemTime = System.nanoTime();
     lastProcessCpuTime = calculateProcessCpuTime(os);
 
-    POOL.scheduleAtFixedRate(
-        () -> {
-          threadCount = thread.getThreadCount();
-          availableProcessors = r.availableProcessors();
-          freeMemory = Runtime.getRuntime().freeMemory() / mb;
-          maxMemory = Runtime.getRuntime().maxMemory() / mb;
-          totalMemory = Runtime.getRuntime().totalMemory() / mb;
-          cpuUsage = calculateCpuUsage(os);
-          vpsCPUUsage = getInstanceCPUUsage(os);
-          vpsFreeMemory = calculateVPSFreeMemory(os);
-          vpsMaxMemory = calculateVPSMaxMemory(os);
-          vpsUsedMemory = vpsMaxMemory - vpsFreeMemory;
-        },
-        1,
-        1,
-        TimeUnit.SECONDS);
+    POOL.scheduleAtFixedRate(() -> {
+      threadCount = thread.getThreadCount();
+      availableProcessors = r.availableProcessors();
+      freeMemory = Runtime.getRuntime().freeMemory() / mb;
+      maxMemory = Runtime.getRuntime().maxMemory() / mb;
+      totalMemory = Runtime.getRuntime().totalMemory() / mb;
+      cpuUsage = calculateCpuUsage(os);
+      vpsCPUUsage = getInstanceCPUUsage(os);
+      vpsFreeMemory = calculateVPSFreeMemory(os);
+      vpsMaxMemory = calculateVPSMaxMemory(os);
+      vpsUsedMemory = vpsMaxMemory - vpsFreeMemory;
+    }, 1, 1, TimeUnit.SECONDS);
     started = true;
   }
 
@@ -129,8 +123,7 @@ public class AsyncInfoMonitor {
     long systemTime = System.nanoTime();
     double processCpuTime = calculateProcessCpuTime(os);
 
-    double cpuUsage =
-        (processCpuTime - lastProcessCpuTime) / ((double) (systemTime - lastSystemTime));
+    double cpuUsage = (processCpuTime - lastProcessCpuTime) / ((double) (systemTime - lastSystemTime));
 
     lastSystemTime = systemTime;
     lastProcessCpuTime = processCpuTime;
