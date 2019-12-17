@@ -66,7 +66,7 @@ public abstract class Command {
       EmbedBuilder eb = new EmbedBuilder();
       eb.setColor(event.getGuild().getSelfMember().getColor());
       eb.setAuthor("Available help for " + name + " command:", null, event.getGuild().getSelfMember().getUser().getEffectiveAvatarUrl());
-      eb.addField("Usage:", "`" + Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix() + name + Argument.arrayToString(arguments) + "`", true);
+      eb.addField("Usage:", "`" + Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix() == null ? config.getPrefix() : Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix() + name + Argument.arrayToString(arguments) + "`", true);
       if (aliases.length > 0) {
         eb.addField("Aliases", "`" + String.join("`, `", aliases) + "`", true);
       }
@@ -77,7 +77,7 @@ public abstract class Command {
         for (Command child : children) {
           subSb
               .append("`")
-              .append(Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix())
+              .append(Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix() == null ? config.getPrefix() : Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix())
               .append(name)
               .append(" ")
               .append(child.name)
@@ -198,7 +198,7 @@ public abstract class Command {
               String.format(
                   config.getError()
                       + " **Too few arguments provided**\nTry using `"
-                      + Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix()
+                      + Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix() == null ? config.getPrefix() : Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix()
                       + "help %s` for more information.",
                   name));
           return;
