@@ -19,7 +19,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sharif.thunder.utils.FormatUtil;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import java.util.Collection;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import lombok.AccessLevel;
