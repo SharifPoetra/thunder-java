@@ -28,6 +28,7 @@ import java.time.zone.ZoneRulesException;
 import java.util.Collection;
 import java.util.Collections;
 import net.dv8tion.jda.api.entities.Guild;
+import lombok.Getter;
 
 public class GuildSettingsManager extends DataManager {
   public static final int PREFIX_MAX_LENGTH = 40;
@@ -108,7 +109,9 @@ public class GuildSettingsManager extends DataManager {
   }
 
   public class GuildSettings {
+    @Getter
     private final String prefix;
+    @Getter
     private final ZoneId timezone;
 
     private GuildSettings() {
@@ -128,15 +131,6 @@ public class GuildSettingsManager extends DataManager {
           zid = DEFAULT_TIMEZONE;
         }
       this.timezone = zid;
-    }
-
-    public ZoneId getTimezone() {
-      return timezone;
-    }
-
-    public Collection<String> getPrefixes() {
-      if (prefix == null || prefix.isEmpty()) return null;
-      return Collections.singleton(prefix);
     }
   }
 }

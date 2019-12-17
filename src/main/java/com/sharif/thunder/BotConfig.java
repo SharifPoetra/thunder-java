@@ -26,12 +26,11 @@ import lombok.Getter;
 
 @Getter
 public class BotConfig {
+
   @Getter(AccessLevel.NONE)
   private Path path = null;
-
   private String token;
   private String prefix;
-  private String altPrefix;
   private String serverInvite;
   private String success;
   private String warning;
@@ -48,10 +47,8 @@ public class BotConfig {
   private String dbPass;
   private String defaultLyrics;
   private String emiliaKey;
-
   @Getter(AccessLevel.NONE)
   private boolean stayInChannel;
-
   @Getter(AccessLevel.NONE)
   private boolean npImages;
 
@@ -61,9 +58,7 @@ public class BotConfig {
   public BotConfig() {
 
     try {
-
-      path =
-          Paths.get(System.getProperty("config.file", System.getProperty("config", "config.txt")));
+      path = Paths.get(System.getProperty("config.file", System.getProperty("config", "config.txt")));
       if (path.toFile().exists()) {
         if (System.getProperty("config.file") == null)
           System.setProperty("config.file", System.getProperty("config", "config.txt"));
@@ -76,7 +71,6 @@ public class BotConfig {
       ownerId = config.getLong("owner");
       serverInvite = config.getString("serverinvite");
       prefix = config.getString("prefix");
-      altPrefix = config.getString("altprefix");
       success = config.getString("success");
       warning = config.getString("warning");
       error = config.getString("error");
@@ -97,8 +91,7 @@ public class BotConfig {
       emiliaKey = config.getString("emiliakey");
 
     } catch (Exception ex) {
-      System.out.println(
-          ex + ": " + ex.getMessage() + "\n\nConfig Location: " + path.toAbsolutePath().toString());
+      System.out.println(ex + ": " + ex.getMessage() + "\n\nConfig Location: " + path.toAbsolutePath().toString());
     }
   }
 
