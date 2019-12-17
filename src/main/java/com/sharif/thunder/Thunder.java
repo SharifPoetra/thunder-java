@@ -22,12 +22,10 @@ import com.sharif.thunder.audio.PlayerManager;
 import com.sharif.thunder.databasemanager.Database;
 import com.sharif.thunder.playlist.PlaylistLoader;
 import java.time.OffsetDateTime;
-import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 
