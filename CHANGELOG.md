@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.22.0] - (unreleased)
 ### Added
 - Add `resetfilters` command
- 
+- Add `prefix` command to set the custom prefix per guild
+
 ### Changed
 - Rename `about` command to `stats` and improve the usage statistics
 
