@@ -91,6 +91,7 @@ public class Main extends ListenerAdapter {
     commands = new Command[] {
       // administration
       new SetInVCRoleCommand(inVcRoles),
+      new PrefixCommand(thunder),
       // fun
       new SayCommand(thunder),
       new BobRossCommand(thunder),
