@@ -61,12 +61,17 @@ public abstract class Command {
   protected abstract void execute(Object[] args, MessageReceivedEvent event);
 
   public final void run(String args, MessageReceivedEvent event) {
+    
+    // get a prefixes
+    String strippedMessage = null;
+    String prefix = Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix();
+    if (prefix == null) prefix = config.getPrefix();
 
     if ("help".equalsIgnoreCase(args)) {
       EmbedBuilder eb = new EmbedBuilder();
       eb.setColor(event.getGuild().getSelfMember().getColor());
       eb.setAuthor("Available help for " + name + " command:", null, event.getGuild().getSelfMember().getUser().getEffectiveAvatarUrl());
-      eb.addField("Usage:", "`" + Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix() == null ? config.getPrefix() : Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix() + name + Argument.arrayToString(arguments) + "`", true);
+      eb.addField("Usage:", "`" + prefix + name + Argument.arrayToString(arguments) + "`", true);
       if (aliases.length > 0) {
         eb.addField("Aliases", "`" + String.join("`, `", aliases) + "`", true);
       }
@@ -77,7 +82,7 @@ public abstract class Command {
         for (Command child : children) {
           subSb
               .append("`")
-              .append(Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix() == null ? config.getPrefix() : Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix())
+              .append(prefix)
               .append(name)
               .append(" ")
               .append(child.name)
@@ -198,7 +203,7 @@ public abstract class Command {
               String.format(
                   config.getError()
                       + " **Too few arguments provided**\nTry using `"
-                      + Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix() == null ? config.getPrefix() : Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix()
+                      + prefix
                       + "help %s` for more information.",
                   name));
           return;
