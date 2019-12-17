@@ -201,7 +201,7 @@ public class Main extends ListenerAdapter {
 
     // get a prefixes
     String strippedMessage = null;
-    String prefix = thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix();
+    String prefix = Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getPrefix();
     if (prefix == null) prefix = config.getPrefix();
     if (event.getMessage().getContentRaw().startsWith(prefix.toLowerCase())) {
       strippedMessage = event.getMessage().getContentRaw().substring(prefix.length()).trim();

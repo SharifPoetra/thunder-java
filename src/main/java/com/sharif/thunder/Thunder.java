@@ -50,7 +50,7 @@ public class Thunder {
   @Getter
   private final EventWaiter waiter;
   @Getter
-  private final Database database;
+  private static Database database;
   
   public Thunder(EventWaiter waiter, BotConfig config, Database database) throws Exception {
     this.waiter = waiter;
@@ -74,9 +74,5 @@ public class Thunder {
 
   public void setJDA(JDA jda) {
     this.jda = jda;
-  }
-  
-  public String getPrefix(Guild guild) {
-    return database.guildSettings.getSettings(guild).getPrefix();
   }
 }
