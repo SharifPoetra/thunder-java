@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.22.0] - (unreleased)
 ### Added
 - Add `resetfilters` command
+- Custom prefixes
 - Add `prefix` command to set the custom prefix per guild
 
 ### Changed
