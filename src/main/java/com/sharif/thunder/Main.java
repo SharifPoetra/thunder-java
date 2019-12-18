@@ -169,7 +169,7 @@ public class Main extends ListenerAdapter {
   }
 
   @Override
-  public void onShutdown(@NotNull ShutdownEvent event) {
+  public void onShutdown(ShutdownEvent event) {
     afks.shutdown();
     inVcRoles.shutdown();
   }
