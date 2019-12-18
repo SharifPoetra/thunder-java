@@ -40,7 +40,7 @@ public class DatabaseConnector {
     try {
       for (Field field : this.getClass().getFields()) {
         if (field.get(this).getClass().getSuperclass() == DataManager.class) {
-          DataManager manager = DataManager.class.cast(field.get(this));
+          DataManager manager = (DataManager) field.get(this);
           if (!connection.getMetaData().getTables(null, null, manager.getTableName(), null).next()) {
             LOG.info("Creating table: " + manager.getTableName());
             Statement s = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);

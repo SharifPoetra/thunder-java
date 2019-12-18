@@ -29,7 +29,7 @@ class ChooseCommand(thunder: Thunder) : FunCommand() {
         this.arguments = arrayOf<Argument>(Argument("items", Argument.Type.LONGSTRING, true))
     }
 
-    protected override fun execute(args: Array<Any>, event: MessageReceivedEvent) {
+    override fun execute(args: Array<Any>, event: MessageReceivedEvent) {
     val items = args[0] as String
     val item = items.split((" ").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
     if (item.size == 1) {

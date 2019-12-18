@@ -32,7 +32,7 @@ public class ThunderApi {
   private static Thunder thunder;
 
   public ThunderApi(Thunder thunder) {
-    this.thunder = thunder;
+    ThunderApi.thunder = thunder;
   }
 
   public ThunderApi start() {
