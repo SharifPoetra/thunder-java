@@ -34,8 +34,7 @@ public class AFKCommand extends UtilitiesCommand {
   @Override
   protected void execute(Object[] args, MessageReceivedEvent event) {
     String message = (String) args[0];
-    afks.set(new String[] {event.getAuthor().getId(), message == null ? null : message});
-    SenderUtil.reply(
-        event, "⌨️ | " + event.getAuthor().getAsMention() + ", I've set you to AFK mode.");
+    afks.set(new String[] {event.getAuthor().getId(), message});
+    SenderUtil.reply(event, "⌨️ | " + event.getAuthor().getAsMention() + ", I've set you to AFK mode.");
   }
 }

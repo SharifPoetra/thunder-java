@@ -34,6 +34,7 @@ public class ShuffleCommand extends MusicCommand {
   @Override
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+    assert handler != null;
     int s = handler.getQueue().shuffle(event.getAuthor().getIdLong());
     switch (s) {
       case 0:

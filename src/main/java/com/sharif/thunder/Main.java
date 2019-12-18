@@ -47,6 +47,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -168,24 +169,20 @@ public class Main extends ListenerAdapter {
   }
 
   @Override
-  public void onShutdown(ShutdownEvent event) {
+  public void onShutdown(@NotNull ShutdownEvent event) {
     afks.shutdown();
     inVcRoles.shutdown();
   }
 
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
-    if (event.getAuthor() == null) return;
-
     if (afks.get(event.getAuthor().getId()) != null) {
       event.getChannel().sendMessage(event.getAuthor().getAsMention() + " Welcome back, I have removed your AFK status.").queue();
       afks.remove(event.getAuthor().getId());
     }
     if (event.getChannelType() != ChannelType.PRIVATE && !event.getAuthor().isBot()) {
       String relate = "__" + event.getGuild().getName() + "__ <#" + event.getTextChannel().getId() + "> **" + event.getAuthor().getAsTag() + "**:\n" + event.getMessage().getContentRaw();
-      event.getMessage().getMentionedUsers().stream().filter((u) -> (afks.get(u.getId()) != null)).forEach((u) -> {
-        SenderUtil.sendDM(u, relate);
-      });
+      event.getMessage().getMentionedUsers().stream().filter((u) -> (afks.get(u.getId()) != null)).forEach((u) -> SenderUtil.sendDM(u, relate));
     }
     if (event.getChannelType() != ChannelType.PRIVATE && !event.getMessage().getMentionedUsers().isEmpty() && !event.getAuthor().isBot()) {
       StringBuilder builder = new StringBuilder();

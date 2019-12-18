@@ -73,25 +73,17 @@ public class EmotesCommand extends UtilitiesCommand {
     eb.setThumbnail(url);
     eb.setColor(event.getGuild().getSelfMember().getColor());
 
-    DateTimeFormatter formatter =
-        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
-            .withZone(TimeZone.getTimeZone("UTC").toZoneId());
+    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withZone(TimeZone.getTimeZone("UTC").toZoneId());
 
     String date = TimeUtil.getTimeCreated(MiscUtil.parseSnowflake(id)).format(formatter);
 
     Emote emote = event.getJDA().getEmoteById(id);
     if (emote == null) {
       eb.setTitle("Emoji info");
-      eb.setDescription(
-          String.format(
-              "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
-              "???", date, id, "???", url));
+      eb.setDescription(String.format("Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s", "???", date, id, "???", url));
     } else {
       eb.setTitle("Emoji info");
-      eb.setDescription(
-          String.format(
-              "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
-              emote.getName(), date, id, emote.getGuild(), url));
+      eb.setDescription(String.format("Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s", emote.getName(), date, id, emote.getGuild(), url));
     }
     event.getChannel().sendMessage(eb.build()).queue();
   }
@@ -103,25 +95,17 @@ public class EmotesCommand extends UtilitiesCommand {
     eb.setThumbnail(url);
     eb.setColor(event.getGuild().getSelfMember().getColor());
 
-    DateTimeFormatter formatter =
-        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
-            .withZone(TimeZone.getTimeZone("UTC").toZoneId());
+    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withZone(TimeZone.getTimeZone("UTC").toZoneId());
 
     String date = TimeUtil.getTimeCreated(MiscUtil.parseSnowflake(id)).format(formatter);
 
     Emote emote = event.getJDA().getEmoteById(id);
     if (emote == null) {
       eb.setTitle("Emoji info");
-      eb.setDescription(
-          String.format(
-              "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
-              "???", date, id, "???", url));
+      eb.setDescription(String.format("Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s", "???", date, id, "???", url));
     } else {
       eb.setTitle("Emoji info");
-      eb.setDescription(
-          String.format(
-              "Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s",
-              emote.getName(), date, id, emote.getGuild(), url));
+      eb.setDescription(String.format("Name: `%s`\n" + "Created at: `%s`\n" + "ID: `%s`\n" + "Guild: `%s`\n" + "URL: %s", emote.getName(), date, id, emote.getGuild(), url));
     }
     event.getChannel().sendMessage(eb.build()).queue();
   }
@@ -133,27 +117,20 @@ public class EmotesCommand extends UtilitiesCommand {
       SenderUtil.replyError(event, "Invalid emote, or input is too long");
     } else {
       StringBuilder builder = new StringBuilder("Emoji/Character info:");
-      input
-          .codePoints()
-          .forEachOrdered(
-              code -> {
-                char[] chars = Character.toChars(code);
-                String hex = Integer.toHexString(code).toUpperCase();
-                while (hex.length() < 4) hex = "0" + hex;
-                builder.append("\n`\\u").append(hex).append("`   ");
-                if (chars.length > 1) {
-                  String hex0 = Integer.toHexString(chars[0]).toUpperCase();
-                  String hex1 = Integer.toHexString(chars[1]).toUpperCase();
-                  while (hex0.length() < 4) hex0 = "0" + hex0;
-                  while (hex1.length() < 4) hex1 = "0" + hex1;
-                  builder.append("[`\\u").append(hex0).append("\\u").append(hex1).append("`]  ");
-                }
-                builder
-                    .append(String.valueOf(chars))
-                    .append("   _")
-                    .append(Character.getName(code))
-                    .append("_");
-              });
+      input.codePoints().forEachOrdered(code -> {
+        char[] chars = Character.toChars(code);
+        String hex = Integer.toHexString(code).toUpperCase();
+        while (hex.length() < 4) hex = "0" + hex;
+        builder.append("\n`\\u").append(hex).append("`   ");
+        if (chars.length > 1) {
+          String hex0 = Integer.toHexString(chars[0]).toUpperCase();
+          String hex1 = Integer.toHexString(chars[1]).toUpperCase();
+          while (hex0.length() < 4) hex0 = "0" + hex0;
+          while (hex1.length() < 4) hex1 = "0" + hex1;
+          builder.append("[`\\u").append(hex0).append("\\u").append(hex1).append("`]  ");
+        }
+        builder.append(String.valueOf(chars)).append("   _").append(Character.getName(code)).append("_");
+      });
       eb.setDescription(builder.toString());
       event.getChannel().sendMessage(eb.build()).queue();
     }

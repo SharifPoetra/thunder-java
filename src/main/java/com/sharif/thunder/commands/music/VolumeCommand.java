@@ -39,10 +39,10 @@ public class VolumeCommand extends MusicCommand {
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     String vo = (String) args[0];
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+    assert handler != null;
     int volume = handler.getPlayer().getVolume();
     if (vo == null) {
-      SenderUtil.reply(
-          event, FormatUtil.volumeIcon(volume) + " Current volume is `" + volume + "`");
+      SenderUtil.reply(event, FormatUtil.volumeIcon(volume) + " Current volume is `" + volume + "`");
     } else {
       int nvolume;
       try {
@@ -54,14 +54,7 @@ public class VolumeCommand extends MusicCommand {
         SenderUtil.replyError(event, "Volume must be a valid integer between 0 and 150!");
       else {
         handler.getPlayer().setVolume(nvolume);
-        SenderUtil.reply(
-            event,
-            FormatUtil.volumeIcon(nvolume)
-                + " Volume changed from `"
-                + volume
-                + "` to `"
-                + nvolume
-                + "`");
+        SenderUtil.reply(event, FormatUtil.volumeIcon(nvolume) + " Volume changed from `" + volume + "` to `" + nvolume + "`");
       }
     }
   }

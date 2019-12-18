@@ -22,6 +22,8 @@ import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.Objects;
+
 public class SkipCommand extends MusicCommand {
   public SkipCommand(Thunder thunder) {
     super(thunder);
@@ -36,22 +38,12 @@ public class SkipCommand extends MusicCommand {
   @Override
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+    assert handler != null;
     if (event.getAuthor().getIdLong() == handler.getRequester()) {
-      SenderUtil.replySuccess(
-          event, "Skipped **" + handler.getPlayer().getPlayingTrack().getInfo().title + "**");
+      SenderUtil.replySuccess(event, "Skipped **" + handler.getPlayer().getPlayingTrack().getInfo().title + "**");
       handler.stopTrack();
     } else {
-      int listeners =
-          (int)
-              event
-                  .getGuild()
-                  .getSelfMember()
-                  .getVoiceState()
-                  .getChannel()
-                  .getMembers()
-                  .stream()
-                  .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened())
-                  .count();
+      int listeners = (int) event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers().stream().filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened()).count();
       String msg;
       if (handler.getVotes().contains(event.getAuthor().getId()))
         msg = thunder.getConfig().getWarning() + " You already voted to skip this song `[";
@@ -59,32 +51,12 @@ public class SkipCommand extends MusicCommand {
         msg = thunder.getConfig().getSuccess() + " You voted to skip the song `[";
         handler.getVotes().add(event.getAuthor().getId());
       }
-      int skippers =
-          (int)
-              event
-                  .getGuild()
-                  .getSelfMember()
-                  .getVoiceState()
-                  .getChannel()
-                  .getMembers()
-                  .stream()
-                  .filter(m -> handler.getVotes().contains(m.getUser().getId()))
-                  .count();
+      int skippers = (int) event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers().stream().filter(m -> handler.getVotes().contains(m.getUser().getId())).count();
       int required = (int) Math.ceil(listeners * .55);
       msg += skippers + " votes, " + required + "/" + listeners + " needed]`";
       if (skippers >= required) {
         User u = event.getJDA().getUserById(handler.getRequester());
-        msg +=
-            "\n"
-                + thunder.getConfig().getSuccess()
-                + " Skipped **"
-                + handler.getPlayer().getPlayingTrack().getInfo().title
-                + "**"
-                + (handler.getRequester() == 0
-                    ? ""
-                    : " (requested by "
-                        + (u == null ? "someone" : "**" + u.getName() + "**")
-                        + ")");
+        msg += "\n" + thunder.getConfig().getSuccess() + " Skipped **" + handler.getPlayer().getPlayingTrack().getInfo().title + "**" + (handler.getRequester() == 0 ? "" : " (requested by " + (u == null ? "someone" : "**" + u.getName() + "**") + ")");
         handler.getPlayer().stopTrack();
       }
       SenderUtil.reply(event, msg);

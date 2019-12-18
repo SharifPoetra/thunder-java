@@ -43,52 +43,16 @@ public class StatsCommand extends UtilitiesCommand {
 
   @Override
   protected void execute(Object[] args, MessageReceivedEvent event) {
-    String author =
-        event.getJDA().getUserById(thunder.getConfig().getOwnerId()) == null
-            ? "<@" + thunder.getConfig().getOwnerId() + ">"
-            : event.getJDA().getUserById(thunder.getConfig().getOwnerId()).getName();
+    String author = event.getJDA().getUserById(thunder.getConfig().getOwnerId()) == null ? "<@" + thunder.getConfig().getOwnerId() + ">" : event.getJDA().getUserById(thunder.getConfig().getOwnerId()).getName();
 
-    EmbedBuilder eb =
-        new EmbedBuilder()
+    EmbedBuilder eb = new EmbedBuilder()
             .setColor(event.getGuild().getSelfMember().getColor())
-            .setAuthor(
-                event.getJDA().getSelfUser().getName() + " Statistics",
-                null,
-                event.getJDA().getSelfUser().getAvatarUrl())
+            .setAuthor(event.getJDA().getSelfUser().getName() + " Statistics", null, event.getJDA().getSelfUser().getAvatarUrl())
             .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-            .addField(
-                "Users",
-                event.getJDA().getUsers().size()
-                    + " unique\n"
-                    + event.getJDA().getGuilds().stream().mapToInt(g -> g.getMembers().size()).sum()
-                    + " total",
-                true)
-            .addField(
-                "Channels",
-                event.getJDA().getTextChannels().size()
-                    + " Text\n"
-                    + event.getJDA().getVoiceChannels().size()
-                    + " Voice",
-                true)
-            .addField(
-                "Bot Stats",
-                event.getJDA().getGuilds().size()
-                    + " servers\n"
-                    + event.getJDA().getShardInfo()
-                    + "\n"
-                    + event
-                        .getJDA()
-                        .getAudioManagers()
-                        .stream()
-                        .filter(AudioManager::isConnected)
-                        .count()
-                    + " voice connections",
-                true)
-            .addField(
-                "Uptime",
-                FormatUtil.secondsToTime(
-                    thunder.getReadyAt().until(OffsetDateTime.now(), ChronoUnit.SECONDS)),
-                true)
+            .addField("Users", event.getJDA().getUsers().size() + " unique\n" + event.getJDA().getGuilds().stream().mapToInt(g -> g.getMembers().size()).sum() + " total", true)
+            .addField("Channels", event.getJDA().getTextChannels().size() + " Text\n" + event.getJDA().getVoiceChannels().size() + " Voice", true)
+            .addField("Bot Stats", event.getJDA().getGuilds().size() + " servers\n" + event.getJDA().getShardInfo() + "\n" + event.getJDA().getAudioManagers().stream().filter(AudioManager::isConnected).count() + " voice connections", true)
+            .addField("Uptime", FormatUtil.secondsToTime(thunder.getReadyAt().until(OffsetDateTime.now(), ChronoUnit.SECONDS)), true)
             .setFooter("Last restart", null)
             .setTimestamp(thunder.getReadyAt());
     event.getChannel().sendMessage(eb.build()).queue();
@@ -104,28 +68,18 @@ public class StatsCommand extends UtilitiesCommand {
 
     @Override
     public void execute(Object[] args, MessageReceivedEvent event) {
-      event
-          .getChannel()
-          .sendMessage(
-              new EmbedBuilder()
-                  .setAuthor(
-                      event.getJDA().getSelfUser().getName() + "'s usage information",
-                      null,
-                      event.getJDA().getSelfUser().getAvatarUrl())
-                  .setColor(event.getGuild().getSelfMember().getColor())
-                  .setDescription("Hardware and usage information.")
-                  .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-                  .addField("Threads", getThreadCount() + " Threads", true)
-                  .addField(
-                      "Memory Usage",
-                      getTotalMemory() - getFreeMemory() + "MB/" + getMaxMemory() + "MB",
-                      true)
-                  .addField("CPU Cores", getAvailableProcessors() + " Cores", true)
-                  .addField("CPU Usage", String.format("%.2f", getInstanceCPUUsage()) + "%", true)
-                  .addField("Assigned Memory", getTotalMemory() + "MB", true)
-                  .addField("Remaining from assigned", getFreeMemory() + "MB", true)
-                  .build())
-          .queue();
+      event.getChannel().sendMessage(new EmbedBuilder()
+              .setAuthor(event.getJDA().getSelfUser().getName() + "'s usage information", null, event.getJDA().getSelfUser().getAvatarUrl())
+              .setColor(event.getGuild().getSelfMember().getColor())
+              .setDescription("Hardware and usage information.")
+              .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
+              .addField("Threads", getThreadCount() + " Threads", true)
+              .addField("Memory Usage", getTotalMemory() - getFreeMemory() + "MB/" + getMaxMemory() + "MB", true)
+              .addField("CPU Cores", getAvailableProcessors() + " Cores", true)
+              .addField("CPU Usage", String.format("%.2f", getInstanceCPUUsage()) + "%", true)
+              .addField("Assigned Memory", getTotalMemory() + "MB", true)
+              .addField("Remaining from assigned", getFreeMemory() + "MB", true)
+              .build()).queue();
     }
   }
 
@@ -139,25 +93,12 @@ public class StatsCommand extends UtilitiesCommand {
 
     @Override
     public void execute(Object[] args, MessageReceivedEvent event) {
-      EmbedBuilder embedBuilder =
-          new EmbedBuilder()
+      EmbedBuilder embedBuilder = new EmbedBuilder()
               .setColor(event.getGuild().getSelfMember().getColor())
-              .setAuthor(
-                  event.getJDA().getSelfUser().getName() + "'s server usage information",
-                  null,
-                  event.getJDA().getSelfUser().getAvatarUrl())
+              .setAuthor(event.getJDA().getSelfUser().getName() + "'s server usage information", null, event.getJDA().getSelfUser().getAvatarUrl())
               .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
               .addField("CPU Usage", String.format("%.2f", getInstanceCPUUsage()) + "%", true)
-              .addField(
-                  "RAM (TOTAL/FREE/USED)",
-                  String.format("%.2f", getVpsMaxMemory())
-                      + "GB/"
-                      + String.format("%.2f", getVpsFreeMemory())
-                      + "GB/"
-                      + String.format("%.2f", getVpsUsedMemory())
-                      + "GB",
-                  false);
-
+              .addField("RAM (TOTAL/FREE/USED)", String.format("%.2f", getVpsMaxMemory()) + "GB/" + String.format("%.2f", getVpsFreeMemory()) + "GB/" + String.format("%.2f", getVpsUsedMemory()) + "GB", false);
       event.getChannel().sendMessage(embedBuilder.build()).queue();
     }
   }

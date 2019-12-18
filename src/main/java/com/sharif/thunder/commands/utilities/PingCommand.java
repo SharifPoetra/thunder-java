@@ -23,13 +23,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class PingCommand extends UtilitiesCommand {
 
-  private static final String[] pingMessages =
-      new String[] {
-        ":ping_pong::white_small_square::black_small_square::black_small_square::ping_pong:",
-        ":ping_pong::black_small_square::white_small_square::black_small_square::ping_pong:",
-        ":ping_pong::black_small_square::black_small_square::white_small_square::ping_pong:",
-        ":ping_pong::black_small_square::white_small_square::black_small_square::ping_pong:",
-      };
+  private static final String[] pingMessages = new String[] {":ping_pong::white_small_square::black_small_square::black_small_square::ping_pong:", ":ping_pong::black_small_square::white_small_square::black_small_square::ping_pong:", ":ping_pong::black_small_square::black_small_square::white_small_square::ping_pong:", ":ping_pong::black_small_square::white_small_square::black_small_square::ping_pong:"};
 
   private final Thunder thunder;
 
@@ -42,62 +36,33 @@ public class PingCommand extends UtilitiesCommand {
 
   @Override
   protected void execute(Object[] args, MessageReceivedEvent event) {
-
     String fancy = (String) args[0];
-
     if (fancy != null && fancy.matches("fancy")) {
-      event
-          .getChannel()
-          .sendMessage("Checking ping...")
-          .queue(
-              message -> {
-                int pings = 5;
-                int lastResult;
-                int sum = 0, min = 999, max = 0;
-                long start = System.currentTimeMillis();
-                for (int j = 0; j < pings; j++) {
-                  message.editMessage(pingMessages[j % pingMessages.length]).queue();
-                  lastResult = (int) (System.currentTimeMillis() - start);
-                  sum += lastResult;
-                  min = Math.min(min, lastResult);
-                  max = Math.max(max, lastResult);
-                  try {
-                    Thread.sleep(1_500L);
-                  } catch (InterruptedException e) {
-                    e.printStackTrace();
-                  }
-                  start = System.currentTimeMillis();
-                }
-                message
-                    .editMessage(
-                        String.format(
-                            "Average ping: %dms (min: %d, max: %d)  | Websocket: "
-                                + event.getJDA().getGatewayPing()
-                                + "ms",
-                            (int) Math.ceil(sum / 5f),
-                            min,
-                            max))
-                    .queue();
-              });
+      event.getChannel().sendMessage("Checking ping...").queue(message -> {
+          int pings = 5;
+          int lastResult;
+          int sum = 0, min = 999, max = 0;
+          long start = System.currentTimeMillis();
+          for (int j = 0; j < pings; j++) {
+              message.editMessage(pingMessages[j % pingMessages.length]).queue();
+              lastResult = (int) (System.currentTimeMillis() - start);
+              sum += lastResult;
+              min = Math.min(min, lastResult);
+              max = Math.max(max, lastResult);
+              try {
+                  Thread.sleep(1_500L);
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+              start = System.currentTimeMillis();
+          }
+          message.editMessage(String.format("Average ping: %dms (min: %d, max: %d)  | Websocket: " + event.getJDA().getGatewayPing() + "ms", (int) Math.ceil(sum / 5f), min, max)).queue();
+      });
     } else {
-      event
-          .getChannel()
-          .sendMessage("Ping: ...")
-          .queue(
-              m -> {
-                long ping =
-                    event
-                        .getMessage()
-                        .getTimeCreated()
-                        .until(m.getTimeCreated(), ChronoUnit.MILLIS);
-                m.editMessage(
-                        "Ping: "
-                            + ping
-                            + "ms | Websocket: "
-                            + event.getJDA().getGatewayPing()
-                            + "ms")
-                    .queue();
-              });
+      event.getChannel().sendMessage("Ping: ...").queue(m -> {
+          long ping = event.getMessage().getTimeCreated().until(m.getTimeCreated(), ChronoUnit.MILLIS);
+          m.editMessage("Ping: " + ping + "ms | Websocket: " + event.getJDA().getGatewayPing() + "ms").queue();
+      });
     }
   }
 }
