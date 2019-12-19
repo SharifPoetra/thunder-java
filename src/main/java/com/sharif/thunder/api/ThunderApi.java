@@ -46,6 +46,7 @@ public class ThunderApi {
 
     Logger logger = LoggerFactory.getLogger(ThunderApi.class);
 
+    staticFiles.externalLocation(System.getProperty("user.dir"));
     port(3000);
     notFound((req, res) -> {
       res.type("application/json");
