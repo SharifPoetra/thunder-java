@@ -27,7 +27,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
 
 public class Thunder {
 
@@ -50,10 +49,10 @@ public class Thunder {
   @Getter
   private static Database database;
   
-  public Thunder(EventWaiter waiter, BotConfig config, Database database) throws Exception {
+  public Thunder(EventWaiter waiter, BotConfig config, Database database) {
     this.waiter = waiter;
     this.config = config;
-    this.database = database;
+    Thunder.database = database;
     this.playlistLoader = new PlaylistLoader(config);
     this.threadpool = Executors.newSingleThreadScheduledExecutor();
     this.playerManager = new PlayerManager(this);
@@ -71,6 +70,6 @@ public class Thunder {
   }
 
   public void setJDA(JDA jda) {
-    this.jda = jda;
+    Thunder.jda = jda;
   }
 }

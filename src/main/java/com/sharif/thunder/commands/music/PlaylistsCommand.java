@@ -46,10 +46,7 @@ public class PlaylistsCommand extends MusicCommand {
     else {
       StringBuilder builder = new StringBuilder("Available playlists:\n\n");
       list.forEach(str -> builder.append("`").append(str).append("` "));
-      builder
-          .append("\n\nType `")
-          .append(thunder.getConfig().getPrefix())
-          .append("play playlist <name>` to play a playlist");
+      builder.append("\n\nType `").append(thunder.getConfig().getPrefix()).append("play playlist <name>` to play a playlist");
       SenderUtil.replySuccess(event, builder.toString());
     }
   }

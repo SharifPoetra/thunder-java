@@ -63,16 +63,6 @@ public class Argument {
   }
 
   public enum Type {
-    INTEGER,
-    SHORTSTRING,
-    LONGSTRING,
-    TIME,
-    MEMBER,
-    USER,
-    LOCALUSER,
-    BANNEDUSER,
-    TEXTCHANNEL,
-    ROLE,
-    GUILD
+    INTEGER, SHORTSTRING, LONGSTRING, TIME, MEMBER, USER, LOCALUSER, BANNEDUSER, TEXTCHANNEL, ROLE, GUILD
   }
 }

@@ -36,11 +36,6 @@ public class RepeatCommand extends MusicCommand {
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.setRepeating(!handler.isRepeating());
-    SenderUtil.reply(
-        event,
-        thunder.getConfig().getRepeat()
-            + " Repeat mode is now `"
-            + (!handler.isRepeating() ? "disabled" : "enabled")
-            + "`.");
+    SenderUtil.reply(event, thunder.getConfig().getRepeat() + " Repeat mode is now `" + (!handler.isRepeating() ? "disabled" : "enabled") + "`.");
   }
 }

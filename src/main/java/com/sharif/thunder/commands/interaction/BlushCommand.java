@@ -40,25 +40,14 @@ public class BlushCommand extends InteractionCommand {
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
       event.getChannel().sendTyping().queue();
-      byte[] data =
-          NetworkUtil.download(
-              "https://emilia.shrf.xyz/api/blush", "Bearer " + thunder.getConfig().getEmiliaKey());
-      event
-          .getChannel()
-          .sendFile(data, "blush.gif")
-          .embed(
-              new EmbedBuilder()
-                  .setAuthor(
-                      event.getAuthor().getName() + RandomUtil.randomElement(msg),
-                      null,
-                      event.getAuthor().getEffectiveAvatarUrl())
-                  .setColor(event.getGuild().getSelfMember().getColor())
-                  .setImage("attachment://blush.gif")
-                  .build())
-          .queue();
+      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/blush", "Bearer " + thunder.getConfig().getEmiliaKey());
+      event.getChannel().sendFile(data, "blush.gif").embed(new EmbedBuilder()
+        .setAuthor(event.getAuthor().getName() + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
+        .setColor(event.getGuild().getSelfMember().getColor())
+        .setImage("attachment://blush.gif")
+        .build()).queue();
     } catch (Exception ex) {
-      SenderUtil.replyError(
-          event, "Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }

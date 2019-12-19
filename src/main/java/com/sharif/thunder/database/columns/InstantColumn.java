@@ -32,10 +32,7 @@ public class InstantColumn extends SQLColumn<Instant> {
 
   @Override
   public String getDataDescription() {
-    return "BIGINT"
-        + (defaultValue == null ? "" : " DEFAULT " + defaultValue.getEpochSecond())
-        + (nullable ? "" : " NOT NULL")
-        + (primaryKey ? " PRIMARY KEY" : "");
+    return "BIGINT" + (defaultValue == null ? "" : " DEFAULT " + defaultValue.getEpochSecond()) + (nullable ? "" : " NOT NULL") + (primaryKey ? " PRIMARY KEY" : "");
   }
 
   @Override

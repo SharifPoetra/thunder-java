@@ -39,22 +39,13 @@ public class BobRossCommand extends FunCommand {
     try {
       event.getChannel().sendTyping().queue();
       User user = (User) args[0];
-      byte[] data =
-          NetworkUtil.download(
-              "https://emilia.shrf.xyz/api/bob-ross?image=" + user.getEffectiveAvatarUrl(),
-              "Bearer " + thunder.getConfig().getEmiliaKey());
-      event
-          .getChannel()
-          .sendFile(data, "bobross.png")
-          .embed(
-              new EmbedBuilder()
-                  .setColor(event.getMember().getColor())
-                  .setImage("attachment://bobross.png")
-                  .build())
-          .queue();
+      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/bob-ross?image=" + user.getEffectiveAvatarUrl(), "Bearer " + thunder.getConfig().getEmiliaKey());
+      event.getChannel().sendFile(data, "bobross.png").embed(new EmbedBuilder()
+        .setColor(event.getMember().getColor())
+        .setImage("attachment://bobross.png")
+        .build()).queue();
     } catch (Exception ex) {
-      SenderUtil.replyError(
-          event, "Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }

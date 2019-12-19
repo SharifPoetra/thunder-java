@@ -26,41 +26,27 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CryCommand extends InteractionCommand {
   private final Thunder thunder;
-  private String[] msg = {
-    "is crying... :c", "needs a hug...", "is crying... there there...", "cries... :'c"
-  };
+  private String[] msg = {"is crying... :c", "needs a hug...", "is crying... there there...", "cries... :'c"};
 
   public CryCommand(Thunder thunder) {
     this.thunder = thunder;
     this.name = "cry";
     this.help = "Express your emotions.";
-    this.botPermissions =
-        new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
+    this.botPermissions = new Permission[] {Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_EMBED_LINKS};
   }
 
   @Override
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
       event.getChannel().sendTyping().queue();
-      byte[] data =
-          NetworkUtil.download(
-              "https://emilia.shrf.xyz/api/cry", "Bearer " + thunder.getConfig().getEmiliaKey());
-      event
-          .getChannel()
-          .sendFile(data, "cry.gif")
-          .embed(
-              new EmbedBuilder()
-                  .setAuthor(
-                      event.getAuthor().getName() + " " + RandomUtil.randomElement(msg),
-                      null,
-                      event.getAuthor().getEffectiveAvatarUrl())
-                  .setColor(event.getGuild().getSelfMember().getColor())
-                  .setImage("attachment://cry.gif")
-                  .build())
-          .queue();
+      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/cry", "Bearer " + thunder.getConfig().getEmiliaKey());
+      event.getChannel().sendFile(data, "cry.gif").embed(new EmbedBuilder()
+        .setAuthor(event.getAuthor().getName() + " " + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
+        .setColor(event.getGuild().getSelfMember().getColor())
+        .setImage("attachment://cry.gif")
+        .build()).queue();
     } catch (Exception ex) {
-      SenderUtil.replyError(
-          event, "Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }

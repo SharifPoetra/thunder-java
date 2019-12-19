@@ -31,10 +31,7 @@ public class LongColumn extends SQLColumn<Long> {
 
   @Override
   public String getDataDescription() {
-    return "BIGINT"
-        + (defaultValue == null ? "" : " DEFAULT " + defaultValue)
-        + nullable()
-        + (primaryKey ? " PRIMARY KEY" : "");
+    return "BIGINT" + (defaultValue == null ? "" : " DEFAULT " + defaultValue) + nullable() + (primaryKey ? " PRIMARY KEY" : "");
   }
 
   @Override

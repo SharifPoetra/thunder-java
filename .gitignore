@@ -3,6 +3,11 @@
 *.jar
 hs_err_pid*
 
+# IntelliJ
+*.iws
+/.idea
+/out/
+
 # Gradle
 .gradle
 build/

@@ -43,22 +43,16 @@ public class AvatarCommand extends UtilitiesCommand {
       if (member == null) {
         member = event.getMember();
       }
-      event
-          .getChannel()
-          .sendMessage(thunder.getConfig().getSearching() + " Please wait...")
-          .queue(
-              message -> {
-                message.delete().queue();
-                EmbedBuilder eb =
-                    new EmbedBuilder()
-                        .setAuthor(member.getUser().getName() + "'s avatar")
-                        .setColor(member.getColor())
-                        .setImage(member.getUser().getEffectiveAvatarUrl() + "?size=2048");
-                event.getChannel().sendMessage(eb.build()).queue();
-              });
+      event.getChannel().sendMessage(thunder.getConfig().getSearching() + " Please wait...").queue(message -> {
+        message.delete().queue();
+        EmbedBuilder eb = new EmbedBuilder()
+                .setAuthor(member.getUser().getName() + "'s avatar")
+                .setColor(member.getColor())
+                .setImage(member.getUser().getEffectiveAvatarUrl() + "?size=2048");
+        event.getChannel().sendMessage(eb.build()).queue();
+      });
     } catch (Exception e) {
-      SenderUtil.replyError(
-          event, "Something went wrong: `" + e.getMessage() + "` please try again later!");
+      SenderUtil.replyError(event, "Something went wrong: `" + e.getMessage() + "` please try again later!");
     }
   }
 }

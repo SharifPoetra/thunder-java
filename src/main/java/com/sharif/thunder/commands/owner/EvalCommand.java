@@ -50,8 +50,7 @@ public class EvalCommand extends OwnerCommand {
       engine.put("guild", event.getGuild());
       engine.put("channel", event.getChannel());
       engine.put("log", log);
-      SenderUtil.replySuccess(
-          event, "Evaluated Successfully:\n```\n" + engine.eval(toEval) + " ```");
+      SenderUtil.replySuccess(event, "Evaluated Successfully:\n```\n" + engine.eval(toEval) + " ```");
     } catch (Exception e) {
       SenderUtil.replyError(event, "An exception was thrown:\n```\n" + e.getMessage() + " ```");
     }

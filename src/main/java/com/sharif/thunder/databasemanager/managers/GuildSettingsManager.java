@@ -50,54 +50,45 @@ public class GuildSettingsManager extends DataManager {
   // Getters
   public GuildSettings getSettings(Guild guild) {
     if (cache.contains(guild.getIdLong())) return cache.get(guild.getIdLong());
-    GuildSettings settings =
-        read(
-            selectAll(GUILD_ID.is(guild.getIdLong())),
-            rs -> rs.next() ? new GuildSettings(rs) : blankSettings);
+    GuildSettings settings = read(selectAll(GUILD_ID.is(guild.getIdLong())), rs -> rs.next() ? new GuildSettings(rs) : blankSettings);
     cache.put(guild.getIdLong(), settings);
     return settings;
   }
 
   public boolean hasSettings(Guild guild) {
-    return read(
-        selectAll(GUILD_ID.is(guild.getIdLong())),
-        rs -> {
-          return rs.next();
-        });
+    return read(selectAll(GUILD_ID.is(guild.getIdLong())), rs -> {
+      return rs.next();
+    });
   }
 
   public void setPrefix(Guild guild, String prefix) {
     invalidateCache(guild);
-    readWrite(
-        select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, PREFIX),
-        rs -> {
-          if (rs.next()) {
-            PREFIX.updateValue(rs, prefix);
-            rs.updateRow();
-          } else {
-            rs.moveToInsertRow();
-            GUILD_ID.updateValue(rs, guild.getIdLong());
-            PREFIX.updateValue(rs, prefix);
-            rs.insertRow();
-          }
-        });
+    readWrite(select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, PREFIX), rs -> {
+      if (rs.next()) {
+        PREFIX.updateValue(rs, prefix);
+        rs.updateRow();
+      } else {
+        rs.moveToInsertRow();
+        GUILD_ID.updateValue(rs, guild.getIdLong());
+        PREFIX.updateValue(rs, prefix);
+        rs.insertRow();
+      }
+    });
   }
 
   public void setTimezone(Guild guild, ZoneId zone) {
     invalidateCache(guild);
-    readWrite(
-        select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, TIMEZONE),
-        rs -> {
-          if (rs.next()) {
-            TIMEZONE.updateValue(rs, zone.getId());
-            rs.updateRow();
-          } else {
-            rs.moveToInsertRow();
-            GUILD_ID.updateValue(rs, guild.getIdLong());
-            TIMEZONE.updateValue(rs, zone.getId());
-            rs.insertRow();
-          }
-        });
+    readWrite(select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, TIMEZONE), rs -> {
+      if (rs.next()) {
+        TIMEZONE.updateValue(rs, zone.getId());
+        rs.updateRow();
+      } else {
+        rs.moveToInsertRow();
+        GUILD_ID.updateValue(rs, guild.getIdLong());
+        TIMEZONE.updateValue(rs, zone.getId());
+        rs.insertRow();
+      }
+    });
   }
 
   private void invalidateCache(Guild guild) {

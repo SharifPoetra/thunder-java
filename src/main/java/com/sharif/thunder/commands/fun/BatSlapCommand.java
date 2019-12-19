@@ -39,29 +39,14 @@ public class BatSlapCommand extends FunCommand {
     try {
       event.getChannel().sendTyping().queue();
       User user = (User) args[0];
-      byte[] data =
-          NetworkUtil.download(
-              "https://emilia.shrf.xyz/api/batslap?slapper="
-                  + event.getAuthor().getEffectiveAvatarUrl()
-                  + "&slapped="
-                  + user.getEffectiveAvatarUrl(),
-              "Bearer " + thunder.getConfig().getEmiliaKey());
-      event
-          .getChannel()
-          .sendFile(data, "batslap.png")
-          .embed(
-              new EmbedBuilder()
-                  .setAuthor(
-                      user.getName() + " has been batslapped by " + event.getAuthor().getName(),
-                      null,
-                      null)
-                  .setColor(event.getMember().getColor())
-                  .setImage("attachment://batslap.png")
-                  .build())
-          .queue();
+      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/batslap?slapper=" + event.getAuthor().getEffectiveAvatarUrl() + "&slapped=" + user.getEffectiveAvatarUrl(), "Bearer " + thunder.getConfig().getEmiliaKey());
+      event.getChannel().sendFile(data, "batslap.png").embed(new EmbedBuilder()
+        .setAuthor(user.getName() + " has been batslapped by " + event.getAuthor().getName(), null, null)
+        .setColor(event.getMember().getColor())
+        .setImage("attachment://batslap.png")
+        .build()).queue();
     } catch (Exception ex) {
-      SenderUtil.replyError(
-          event, "Shomething went wrong while fetching the API! Please try again.");
+      SenderUtil.replyError(event, "Shomething went wrong while fetching the API! Please try again.");
       System.out.println(ex);
     }
   }

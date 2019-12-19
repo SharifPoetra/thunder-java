@@ -28,7 +28,7 @@ public class PrefixCommand extends AdministrationCommand {
   private static Thunder thunder;
 
   public PrefixCommand(Thunder thunder) {
-    this.thunder = thunder;
+    PrefixCommand.thunder = thunder;
     this.name = "prefix";
     this.help = "Set the prefix for the bot";
     this.aliases = new String[] {"setprefix"};

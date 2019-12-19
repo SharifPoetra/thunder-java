@@ -52,18 +52,8 @@ public class PlaynextCommand extends MusicCommand {
       SenderUtil.replyWarning(event, "Please include a song title or URL!");
       return;
     }
-    String arg =
-        input.startsWith("<") && input.endsWith(">")
-            ? input.substring(1, input.length() - 1)
-            : input.isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : input;
-    event
-        .getChannel()
-        .sendMessage(loadingEmoji + " Loading... `[" + arg + "]`")
-        .queue(
-            m ->
-                thunder
-                    .getPlayerManager()
-                    .loadItemOrdered(event.getGuild(), arg, new ResultHandler(m, event, false)));
+    String arg = input.startsWith("<") && input.endsWith(">") ? input.substring(1, input.length() - 1) : input.isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : input;
+    event.getChannel().sendMessage(loadingEmoji + " Loading... `[" + arg + "]`").queue(m -> thunder.getPlayerManager().loadItemOrdered(event.getGuild(), arg, new ResultHandler(m, event, false)));
   }
 
   private class ResultHandler implements AudioLoadResultHandler {
@@ -79,36 +69,16 @@ public class PlaynextCommand extends MusicCommand {
 
     private void loadSingle(AudioTrack track) {
       if (thunder.getConfig().isTooLong(track)) {
-        m.editMessage(
-                FormatUtil.filterEveryone(
-                    thunder.getConfig().getWarning()
-                        + " This track (**"
-                        + track.getInfo().title
-                        + "**) is longer than the allowed maximum: `"
-                        + FormatUtil.formatTime(track.getDuration())
-                        + "` > `"
-                        + FormatUtil.formatTime(thunder.getConfig().getMaxSeconds() * 1000)
-                        + "`"))
-            .queue();
+        m.editMessage(FormatUtil.filterEveryone(thunder.getConfig().getWarning() + " This track (**" + track.getInfo().title + "**) is longer than the allowed maximum: `" + FormatUtil.formatTime(track.getDuration()) + "` > `" + FormatUtil.formatTime(thunder.getConfig().getMaxSeconds() * 1000) + "`")).queue();
         return;
       }
       AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
       handler.setAnnouncingChannel(event.getChannel().getIdLong());
       int pos = handler.addTrackToFront(new QueuedTrack(track, event.getAuthor())) + 1;
-      String addMsg =
-          FormatUtil.filterEveryone(
-              thunder.getConfig().getSuccess()
-                  + " Added **"
-                  + track.getInfo().title
-                  + "** (`"
-                  + FormatUtil.formatTime(track.getDuration())
-                  + "`) "
-                  + (pos == 0 ? "" : " to the queue at position " + pos));
-      m.editMessage(addMsg)
-          .queue(
-              (m) -> {
-                OtherUtil.deleteMessageAfter(m, track.getDuration());
-              });
+      String addMsg = FormatUtil.filterEveryone(thunder.getConfig().getSuccess() + " Added **" + track.getInfo().title + "** (`" + FormatUtil.formatTime(track.getDuration()) + "`) " + (pos == 0 ? "" : " to the queue at position " + pos));
+      m.editMessage(addMsg).queue((m) -> {
+        OtherUtil.deleteMessageAfter(m, track.getDuration());
+      });
     }
 
     @Override
@@ -120,10 +90,7 @@ public class PlaynextCommand extends MusicCommand {
     public void playlistLoaded(AudioPlaylist playlist) {
       AudioTrack single;
       if (playlist.getTracks().size() == 1 || playlist.isSearchResult())
-        single =
-            playlist.getSelectedTrack() == null
-                ? playlist.getTracks().get(0)
-                : playlist.getSelectedTrack();
+        single = playlist.getSelectedTrack() == null ? playlist.getTracks().get(0) : playlist.getSelectedTrack();
       else if (playlist.getSelectedTrack() != null) single = playlist.getSelectedTrack();
       else single = playlist.getTracks().get(0);
       loadSingle(single);
@@ -132,22 +99,15 @@ public class PlaynextCommand extends MusicCommand {
     @Override
     public void noMatches() {
       if (ytsearch)
-        m.editMessage(
-                FormatUtil.filterEveryone(
-                    thunder.getConfig().getWarning() + " No results found for `" + input + "`."))
-            .queue();
+        m.editMessage(FormatUtil.filterEveryone(thunder.getConfig().getWarning() + " No results found for `" + input + "`.")).queue();
       else
-        thunder
-            .getPlayerManager()
-            .loadItemOrdered(
-                event.getGuild(), "ytsearch:" + input, new ResultHandler(m, event, true));
+        thunder.getPlayerManager().loadItemOrdered(event.getGuild(), "ytsearch:" + input, new ResultHandler(m, event, true));
     }
 
     @Override
     public void loadFailed(FriendlyException throwable) {
       if (throwable.severity == FriendlyException.Severity.COMMON)
-        m.editMessage(thunder.getConfig().getError() + " Error loading: " + throwable.getMessage())
-            .queue();
+        m.editMessage(thunder.getConfig().getError() + " Error loading: " + throwable.getMessage()).queue();
       else m.editMessage(thunder.getConfig().getError() + " Error loading track.").queue();
     }
   }

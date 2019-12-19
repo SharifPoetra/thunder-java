@@ -36,8 +36,6 @@ public class VaporwaveCommand extends MusicCommand {
   public void doCommand(Object[] args, MessageReceivedEvent event) {
     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
     handler.setVaporwave(!handler.isVaporwave());
-    SenderUtil.replySuccess(
-        event,
-        "Vaporwave mode is now `" + (!handler.isVaporwave() ? "disabled" : "enabled") + "`.");
+    SenderUtil.replySuccess(event, "Vaporwave mode is now `" + (!handler.isVaporwave() ? "disabled" : "enabled") + "`.");
   }
 }

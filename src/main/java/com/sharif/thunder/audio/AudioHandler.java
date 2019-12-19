@@ -59,6 +59,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AudioHandler extends AudioEventAdapter implements AudioSendHandler {
+
   Logger log = LoggerFactory.getLogger(AudioHandler.class);
   private final FairQueue<QueuedTrack> queue = new FairQueue<QueuedTrack>();
   private final List<AudioTrack> defaultQueue = new LinkedList<AudioTrack>();
@@ -68,26 +69,47 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   private final PlayerManager manager;
   private final long guildId;
   private Guild guild;
-
   private AudioFrame lastFrame;
-  @Getter @Setter private long announcingChannel;
-  @Setter private AudioPlayer audioPlayer;
-  @Getter @Setter private float nightcore = 1.0f;
-  @Getter @Setter private boolean karaoke = false;
-  @Getter @Setter private boolean vaporwave = false;
-  @Getter @Setter private boolean repeating = false;
-  @Getter @Setter private float karaokeLevel = 1f;
-  @Getter @Setter private float karaokeMono = 1f;
-  @Getter @Setter private float karaokeWidth = 100f;
-  @Getter @Setter private float karaokeBand = 220f;
+  @Getter
+  @Setter
+  private long announcingChannel;
+  @Setter
+  private AudioPlayer audioPlayer;
+  @Getter
+  @Setter
+  private float nightcore = 1.0f;
+  @Getter
+  @Setter
+  private boolean karaoke = false;
+  @Getter
+  @Setter private boolean vaporwave = false;
+  @Getter
+  @Setter 
+  private boolean repeating = false;
+  @Getter
+  @Setter 
+  private float karaokeLevel = 1f;
+  @Getter
+  @Setter
+  private float karaokeMono = 1f;
+  @Getter
+  @Setter 
+  private float karaokeWidth = 100f;
+  @Getter 
+  @Setter 
+  private float karaokeBand = 220f;
   private static final float[] BASS_BOOST = {
-    0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f,
-    -0.1f
+    0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f
   };
-  @Getter @Setter private boolean bassboost = false;
+  @Getter
+  @Setter 
+  private boolean bassboost = false;
   private boolean deleteMessage = false;
-  @Getter @Setter private int pitch = 0;
-  @Getter @Setter private float tempo = 1.0f;
+  @Getter
+  @Setter 
+  private int pitch = 0;
+  @Getter 
+  @Setter private float tempo = 1.0f;
   private CompletableFuture<Void> task;
 
   @SerializedName("high-quality-nightcore")
@@ -105,8 +127,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   }
 
   public boolean isMusicPlaying(JDA jda) {
-    return guild(jda).getSelfMember().getVoiceState().inVoiceChannel()
-        && audioPlayer.getPlayingTrack() != null;
+    return guild(jda).getSelfMember().getVoiceState().inVoiceChannel() && audioPlayer.getPlayingTrack() != null;
   }
 
   // Methods
@@ -156,8 +177,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   }
 
   public long getRequester() {
-    if (audioPlayer.getPlayingTrack() == null
-        || audioPlayer.getPlayingTrack().getUserData(Long.class) == null) return 0;
+    if (audioPlayer.getPlayingTrack() == null || audioPlayer.getPlayingTrack().getUserData(Long.class) == null) return 0;
     return audioPlayer.getPlayingTrack().getUserData(Long.class);
   }
 
@@ -174,10 +194,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   @Override
   public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
     if (isRepeating()) {
-      queue.add(
-          new QueuedTrack(
-              track.makeClone(),
-              track.getUserData(Long.class) == null ? 0L : track.getUserData(Long.class)));
+      queue.add(new QueuedTrack(track.makeClone(), track.getUserData(Long.class) == null ? 0L : track.getUserData(Long.class)));
     }
 
     if (queue.isEmpty()) {
@@ -201,26 +218,14 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     eb.setFooter("Source: " + track.getInfo().author, null);
     User u = guild.getJDA().getUserById(getRequester());
     try {
-      eb.setDescription(
-          "**["
-              + track.getInfo().title
-              + "]("
-              + track.getInfo().uri
-              + ")** `["
-              + FormatUtil.formatTime(track.getDuration())
-              + "]` ["
-              + u.getAsMention()
-              + "]");
+      eb.setDescription("**[" + track.getInfo().title + "](" + track.getInfo().uri + ")** `[" + FormatUtil.formatTime(track.getDuration()) + "]` [" + u.getAsMention() + "]");
     } catch (Exception e) {
       eb.setDescription("**" + track.getInfo().title + "** [" + u.getAsMention() + "]");
     }
     TextChannel channel = guild.getTextChannelById(announcingChannel);
-    channel
-        .sendMessage(eb.build())
-        .queue(
-            (m) -> {
-              OtherUtil.deleteMessageAfter(m, track.getDuration());
-            });
+    channel.sendMessage(eb.build()).queue((m) -> {
+      OtherUtil.deleteMessageAfter(m, track.getDuration());
+    });
     votes.clear();
     updateFilters(getPlayingTrack());
   }
@@ -231,12 +236,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
       Guild guild = guild(jda);
       AudioTrack track = audioPlayer.getPlayingTrack();
       MessageBuilder mb = new MessageBuilder();
-      mb.append(
-          FormatUtil.filterEveryone(
-              manager.getBot().getConfig().getSuccess()
-                  + " **Now Playing in "
-                  + guild.getSelfMember().getVoiceState().getChannel().getName()
-                  + "...**"));
+      mb.append(FormatUtil.filterEveryone(manager.getBot().getConfig().getSuccess() + " **Now Playing in " + guild.getSelfMember().getVoiceState().getChannel().getName() + "...**"));
       EmbedBuilder eb = new EmbedBuilder();
       eb.setColor(guild.getSelfMember().getColor());
       if (getRequester() != 0) {
@@ -260,17 +260,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         eb.setFooter("Source: " + track.getInfo().author, null);
 
       double progress = (double) audioPlayer.getPlayingTrack().getPosition() / track.getDuration();
-      eb.setDescription(
-          (audioPlayer.isPaused() ? Main.PAUSE_EMOJI : Main.PLAY_EMOJI)
-              + " "
-              + FormatUtil.progressBar(progress)
-              + " `["
-              + FormatUtil.formatTime(track.getPosition())
-              + "/"
-              + FormatUtil.formatTime(track.getDuration())
-              + "]` "
-              + FormatUtil.volumeIcon(audioPlayer.getVolume()));
-
+      eb.setDescription((audioPlayer.isPaused() ? Main.PAUSE_EMOJI : Main.PLAY_EMOJI) + " " + FormatUtil.progressBar(progress) + " `[" + FormatUtil.formatTime(track.getPosition()) + "/" + FormatUtil.formatTime(track.getDuration()) + "]` " + FormatUtil.volumeIcon(audioPlayer.getVolume()));
       return mb.setEmbed(eb.build()).build();
     } else return null;
   }
@@ -278,20 +268,12 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   public Message getNoMusicPlaying(JDA jda) {
     Guild guild = guild(jda);
     return new MessageBuilder()
-        .setContent(
-            FormatUtil.filterEveryone(
-                manager.getBot().getConfig().getSuccess() + " **Now Playing...**"))
-        .setEmbed(
-            new EmbedBuilder()
-                .setTitle("No music playing")
-                .setDescription(
-                    Main.STOP_EMOJI
-                        + " "
-                        + FormatUtil.progressBar(-1)
-                        + " "
-                        + FormatUtil.volumeIcon(audioPlayer.getVolume()))
-                .setColor(guild.getSelfMember().getColor())
-                .build())
+        .setContent(FormatUtil.filterEveryone(manager.getBot().getConfig().getSuccess() + " **Now Playing...**"))
+        .setEmbed(new EmbedBuilder()
+        .setTitle("No music playing")
+        .setDescription(Main.STOP_EMOJI + " " + FormatUtil.progressBar(-1) + " " + FormatUtil.volumeIcon(audioPlayer.getVolume()))
+        .setColor(guild.getSelfMember().getColor())
+        .build())
         .build();
   }
 
@@ -323,8 +305,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   private volatile List<AudioFilter> lastChain;
   private volatile boolean shouldRebuild;
 
-  private List<AudioFilter> getFiltersOrRebuild(
-      AudioTrack audioTrack, AudioDataFormat audioDataFormat, UniversalPcmAudioFilter downstream) {
+  private List<AudioFilter> getFiltersOrRebuild(AudioTrack audioTrack, AudioDataFormat audioDataFormat, UniversalPcmAudioFilter downstream) {
     if (shouldRebuild) {
       lastChain = buildChain(audioTrack, audioDataFormat, downstream);
       shouldRebuild = false;
@@ -333,28 +314,18 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     return lastChain;
   }
 
-  private List<AudioFilter> buildChain(
-      AudioTrack audioTrack, AudioDataFormat format, UniversalPcmAudioFilter downstream) {
+  private List<AudioFilter> buildChain(AudioTrack audioTrack, AudioDataFormat format, UniversalPcmAudioFilter downstream) {
     List<AudioFilter> filterList = new ArrayList<>();
     FloatPcmAudioFilter filter = downstream;
 
-    if (canChangeSpeed(getPlayingTrack())
-        && (vaporwave || nightcore != 1 || tempo != 1 || pitch != 0)) {
+    if (canChangeSpeed(getPlayingTrack()) && (vaporwave || nightcore != 1 || tempo != 1 || pitch != 0)) {
       if (nightcore != 1 && highQualityNightcore) {
-        ResamplingPcmAudioFilter resamplingFilter =
-            new ResamplingPcmAudioFilter(
-                configuration,
-                format.channelCount,
-                filter,
-                format.sampleRate,
-                (int) (format.sampleRate / nightcore));
+        ResamplingPcmAudioFilter resamplingFilter = new ResamplingPcmAudioFilter(configuration, format.channelCount, filter, format.sampleRate, (int) (format.sampleRate / nightcore));
         filterList.add(resamplingFilter);
         filter = resamplingFilter;
       }
 
-      TimescalePcmAudioFilter timescale =
-          new TimescalePcmAudioFilter(filter, format.channelCount, format.sampleRate);
-
+      TimescalePcmAudioFilter timescale = new TimescalePcmAudioFilter(filter, format.channelCount, format.sampleRate);
       if (!highQualityNightcore) {
         timescale.setRate(nightcore);
       }
@@ -370,12 +341,11 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     }
 
     if (karaoke) {
-      KaraokePcmAudioFilter karaokeFilter =
-          new KaraokePcmAudioFilter(filter, format.channelCount, format.sampleRate)
-              .setLevel(karaokeLevel)
-              .setMonoLevel(karaokeMono)
-              .setFilterBand(karaokeBand)
-              .setFilterWidth(karaokeWidth);
+      KaraokePcmAudioFilter karaokeFilter = new KaraokePcmAudioFilter(filter, format.channelCount, format.sampleRate)
+        .setLevel(karaokeLevel)
+        .setMonoLevel(karaokeMono)
+        .setFilterBand(karaokeBand)
+        .setFilterWidth(karaokeWidth);
 
       filterList.add(karaokeFilter);
       filter = karaokeFilter;
@@ -396,8 +366,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 
   private boolean canChangeSpeed(AudioTrack track) {
     if (track == null) return false;
-    if (track.getSourceManager() instanceof YoutubeAudioSourceManager
-        && track.getDuration() == Long.MAX_VALUE) return false;
+    if (track.getSourceManager() instanceof YoutubeAudioSourceManager && track.getDuration() == Long.MAX_VALUE) return false;
     return !(track.getSourceManager() instanceof TwitchStreamAudioSourceManager);
   }
 

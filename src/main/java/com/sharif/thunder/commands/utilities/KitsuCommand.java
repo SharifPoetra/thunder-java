@@ -63,13 +63,8 @@ public class KitsuCommand extends UtilitiesCommand {
       final String startDate = data.attributes.startDate;
       final String endDate = data.attributes.endDate;
 
-      EmbedBuilder embed =
-          new EmbedBuilder()
-              .setTitle(
-                  data.attributes.canonicalTitle + " | " + data.attributes.titles.ja_jp,
-                  data.attributes.youtubeVideoId == null
-                      ? ""
-                      : "https://www.youtube.com/watch?v=" + data.attributes.youtubeVideoId)
+      EmbedBuilder embed = new EmbedBuilder()
+              .setTitle(data.attributes.canonicalTitle + " | " + data.attributes.titles.ja_jp, data.attributes.youtubeVideoId == null ? "" : "https://www.youtube.com/watch?v=" + data.attributes.youtubeVideoId)
               .setImage(data.attributes.posterImage.large)
               .setDescription(data.attributes.synopsis)
               .addField("Age Rating", ageRating, true)
@@ -82,14 +77,10 @@ public class KitsuCommand extends UtilitiesCommand {
               .addField("Start Date", startDate, true)
               .addField("End Date", endDate, true)
               .setColor(event.getGuild().getSelfMember().getColor())
-              .setFooter(
-                  "Requested by " + event.getMember().getEffectiveName(),
-                  event.getMember().getUser().getEffectiveAvatarUrl());
+              .setFooter("Requested by " + event.getMember().getEffectiveName(), event.getMember().getUser().getEffectiveAvatarUrl());
       event.getChannel().sendMessage(embed.build()).queue();
     } catch (Exception ex) {
-      SenderUtil.replyWarning(
-          event,
-          "Shomething went wrong when trying to fetch the kitsu API, Please try with another queries.");
+      SenderUtil.replyWarning(event, "Shomething went wrong when trying to fetch the kitsu API, Please try with another queries.");
       System.out.println("Shomething went wrong when trying to fetch the kitsu API: " + ex);
     }
   }

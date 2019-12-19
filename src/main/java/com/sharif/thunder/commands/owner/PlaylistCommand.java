@@ -33,27 +33,14 @@ public class PlaylistCommand extends OwnerCommand {
     this.name = "playlist";
     this.help = "playlist management.";
     this.hidden = true;
-    this.children =
-        new Command[] {
-          new ListCommand(), new AppendlistCommand(), new DeletelistCommand(), new MakelistCommand()
-        };
+    this.children = new Command[] {new ListCommand(), new AppendlistCommand(), new DeletelistCommand(), new MakelistCommand()};
   }
 
   @Override
   public void execute(Object[] args, MessageReceivedEvent event) {
-    StringBuilder builder =
-        new StringBuilder(thunder.getConfig().getWarning() + " Playlist Management Commands:\n");
+    StringBuilder builder = new StringBuilder(thunder.getConfig().getWarning() + " Playlist Management Commands:\n");
     for (Command cmd : this.children)
-      builder
-          .append("\n`")
-          .append(thunder.getConfig().getPrefix())
-          .append(name)
-          .append(" ")
-          .append(cmd.getName())
-          .append(" ")
-          .append(Argument.arrayToString(cmd.getArguments()))
-          .append("` - ")
-          .append(cmd.getHelp());
+      builder.append("\n`").append(thunder.getConfig().getPrefix()).append(name).append(" ").append(cmd.getName()).append(" ").append(Argument.arrayToString(cmd.getArguments())).append("` - ").append(cmd.getHelp());
     SenderUtil.reply(event, builder.toString());
   }
 
@@ -62,8 +49,7 @@ public class PlaylistCommand extends OwnerCommand {
       this.name = "make";
       this.aliases = new String[] {"create"};
       this.help = "makes a new playlist";
-      this.arguments =
-          new Argument[] {new Argument("name", Argument.Type.SHORTSTRING, true, 3, 20)};
+      this.arguments = new Argument[] {new Argument("name", Argument.Type.SHORTSTRING, true, 3, 20)};
     }
 
     @Override
@@ -75,8 +61,7 @@ public class PlaylistCommand extends OwnerCommand {
           thunder.getPlaylistLoader().createPlaylist(pname);
           SenderUtil.replySuccess(event, "Successfully created playlist `" + pname + "`!");
         } catch (IOException e) {
-          SenderUtil.replyError(
-              event, "I was unable to create the playlist: " + e.getLocalizedMessage());
+          SenderUtil.replyError(event, "I was unable to create the playlist: " + e.getLocalizedMessage());
         }
       } else SenderUtil.replyError(event, "Playlist `" + pname + "` already exists!");
     }
@@ -87,8 +72,7 @@ public class PlaylistCommand extends OwnerCommand {
       this.name = "delete";
       this.aliases = new String[] {"remove"};
       this.help = "deletes an existing playlist";
-      this.arguments =
-          new Argument[] {new Argument("name", Argument.Type.SHORTSTRING, true, 3, 20)};
+      this.arguments = new Argument[] {new Argument("name", Argument.Type.SHORTSTRING, true, 3, 20)};
     }
 
     @Override
@@ -114,10 +98,7 @@ public class PlaylistCommand extends OwnerCommand {
       this.name = "append";
       this.aliases = new String[] {"add"};
       this.help = "appends songs to an existing playlist";
-      this.arguments =
-          new Argument[] {
-            new Argument("name> <URL> | <URL> | <...", Argument.Type.LONGSTRING, true)
-          };
+      this.arguments = new Argument[] {new Argument("name> <URL> | <URL> | <...", Argument.Type.LONGSTRING, true)};
     }
 
     @Override
@@ -142,11 +123,9 @@ public class PlaylistCommand extends OwnerCommand {
         }
         try {
           thunder.getPlaylistLoader().writePlaylist(pname, builder.toString());
-          SenderUtil.replySuccess(
-              event, "Successfully added " + urls.length + " items to playlist `" + pname + "`!");
+          SenderUtil.replySuccess(event, "Successfully added " + urls.length + " items to playlist `" + pname + "`!");
         } catch (IOException e) {
-          SenderUtil.replyError(
-              event, "I was unable to append to the playlist: " + e.getLocalizedMessage());
+          SenderUtil.replyError(event, "I was unable to append to the playlist: " + e.getLocalizedMessage());
         }
       }
     }
@@ -171,8 +150,7 @@ public class PlaylistCommand extends OwnerCommand {
       else if (list.isEmpty())
         SenderUtil.replyWarning(event, "There are no playlists in the Playlists folder!");
       else {
-        StringBuilder builder =
-            new StringBuilder(thunder.getConfig().getSuccess() + " Available playlists:\n");
+        StringBuilder builder = new StringBuilder(thunder.getConfig().getSuccess() + " Available playlists:\n");
         list.forEach(str -> builder.append("`").append(str).append("` "));
         SenderUtil.reply(event, builder.toString());
       }

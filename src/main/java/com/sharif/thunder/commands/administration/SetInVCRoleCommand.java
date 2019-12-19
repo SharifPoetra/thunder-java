@@ -32,7 +32,9 @@ public class SetInVCRoleCommand extends AdministrationCommand {
     this.inVcRoles = inVcRoles;
     this.name = "setinvcrole";
     this.help = "set the role to be given to member when they're joining the voice channel.";
-    this.arguments = new Argument[] {new Argument("role", Argument.Type.ROLE, true)};
+    this.arguments = new Argument[] {
+      new Argument("role", Argument.Type.ROLE, true)
+    };
     this.aliases = new String[] {"invcrole", "sivcr"};
     this.botPermissions = new Permission[] {Permission.MANAGE_ROLES};
     this.userPermissions = new Permission[] {Permission.ADMINISTRATOR};
@@ -43,11 +45,7 @@ public class SetInVCRoleCommand extends AdministrationCommand {
   protected void execute(Object[] args, MessageReceivedEvent event) {
     Role role = (Role) args[0];
     inVcRoles.set(new String[] {event.getGuild().getId(), role.getId()});
-    SenderUtil.replySuccess(
-        event,
-        "The member will be given `"
-            + role.getName()
-            + "` role when they're joining a voice channel.");
+    SenderUtil.replySuccess(event, "The member will be given `" + role.getName() + "` role when they're joining a voice channel.");
   }
 
   private class DisableCommand extends AdministrationCommand {

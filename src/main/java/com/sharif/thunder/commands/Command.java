@@ -40,23 +40,32 @@ public abstract class Command {
 
   private static final BotConfig config = new BotConfig();
 
-  @Getter protected String name = "null";
-  @Getter protected String help = "no help description provided";
-  @Getter protected String[] aliases = new String[0];
-  @Getter protected Argument[] arguments = new Argument[0];
-  @Getter protected Command[] children = new Command[0];
-  @Getter protected Permission[] userPermissions = new Permission[0];
-  @Getter protected Permission[] botPermissions = new Permission[0];
-  @Getter protected Category category = null;
-  @Getter protected int cooldown = 0;
+  @Getter
+  protected String name = "null";
+  @Getter
+  protected String help = "no help description provided";
+  @Getter
+  protected String[] aliases = new String[0];
+  @Getter
+  protected Argument[] arguments = new Argument[0];
+  @Getter
+  protected Command[] children = new Command[0];
+  @Getter
+  protected Permission[] userPermissions = new Permission[0];
+  @Getter
+  protected Permission[] botPermissions = new Permission[0];
+  @Getter
+  protected Category category = null;
+  @Getter
+  protected int cooldown = 0;
   protected boolean ownerOnly = false;
   protected boolean usesTopicTags = true;
   protected boolean guildOnly = false;
-  @Getter protected boolean hidden = false;
+  @Getter
+  protected boolean hidden = false;
 
   private static final String BOT_PERM = "%s I need the %s permission in this %s!";
-  private static final String USER_PERM =
-      "%s You must have the %s permission in this %s to use that!";
+  private static final String USER_PERM = "%s You must have the %s permission in this %s to use that!";
 
   protected abstract void execute(Object[] args, MessageReceivedEvent event);
 
@@ -80,26 +89,12 @@ public abstract class Command {
       if (children.length > 0) {
         StringBuilder subSb = new StringBuilder();
         for (Command child : children) {
-          subSb
-              .append("`")
-              .append(prefix)
-              .append(name)
-              .append(" ")
-              .append(child.name)
-              .append(Argument.arrayToString(child.arguments))
-              .append("` - ")
-              .append(child.help)
-              .append("\n");
+          subSb.append("`").append(prefix).append(name).append(" ").append(child.name).append(Argument.arrayToString(child.arguments)).append("` - ").append(child.help).append("\n");
         }
         eb.addField("Subcommands:", subSb.toString(), true);
       }
       StringBuilder footerSb = new StringBuilder();
-      footerSb.append(
-          "\n\nFor additional help, contact "
-              + event.getJDA().getUserById(config.getOwnerId()).getName()
-              + "#"
-              + event.getJDA().getUserById(config.getOwnerId()).getDiscriminator()
-              + "");
+      footerSb.append("\n\nFor additional help, contact " + event.getJDA().getUserById(config.getOwnerId()).getName() + "#" + event.getJDA().getUserById(config.getOwnerId()).getDiscriminator() + "");
       eb.setFooter(footerSb.toString());
       event.getChannel().sendMessage(eb.build()).queue();
       return;
@@ -142,25 +137,21 @@ public abstract class Command {
           if (p.name().startsWith("VOICE")) {
             VoiceChannel vc = event.getMember().getVoiceState().getChannel();
             if (vc == null) {
-              SenderUtil.reply(
-                  event, config.getError() + " You must be in a voice channel to use that!");
+              SenderUtil.reply(event, config.getError() + " You must be in a voice channel to use that!");
               return;
             } else if (!event.getGuild().getSelfMember().hasPermission(vc, p)) {
-              SenderUtil.reply(
-                  event, String.format(BOT_PERM, config.getError(), p.getName(), "Voice Channel"));
+              SenderUtil.reply(event, String.format(BOT_PERM, config.getError(), p.getName(), "Voice Channel"));
               return;
             }
           } else {
             if (!event.getGuild().getSelfMember().hasPermission(event.getTextChannel(), p)) {
-              SenderUtil.reply(
-                  event, String.format(BOT_PERM, config.getError(), p.getName(), "Channel"));
+              SenderUtil.reply(event, String.format(BOT_PERM, config.getError(), p.getName(), "Channel"));
               return;
             }
           }
         } else {
           if (!event.getGuild().getSelfMember().hasPermission(p)) {
-            SenderUtil.reply(
-                event, String.format(BOT_PERM, config.getError(), p.getName(), "Guild"));
+            SenderUtil.reply(event, String.format(BOT_PERM, config.getError(), p.getName(), "Guild"));
             return;
           }
         }
@@ -170,21 +161,18 @@ public abstract class Command {
       for (Permission p : userPermissions) {
         if (p.isChannel()) {
           if (!event.getMember().hasPermission(event.getTextChannel(), p)) {
-            SenderUtil.reply(
-                event, String.format(USER_PERM, config.getError(), p.getName(), "Channel"));
+            SenderUtil.reply(event, String.format(USER_PERM, config.getError(), p.getName(), "Channel"));
             return;
           }
         } else {
           if (!event.getMember().hasPermission(p)) {
-            SenderUtil.reply(
-                event, String.format(USER_PERM, config.getError(), p.getName(), "Guild"));
+            SenderUtil.reply(event, String.format(USER_PERM, config.getError(), p.getName(), "Guild"));
             return;
           }
         }
       }
     } else if (guildOnly) {
-      SenderUtil.reply(
-          event, config.getError() + " This command cannot be used in Direct messages");
+      SenderUtil.reply(event, config.getError() + " This command cannot be used in Direct messages");
       return;
     }
 
@@ -192,20 +180,10 @@ public abstract class Command {
     Object[] parsedArgs = new Object[arguments.length];
     String workingSet = args;
     for (int i = 0; i < arguments.length; i++) {
-      String separatorRegex =
-          arguments[i].separator == null
-              ? null
-              : "(?i)\\s+" + arguments[i].separator.replace("|", "\\|") + "\\s+";
+      String separatorRegex = arguments[i].separator == null ? null : "(?i)\\s+" + arguments[i].separator.replace("|", "\\|") + "\\s+";
       if (workingSet == null) {
         if (arguments[i].required) {
-          SenderUtil.reply(
-              event,
-              String.format(
-                  config.getError()
-                      + " **Too few arguments provided**\nTry using `"
-                      + prefix
-                      + "help %s` for more information.",
-                  name));
+          SenderUtil.reply(event, String.format(config.getError() + " **Too few arguments provided**\nTry using `" + prefix + "help %s` for more information.", name));
           return;
         } else continue;
       }
@@ -217,25 +195,11 @@ public abstract class Command {
             try {
               num = Long.parseLong(parts[0]);
               if (num < arguments[i].min || num > arguments[i].max) {
-                SenderUtil.reply(
-                    event,
-                    String.format(
-                        config.getError()
-                            + " **Invalid Value:**\n`%s` must be an integer between %s and %s",
-                        arguments[i].name,
-                        arguments[i].min,
-                        arguments[i].max));
+                SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\n`%s` must be an integer between %s and %s", arguments[i].name, arguments[i].min, arguments[i].max));
                 return;
               }
             } catch (NumberFormatException e) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\n`%s` must be an integer between %s and %s",
-                      arguments[i].name,
-                      arguments[i].min,
-                      arguments[i].max));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\n`%s` must be an integer between %s and %s", arguments[i].name, arguments[i].min, arguments[i].max));
               return;
             }
             parsedArgs[i] = num;
@@ -248,14 +212,7 @@ public abstract class Command {
             String[] parts = FormatUtil.cleanSplit(workingSet);
             parsedArgs[i] = parts[0];
             if (parts[0].length() < arguments[i].min || parts[0].length() > arguments[i].max) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\n`%s` must be between %s and %s characters",
-                      arguments[i].name,
-                      arguments[i].min,
-                      arguments[i].max));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\n`%s` must be between %s and %s characters", arguments[i].name, arguments[i].min, arguments[i].max));
               return;
             }
             workingSet = parts[1];
@@ -268,14 +225,7 @@ public abstract class Command {
             if (separatorRegex == null) parts = new String[] {workingSet, null};
             else parts = FormatUtil.cleanSplit(workingSet, separatorRegex);
             if (parts[0].length() < arguments[i].min || parts[0].length() > arguments[i].max) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\n`%s` must be between %s and %s characters",
-                      arguments[i].name,
-                      arguments[i].min,
-                      arguments[i].max));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\n`%s` must be between %s and %s characters", arguments[i].name, arguments[i].min, arguments[i].max));
               return;
             }
             parsedArgs[i] = parts[0];
@@ -288,28 +238,16 @@ public abstract class Command {
             String[] parts;
             if (separatorRegex == null) parts = new String[] {workingSet, null};
             else parts = FormatUtil.cleanSplit(workingSet, separatorRegex);
-            String timestr =
-                parts[0].replaceAll(
-                    "(?is)^((\\s*-?\\s*\\d+\\s*(d(ays?)?|h((ou)?rs?)?|m(in(ute)?s?)?|s(ec(ond)?s?)?)\\s*,?\\s*(and)?)*).*",
-                    "$1");
+            String timestr = parts[0].replaceAll("(?is)^((\\s*-?\\s*\\d+\\s*(d(ays?)?|h((ou)?rs?)?|m(in(ute)?s?)?|s(ec(ond)?s?)?)\\s*,?\\s*(and)?)*).*", "$1");
             if (timestr.equals("")) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\nNo amount of time could be parsed from \"%s\"",
-                      parts[0]));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\nNo amount of time could be parsed from \"%s\"", parts[0]));
               return;
             }
             if (timestr.length() < parts[0].length()) {
               parts[1] = workingSet.substring(timestr.length()).trim();
               if (parts[1].equals("")) parts[1] = null;
             }
-            timestr =
-                timestr
-                    .replaceAll("(?i)(\\s|,|and)", "")
-                    .replaceAll("(?is)(-?\\d+|[a-z]+)", "$1 ")
-                    .trim();
+            timestr = timestr.replaceAll("(?i)(\\s|,|and)", "").replaceAll("(?is)(-?\\d+|[a-z]+)", "$1 ").trim();
             String[] vals = timestr.split("\\s+");
             long timeinseconds = 0;
             try {
@@ -321,23 +259,11 @@ public abstract class Command {
                 timeinseconds += num;
               }
             } catch (Exception e) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\nNo amount of time could be parsed from \"%s\"",
-                      parts[0]));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\nNo amount of time could be parsed from \"%s\"", parts[0]));
               return;
             }
             if (timeinseconds < arguments[i].min || timeinseconds > arguments[i].max) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\n`%s` must be in at least %s, and no longer than %s",
-                      arguments[i].name,
-                      FormatUtil.secondsToTime(arguments[i].min),
-                      FormatUtil.secondsToTime(arguments[i].max)));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\n`%s` must be in at least %s, and no longer than %s", arguments[i].name, FormatUtil.secondsToTime(arguments[i].min), FormatUtil.secondsToTime(arguments[i].max)));
               return;
             }
             parsedArgs[i] = timeinseconds;
@@ -360,12 +286,7 @@ public abstract class Command {
             if (mlist == null || mlist.isEmpty())
               mlist = FinderUtil.findMembers(parts[0], event.getGuild());
             if (mlist.isEmpty()) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getWarning() + " **No %s found matching \"%s\"**",
-                      "members",
-                      parts[0]));
+              SenderUtil.reply(event, String.format(config.getWarning() + " **No %s found matching \"%s\"**", "members", parts[0]));
               return;
             } else if (mlist.size() > 1) {
               SenderUtil.reply(event, FormatUtil.listOfMembers(mlist, parts[0]));
@@ -391,10 +312,7 @@ public abstract class Command {
             if (ulist == null || ulist.isEmpty())
               ulist = FinderUtil.findUsers(parts[0], event.getJDA());
             if (ulist.isEmpty()) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getWarning() + " **No %s found matching \"%s\"**", "users", parts[0]));
+              SenderUtil.reply(event, String.format(config.getWarning() + " **No %s found matching \"%s\"**", "users", parts[0]));
               return;
             } else if (ulist.size() > 1) {
               SenderUtil.reply(event, FormatUtil.listOfUsers(ulist, parts[0]));
@@ -408,12 +326,7 @@ public abstract class Command {
         case LOCALUSER:
           {
             if (event.getChannelType() == ChannelType.PRIVATE) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\n`%s` cannot be included via Direct Message",
-                      arguments[i].name));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\n`%s` cannot be included via Direct Message", arguments[i].name));
               return;
             }
             String[] parts;
@@ -425,10 +338,7 @@ public abstract class Command {
             }
             List<User> ulist = FinderUtil.findUsers(parts[0], event.getJDA());
             if (ulist.isEmpty()) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getWarning() + " **No %s found matching \"%s\"**", "users", parts[0]));
+              SenderUtil.reply(event, String.format(config.getWarning() + " **No %s found matching \"%s\"**", "users", parts[0]));
               return;
             } else if (ulist.size() > 1) {
               SenderUtil.reply(event, FormatUtil.listOfUsers(ulist, parts[0]));
@@ -442,12 +352,7 @@ public abstract class Command {
         case BANNEDUSER:
           {
             if (event.getChannelType() == ChannelType.PRIVATE) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\n`%s` cannot be included via Direct Message",
-                      arguments[i].name));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\n`%s` cannot be included via Direct Message", arguments[i].name));
               return;
             }
             String[] parts;
@@ -459,15 +364,11 @@ public abstract class Command {
             }
             List<User> ulist = FinderUtil.findBannedUsers(parts[0], event.getGuild());
             if (ulist == null) {
-              SenderUtil.reply(
-                  event, config.getError() + "I cannot check the list of banned users.");
+              SenderUtil.reply(event, config.getError() + "I cannot check the list of banned users.");
               return;
             }
             if (ulist.isEmpty()) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getWarning() + " **No %s found matching \"%s\"**", "users", parts[0]));
+              SenderUtil.reply(event, String.format(config.getWarning() + " **No %s found matching \"%s\"**", "users", parts[0]));
               return;
             } else if (ulist.size() > 1) {
               SenderUtil.reply(event, FormatUtil.listOfUsers(ulist, parts[0]));
@@ -481,23 +382,13 @@ public abstract class Command {
         case TEXTCHANNEL:
           {
             if (event.getChannelType() == ChannelType.PRIVATE) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\n`%s` cannot be included via Direct Message",
-                      arguments[i].name));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\n`%s` cannot be included via Direct Message", arguments[i].name));
               return;
             }
             String[] parts = FormatUtil.cleanSplit(workingSet);
             List<TextChannel> tclist = FinderUtil.findTextChannels(parts[0], event.getGuild());
             if (tclist.isEmpty()) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getWarning() + " **No %s found matching \"%s\"**",
-                      "text channels",
-                      parts[0]));
+              SenderUtil.reply(event, String.format(config.getWarning() + " **No %s found matching \"%s\"**", "text channels", parts[0]));
               return;
             } else if (tclist.size() > 1) {
               SenderUtil.reply(event, FormatUtil.listOfChannels(tclist, parts[0]));
@@ -511,12 +402,7 @@ public abstract class Command {
         case ROLE:
           {
             if (event.getChannelType() == ChannelType.PRIVATE) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getError()
-                          + " **Invalid Value:**\n`%s` cannot be included via Direct Message",
-                      arguments[i].name));
+              SenderUtil.reply(event, String.format(config.getError() + " **Invalid Value:**\n`%s` cannot be included via Direct Message", arguments[i].name));
               return;
             }
             String[] parts;
@@ -524,10 +410,7 @@ public abstract class Command {
             else parts = FormatUtil.cleanSplit(workingSet, separatorRegex);
             List<Role> rlist = FinderUtil.findRoles(parts[0], event.getGuild());
             if (rlist.isEmpty()) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getWarning() + " **No %s found matching \"%s\"**", "roles", parts[0]));
+              SenderUtil.reply(event, String.format(config.getWarning() + " **No %s found matching \"%s\"**", "roles", parts[0]));
               return;
             } else if (rlist.size() > 1) {
               SenderUtil.reply(event, FormatUtil.listOfRoles(rlist, parts[0]));
@@ -544,12 +427,7 @@ public abstract class Command {
             else parts = FormatUtil.cleanSplit(workingSet, separatorRegex);
             List<Guild> glist = OtherUtil.findGuild(parts[0], event.getJDA());
             if (glist.isEmpty()) {
-              SenderUtil.reply(
-                  event,
-                  String.format(
-                      config.getWarning() + " **No %s found matching \"%s\"**",
-                      "servers",
-                      parts[0]));
+              SenderUtil.reply(event, String.format(config.getWarning() + " **No %s found matching \"%s\"**", "servers", parts[0]));
               return;
             } else if (glist.size() > 1) {
               SenderUtil.reply(event, FormatUtil.listOfGuilds(glist, parts[0]));
@@ -597,8 +475,10 @@ public abstract class Command {
 
   // Category class
   public static class Category {
-    @Getter private final String name;
-    @Getter private final String failureResponse;
+    @Getter
+    private final String name;
+    @Getter
+    private final String failureResponse;
     private final Predicate<MessageReceivedEvent> predicate;
 
     public Category(String name) {
@@ -613,8 +493,7 @@ public abstract class Command {
       this.predicate = predicate;
     }
 
-    public Category(
-        String name, String failureResponse, Predicate<MessageReceivedEvent> predicate) {
+    public Category(String name, String failureResponse, Predicate<MessageReceivedEvent> predicate) {
       this.name = name;
       this.failureResponse = failureResponse;
       this.predicate = predicate;
@@ -628,9 +507,7 @@ public abstract class Command {
     public boolean equals(Object obj) {
       if (!(obj instanceof Category)) return false;
       Category other = (Category) obj;
-      return Objects.equals(name, other.name)
-          && Objects.equals(predicate, other.predicate)
-          && Objects.equals(failureResponse, other.failureResponse);
+      return Objects.equals(name, other.name) && Objects.equals(predicate, other.predicate) && Objects.equals(failureResponse, other.failureResponse);
     }
 
     @Override
