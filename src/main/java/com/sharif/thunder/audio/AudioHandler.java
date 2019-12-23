@@ -37,14 +37,6 @@ import com.sharif.thunder.Main;
 import com.sharif.thunder.queue.FairQueue;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.OtherUtil;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -55,16 +47,16 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.nio.ByteBuffer;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class AudioHandler extends AudioEventAdapter implements AudioSendHandler {
 
-  Logger log = LoggerFactory.getLogger(AudioHandler.class);
-  private final FairQueue<QueuedTrack> queue = new FairQueue<QueuedTrack>();
-  private final List<AudioTrack> defaultQueue = new LinkedList<AudioTrack>();
-  private final Set<String> votes = new HashSet<String>();
-  private JDA jda;
+  private final FairQueue<QueuedTrack> queue = new FairQueue<>();
+  private final List<AudioTrack> defaultQueue = new LinkedList<>();
+  private final Set<String> votes = new HashSet<>();
   static AudioConfiguration configuration;
   private final PlayerManager manager;
   private final long guildId;
@@ -104,7 +96,6 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   @Getter
   @Setter 
   private boolean bassboost = false;
-  private boolean deleteMessage = false;
   @Getter
   @Setter 
   private int pitch = 0;
@@ -153,12 +144,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   }
 
   public void stopTrack() {
-    this.deleteMessage = true;
     audioPlayer.stopTrack();
   }
 
   public void stopAndClear() {
-    this.deleteMessage = true;
     queue.clear();
     defaultQueue.clear();
     audioPlayer.stopTrack();

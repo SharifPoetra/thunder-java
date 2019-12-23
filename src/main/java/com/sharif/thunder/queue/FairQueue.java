@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Set;
 
 public class FairQueue<T extends Queueable> {
-  private final List<T> list = new ArrayList<T>();
-  private final Set<Long> set = new HashSet<Long>();
+  private final List<T> list = new ArrayList<>();
+  private final Set<Long> set = new HashSet<>();
 
   public int add(T item) {
     int lastIndex;
@@ -83,7 +83,7 @@ public class FairQueue<T extends Queueable> {
   }
 
   public int shuffle(long identifier) {
-    List<Integer> iset = new ArrayList<Integer>();
+    List<Integer> iset = new ArrayList<>();
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).getIdentifier() == identifier) iset.add(i);
     }
@@ -98,7 +98,9 @@ public class FairQueue<T extends Queueable> {
   }
 
   public void skip(int number) {
-    for (int i = 0; i < number; i++) list.remove(0);
+    if (number > 0) {
+      list.subList(0, number).clear();
+    }
   }
 
   /**
