@@ -7,6 +7,11 @@ hs_err_pid*
 *.iws
 /.idea
 /out/
+.classpath
+.project
+.settings/
+.vscode/
+bin/
 
 # Gradle
 .gradle
