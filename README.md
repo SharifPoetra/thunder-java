@@ -8,8 +8,7 @@
 [![CircleCI](https://img.shields.io/circleci/build/github/SharifPoetra/thunder-java)](https://circleci.com/gh/SharifPoetra/thunder-java)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/SharifPoetra/thunder-java)
 ![GitHub repo size](https://img.shields.io/github/repo-size/SharifPoetra/thunder-java)
-![Uptime Robot ratio (7 days)](https://img.shields.io/uptimerobot/ratio/7/m783516155-547dfefe9aaa2d503b9aea20)
- 
+
  
 <hr>
 
