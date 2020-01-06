@@ -120,7 +120,7 @@ public class GuildSettingsManager extends DataManager {
     @Getter
     private final ZoneId timezone;
     @Getter
-    private final logChannel;
+    private final String logChannel;
 
     private GuildSettings() {
       this.prefix = null;

@@ -55,7 +55,8 @@ public class ThunderApi {
     
     get("/", (req, res) -> {
       res.body("OK");
-    }
+    });
+
     path("/api", () -> {
       before("/*", (q, a) -> logger.info("Received API-call."));
 
