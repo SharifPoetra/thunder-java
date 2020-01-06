@@ -28,7 +28,6 @@ import java.time.zone.ZoneRulesException;
 import java.util.Collection;
 import java.util.Collections;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 import lombok.Getter;
 
 public class GuildSettingsManager extends DataManager {
@@ -38,7 +37,6 @@ public class GuildSettingsManager extends DataManager {
   public static final SQLColumn<Long> GUILD_ID = new LongColumn("GUILD_ID", false, 0L, true);
   public static final SQLColumn<String> PREFIX = new StringColumn("PREFIX", true, null, PREFIX_MAX_LENGTH);
   public static final SQLColumn<String> TIMEZONE = new StringColumn("TIMEZONE", true, null, 32);
-  public static final SQLColumn<String> LOGCHANNEL = new LongColumn("LOGCHANNEL", true, null, 18);
 
   // Cache
   private final FixedCache<Long, GuildSettings> cache = new FixedCache<>(1000);
@@ -92,21 +90,6 @@ public class GuildSettingsManager extends DataManager {
     });
   }
 
-  public void setLogChannel(Guild guild, TextChannel channel) {
-    invalidateCache(guild);
-    readWrite(select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, LOGCHANNEL), rs -> {
-      if (rs.next()) {
-        LOGCHANNEL.updateValue(rs, channel.getIdLong());
-        rs.updateRow();
-      } else {
-        rs.moveToInsertRow();
-        GUILD_ID.updateValue(rs, guild.getIdLong());
-        LOGCHANNEL.updateValue(rs, channel.getIdLong());
-        rs.insertRow();
-      }
-    });
-  }
-
   private void invalidateCache(Guild guild) {
     invalidateCache(guild.getIdLong());
   }
@@ -120,13 +103,10 @@ public class GuildSettingsManager extends DataManager {
     private final String prefix;
     @Getter
     private final ZoneId timezone;
-    @Getter
-    private final String logChannel;
 
     private GuildSettings() {
       this.prefix = null;
       this.timezone = DEFAULT_TIMEZONE;
-      this.logChannel = null;
     }
 
     private GuildSettings(ResultSet rs) throws SQLException {
@@ -141,7 +121,6 @@ public class GuildSettingsManager extends DataManager {
           zid = DEFAULT_TIMEZONE;
         }
       this.timezone = zid;
-      this.logChannel = LOGCHANNEL.getValue(rs);
     }
   }
 }
