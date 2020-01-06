@@ -28,7 +28,7 @@ import java.time.zone.ZoneRulesException;
 import java.util.Collection;
 import java.util.Collections;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Channel;
+import net.dv8tion.jda.api.entities.TextChannel;
 import lombok.Getter;
 
 public class GuildSettingsManager extends DataManager {
@@ -92,7 +92,7 @@ public class GuildSettingsManager extends DataManager {
     });
   }
 
-  public void setLogChannel(Guild guild, Channel channel) {
+  public void setLogChannel(Guild guild, TextChannel channel) {
     invalidateCache(guild);
     readWrite(select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, LOGCHANNEL), rs -> {
       if (rs.next()) {
