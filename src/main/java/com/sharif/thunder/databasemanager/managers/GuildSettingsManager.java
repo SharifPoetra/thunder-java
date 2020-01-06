@@ -28,6 +28,7 @@ import java.time.zone.ZoneRulesException;
 import java.util.Collection;
 import java.util.Collections;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Channel;
 import lombok.Getter;
 
 public class GuildSettingsManager extends DataManager {
