@@ -54,7 +54,7 @@ public class ThunderApi {
     });
     
     get("/", (req, res) -> {
-      res.body("OK");
+      return "{\"message\":\"SUCCESS\"}";
     });
 
     path("/api", () -> {

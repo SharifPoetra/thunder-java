@@ -38,7 +38,7 @@ public class GuildSettingsManager extends DataManager {
   public static final SQLColumn<Long> GUILD_ID = new LongColumn("GUILD_ID", false, 0L, true);
   public static final SQLColumn<String> PREFIX = new StringColumn("PREFIX", true, null, PREFIX_MAX_LENGTH);
   public static final SQLColumn<String> TIMEZONE = new StringColumn("TIMEZONE", true, null, 32);
-  public static final SQLColumn<String> LOGCHANNEL = new StringColumn("LOGCHANNEL", true, null, 18);
+  public static final SQLColumn<String> LOGCHANNEL = new LongColumn("LOGCHANNEL", true, null, 18);
 
   // Cache
   private final FixedCache<Long, GuildSettings> cache = new FixedCache<>(1000);
@@ -96,12 +96,12 @@ public class GuildSettingsManager extends DataManager {
     invalidateCache(guild);
     readWrite(select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, LOGCHANNEL), rs -> {
       if (rs.next()) {
-        LOGCHANNEL.updateValue(rs, channel);
+        LOGCHANNEL.updateValue(rs, channel.getIdLong());
         rs.updateRow();
       } else {
         rs.moveToInsertRow();
         GUILD_ID.updateValue(rs, guild.getIdLong());
-        LOGCHANNEL.updateValue(rs, channel);
+        LOGCHANNEL.updateValue(rs, channel.getIdLong());
         rs.insertRow();
       }
     });
