@@ -35,8 +35,7 @@ public class GuildSettingsManager extends DataManager {
   private static final ZoneId DEFAULT_TIMEZONE = ZoneId.of("GMT-4");
 
   public static final SQLColumn<Long> GUILD_ID = new LongColumn("GUILD_ID", false, 0L, true);
-  public static final SQLColumn<String> PREFIX =
-      new StringColumn("PREFIX", true, null, PREFIX_MAX_LENGTH);
+  public static final SQLColumn<String> PREFIX = new StringColumn("PREFIX", true, null, PREFIX_MAX_LENGTH);
   public static final SQLColumn<String> TIMEZONE = new StringColumn("TIMEZONE", true, null, 32);
 
   // Cache

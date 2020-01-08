@@ -52,6 +52,10 @@ public class ThunderApi {
       res.type("application/json");
       return "{\"message\":\"404 Not Found\"}";
     });
+    
+    get("/", (req, res) -> {
+      return "{\"message\":\"SUCCESS\"}";
+    });
 
     path("/api", () -> {
       before("/*", (q, a) -> logger.info("Received API-call."));

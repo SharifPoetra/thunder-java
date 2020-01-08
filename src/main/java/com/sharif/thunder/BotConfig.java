@@ -89,7 +89,6 @@ public class BotConfig {
       dbPass = config.getString("dbpass");
       defaultLyrics = config.getString("lyrics.default");
       emiliaKey = config.getString("emiliakey");
-
     } catch (Exception ex) {
       System.out.println(ex + ": " + ex.getMessage() + "\n\nConfig Location: " + path.toAbsolutePath().toString());
     }

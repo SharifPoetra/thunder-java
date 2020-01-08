@@ -33,7 +33,7 @@ public class SetInVCRoleCommand extends AdministrationCommand {
     this.name = "setinvcrole";
     this.help = "set the role to be given to member when they're joining the voice channel.";
     this.arguments = new Argument[] {
-      new Argument("role", Argument.Type.ROLE, true)
+        new Argument("role", Argument.Type.ROLE, true)
     };
     this.aliases = new String[] {"invcrole", "sivcr"};
     this.botPermissions = new Permission[] {Permission.MANAGE_ROLES};
