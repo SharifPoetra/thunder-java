@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    implementation ('net.dv8tion:JDA:4.1.0_95') {
+    implementation ('net.dv8tion:JDA:4.1.0_99') {
       exclude module: 'opus-java'
     }
     implementation 'com.jagrosh:jda-utilities:3.0.2'
