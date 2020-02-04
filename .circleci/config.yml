@@ -14,7 +14,7 @@ jobs:
       - restore_cache:
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - run:
-          name: Install dependencies
+          name: building all project structure
           command: bash ./gradlew build -x test
       - save_cache:
           paths:
@@ -27,7 +27,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - build
+            - test
   test:
     environment:
       # Configure the JVM and Gradle to avoid OOM errors
@@ -51,7 +51,4 @@ workflows:
   version: 2
   workflow:
     jobs:
-    - build
-    - test:
-        requires:
-          - build
+    - test
