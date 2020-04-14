@@ -105,6 +105,7 @@ public class Main extends ListenerAdapter {
       new DanceCommand(thunder),
       new PoutCommand(thunder),
       new LewdCommand(thunder),
+      new KissCommand(thunder),
       // owner
       new EvalCommand(thunder),
       new RestartCommand(thunder),
