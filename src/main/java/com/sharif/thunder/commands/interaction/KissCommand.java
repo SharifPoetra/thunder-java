@@ -46,7 +46,7 @@ public class KissCommand extends InteractionCommand {
       User user = (User) args[0];
       byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/kiss", "Bearer " + thunder.getConfig().getEmiliaKey());
       event.getChannel().sendFile(data, "kiss.gif").embed(new EmbedBuilder()
-        .setAuthor(event.getAuthor().getName() + " kisses " + user.getName() + "! " + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
+        .setAuthor(event.getAuthor().getName() + " kisses " + user.getName() + " " + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
         .setColor(event.getGuild().getSelfMember().getColor())
         .setImage("attachment://kiss.gif")
         .build()).queue();
