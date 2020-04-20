@@ -33,7 +33,6 @@ import java.util.EnumSet;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import javax.security.auth.login.LoginException;
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -146,7 +145,7 @@ public class Main extends ListenerAdapter {
 
     try {
       logger.info("Running JDABuilder...");
-      JDA jda = new JDABuilder(AccountType.BOT)
+      JDA jda = new JDABuilder()
         .setToken(config.getToken())
         .addEventListeners(new Main(), waiter)
         .setDisabledCacheFlags(EnumSet.of(CacheFlag.ACTIVITY))
