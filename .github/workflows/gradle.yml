@@ -24,10 +24,8 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Creating artifacts path
-      run: mkdir artifacts
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: Thunder
-        path: artifacts
+        path: build/libs
