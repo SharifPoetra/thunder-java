@@ -29,7 +29,6 @@ import com.sharif.thunder.databasemanager.Database;
 import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.SenderUtil;
-import java.util.EnumSet;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import javax.security.auth.login.LoginException;
@@ -45,7 +44,6 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,10 +143,9 @@ public class Main extends ListenerAdapter {
 
     try {
       logger.info("Running JDABuilder...");
-      JDA jda = new JDABuilder()
-        .setToken(config.getToken())
+      JDA jda = JDABuilder
+        .createDefault(config.getToken())
         .addEventListeners(new Main(), waiter)
-        .setDisabledCacheFlags(EnumSet.of(CacheFlag.ACTIVITY))
         .build()
         .awaitReady();
       thunder.setJDA(jda);
