@@ -144,7 +144,7 @@ public class Main extends ListenerAdapter {
     try {
       logger.info("Running JDABuilder...");
       JDA jda = JDABuilder
-        .createDefault(config.getToken())
+        .createLight(config.getToken())
         .addEventListeners(new Main(), waiter)
         .build()
         .awaitReady();
