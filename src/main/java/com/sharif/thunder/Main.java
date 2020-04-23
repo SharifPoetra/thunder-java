@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +145,8 @@ public class Main extends ListenerAdapter {
     try {
       logger.info("Running JDABuilder...");
       JDA jda = JDABuilder
-        .createLight(config.getToken())
+        .createDefault(config.getToken())
+        .setMemberCachePolicy(MemberCachePolicy.ALL)
         .addEventListeners(new Main(), waiter)
         .build()
         .awaitReady();
