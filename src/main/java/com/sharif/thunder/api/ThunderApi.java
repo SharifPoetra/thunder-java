@@ -47,7 +47,7 @@ public class ThunderApi {
     Logger logger = LoggerFactory.getLogger(ThunderApi.class);
 
     staticFiles.externalLocation(System.getProperty("user.dir"));
-    port(3000);
+    port(thunder.getConfig().getPort());
     notFound((req, res) -> {
       res.type("application/json");
       return "{\"message\":\"404 Not Found\"}";
