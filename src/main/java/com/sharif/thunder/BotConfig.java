@@ -52,7 +52,7 @@ public class BotConfig {
   @Getter(AccessLevel.NONE)
   private boolean npImages;
   @Getter
-  provate long port;
+  private long port;
   private long ownerId;
   private long maxSeconds;
 
