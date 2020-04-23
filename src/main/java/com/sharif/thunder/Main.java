@@ -151,7 +151,8 @@ public class Main extends ListenerAdapter {
                 GatewayIntent.GUILD_MESSAGES,
                 GatewayIntent.GUILD_MESSAGE_REACTIONS,
                 GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES,
-                GatewayIntent.GUILD_BANS)
+                GatewayIntent.GUILD_BANS,
+                GatewayIntent.GUILD_EMOJIS)
         .setMemberCachePolicy(MemberCachePolicy.ALL)
         .setChunkingFilter(ChunkingFilter.NONE)
         .addEventListeners(new Main(), waiter)
