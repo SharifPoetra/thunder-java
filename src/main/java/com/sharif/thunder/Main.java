@@ -146,7 +146,7 @@ public class Main extends ListenerAdapter {
       logger.info("Running JDABuilder...");
       JDA jda = JDABuilder
         .createDefault(config.getToken())
-        .setMemberCachePolicy(MemberCachePolicy.ALL)
+        .setMemberCachePolicy(MemberCachePolicy.ONLINE)
         .addEventListeners(new Main(), waiter)
         .build()
         .awaitReady();
