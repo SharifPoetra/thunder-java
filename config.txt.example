@@ -1,6 +1,7 @@
 token = your-bot-token-here
 owner = your-id
 serverinvite = "https://discord.gg/ZEFrfj5"
+port = 3000
 prefix = "~"
 success = "🎶"
 warning = "💡"

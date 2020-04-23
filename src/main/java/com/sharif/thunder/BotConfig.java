@@ -51,7 +51,8 @@ public class BotConfig {
   private boolean stayInChannel;
   @Getter(AccessLevel.NONE)
   private boolean npImages;
-
+  @Getter
+  provate long port;
   private long ownerId;
   private long maxSeconds;
 
@@ -89,6 +90,7 @@ public class BotConfig {
       dbPass = config.getString("dbpass");
       defaultLyrics = config.getString("lyrics.default");
       emiliaKey = config.getString("emiliakey");
+      port = config.getLong("port")
     } catch (Exception ex) {
       System.out.println(ex + ": " + ex.getMessage() + "\n\nConfig Location: " + path.toAbsolutePath().toString());
     }
