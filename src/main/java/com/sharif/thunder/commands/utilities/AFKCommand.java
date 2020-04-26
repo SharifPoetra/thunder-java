@@ -36,7 +36,6 @@ public class AFKCommand extends UtilitiesCommand {
   protected void execute(Object[] args, MessageReceivedEvent event) {
     String message = (String) args[0];
     Thunder.getDatabase().afksettings.setMessage(event.getAuthor(), message);
-    // afks.set(new String[] {event.getAuthor().getId(), message});
     SenderUtil.reply(event, "⌨️ | " + event.getAuthor().getAsMention() + ", I've set you to AFK mode.");
   }
 }
