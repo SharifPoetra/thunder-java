@@ -18,7 +18,7 @@ package com.sharif.thunder.commands.administration;
 import com.sharif.thunder.commands.AdministrationCommand;
 import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.Command;
-import com.sharif.thunder.datasources.InVCRoles;
+import com.sharif.thunder.Thunder;
 import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
@@ -26,10 +26,10 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class SetInVCRoleCommand extends AdministrationCommand {
 
-  private final InVCRoles inVcRoles;
+  private final Thunder thunder;
 
-  public SetInVCRoleCommand(InVCRoles inVcRoles) {
-    this.inVcRoles = inVcRoles;
+  public SetInVCRoleCommand(Thunder thunder) {
+    this.thunder = thunder;
     this.name = "setinvcrole";
     this.help = "set the role to be given to member when they're joining the voice channel.";
     this.arguments = new Argument[] {
@@ -44,7 +44,7 @@ public class SetInVCRoleCommand extends AdministrationCommand {
   @Override
   protected void execute(Object[] args, MessageReceivedEvent event) {
     Role role = (Role) args[0];
-    inVcRoles.set(new String[] {event.getGuild().getId(), role.getId()});
+    Thunder.getDatabase().guildSettings.setVoiceRole(event.getGuild(), role.getId());
     SenderUtil.replySuccess(event, "The member will be given `" + role.getName() + "` role when they're joining a voice channel.");
   }
 
@@ -59,11 +59,11 @@ public class SetInVCRoleCommand extends AdministrationCommand {
 
     @Override
     protected void execute(Object[] args, MessageReceivedEvent event) {
-      if (!inVcRoles.has(event.getGuild().getId())) {
+      if (Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole() == null) {
         SenderUtil.replyWarning(event, "There's no in voice role set.");
         return;
       } else {
-        inVcRoles.remove(event.getGuild().getId());
+        Thunder.getDatabase().guildSettings.setVoiceRole(event.getGuild(), null);
         SenderUtil.replySuccess(event, "Voice join role cleared.");
       }
     }

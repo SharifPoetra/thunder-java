@@ -37,6 +37,7 @@ public class GuildSettingsManager extends DataManager {
   public static final SQLColumn<Long> GUILD_ID = new LongColumn("GUILD_ID", false, 0L, true);
   public static final SQLColumn<String> PREFIX = new StringColumn("PREFIX", true, null, PREFIX_MAX_LENGTH);
   public static final SQLColumn<String> TIMEZONE = new StringColumn("TIMEZONE", true, null, 32);
+  public static final SQLColumn<String> VOICEROLE = new StringColumn("VOICEROLE", true, null, 20);
 
   // Cache
   private final FixedCache<Long, GuildSettings> cache = new FixedCache<>(1000);
@@ -74,6 +75,21 @@ public class GuildSettingsManager extends DataManager {
       }
     });
   }
+  
+  public void setVoiceRole(Guild guild, String roleId) {
+    invalidateCache(guild);
+    readWrite(select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, VOICEROLE), rs -> {
+      if (rs.next()) {
+        VOICEROLE.updateValue(rs, roleId);
+        rs.updateRow();
+      } else {
+        rs.moveToInsertRow();
+        GUILD_ID.updateValue(rs, guild.getIdLong());
+        VOICEROLE.updateValue(rs, roleId);
+        rs.insertRow();
+      }
+    });
+  }
 
   public void setTimezone(Guild guild, ZoneId zone) {
     invalidateCache(guild);
@@ -103,10 +119,13 @@ public class GuildSettingsManager extends DataManager {
     private final String prefix;
     @Getter
     private final ZoneId timezone;
+    @Getter
+    private final String voiceRole;
 
     private GuildSettings() {
       this.prefix = null;
       this.timezone = DEFAULT_TIMEZONE;
+      this.voiceRole = null;
     }
 
     private GuildSettings(ResultSet rs) throws SQLException {
@@ -121,6 +140,7 @@ public class GuildSettingsManager extends DataManager {
           zid = DEFAULT_TIMEZONE;
         }
       this.timezone = zid;
+      this.voiceRole = VOICEROLE.getValue(rs);
     }
   }
 }

@@ -21,11 +21,13 @@ import com.sharif.thunder.databasemanager.managers.*;
 public class Database extends DatabaseConnector {
 
   public final GuildSettingsManager guildSettings;
+  public final AfkSettingsManager afksettings;
 
   public Database(String host, String user, String pass) throws Exception {
     super(host, user, pass);
 
     guildSettings = new GuildSettingsManager(this);
+    afksettings = new AfkSettingsManager(this);
 
     init();
   }

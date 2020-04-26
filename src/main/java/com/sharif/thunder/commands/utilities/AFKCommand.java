@@ -17,15 +17,16 @@ package com.sharif.thunder.commands.utilities;
 
 import com.sharif.thunder.commands.Argument;
 import com.sharif.thunder.commands.UtilitiesCommand;
-import com.sharif.thunder.datasources.AFKs;
 import com.sharif.thunder.utils.SenderUtil;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import com.sharif.thunder.Thunder;
 
 public class AFKCommand extends UtilitiesCommand {
-  private final AFKs afks;
 
-  public AFKCommand(AFKs afks) {
-    this.afks = afks;
+  private final Thunder thunder;
+
+  public AFKCommand(Thunder thunder) {
+    this.thunder = thunder;
     this.name = "afk";
     this.help = "relays mentions via DM; can autoreply message.";
     this.arguments = new Argument[] {new Argument("message", Argument.Type.LONGSTRING, false)};
@@ -34,7 +35,8 @@ public class AFKCommand extends UtilitiesCommand {
   @Override
   protected void execute(Object[] args, MessageReceivedEvent event) {
     String message = (String) args[0];
-    afks.set(new String[] {event.getAuthor().getId(), message});
+    Thunder.getDatabase().afksettings.setMessage(event.getAuthor(), message);
+    // afks.set(new String[] {event.getAuthor().getId(), message});
     SenderUtil.reply(event, "⌨️ | " + event.getAuthor().getAsMention() + ", I've set you to AFK mode.");
   }
 }

@@ -26,7 +26,6 @@ import com.sharif.thunder.commands.music.*;
 import com.sharif.thunder.commands.owner.*;
 import com.sharif.thunder.commands.utilities.*;
 import com.sharif.thunder.databasemanager.Database;
-import com.sharif.thunder.datasources.*;
 import com.sharif.thunder.utils.FormatUtil;
 import com.sharif.thunder.utils.SenderUtil;
 import java.util.Objects;
@@ -60,9 +59,6 @@ public class Main extends ListenerAdapter {
   private static BotConfig config;
   private static Thunder thunder;
   private static ThunderApi thunderApi;
-  // datasources
-  private static AFKs afks;
-  private static InVCRoles inVcRoles;
 
   public static void main(String[] args) throws Exception {
 
@@ -76,21 +72,11 @@ public class Main extends ListenerAdapter {
     logger.info("Starting ThunderApi...");
     thunderApi = new ThunderApi(thunder).start();
 
-    // datasources initializations
-    logger.info("Initializing datasources...");
-    afks = new AFKs();
-    inVcRoles = new InVCRoles();
-
-    // reading datasources
-    logger.info("Reading datasources...");
-    afks.read();
-    inVcRoles.read();
-
     // lists all the commands
     logger.info("Loading all commands...");
     commands = new Command[] {
       // administration
-      new SetInVCRoleCommand(inVcRoles),
+      new SetInVCRoleCommand(thunder),
       new PrefixCommand(thunder),
       // fun
       new SayCommand(thunder),
@@ -115,7 +101,7 @@ public class Main extends ListenerAdapter {
       new StatsCommand(thunder),
       new PingCommand(thunder),
       new EmotesCommand(thunder),
-      new AFKCommand(afks),
+      new AFKCommand(thunder),
       new KitsuCommand(thunder),
       new AvatarCommand(thunder),
       // music
@@ -175,26 +161,21 @@ public class Main extends ListenerAdapter {
   }
 
   @Override
-  public void onShutdown(ShutdownEvent event) {
-    afks.shutdown();
-    inVcRoles.shutdown();
-  }
-
-  @Override
   public void onMessageReceived(MessageReceivedEvent event) {
-    if (afks.get(event.getAuthor().getId()) != null) {
+    if (Thunder.getDatabase().afksettings.hasUser(event.getAuthor())) {
       event.getChannel().sendMessage(event.getAuthor().getAsMention() + " Welcome back, I have removed your AFK status.").queue();
-      afks.remove(event.getAuthor().getId());
+      Thunder.getDatabase().afksettings.removeUser(event.getAuthor());
     }
+    
     if (event.getChannelType() != ChannelType.PRIVATE && !event.getAuthor().isBot()) {
       String relate = "__" + event.getGuild().getName() + "__ <#" + event.getTextChannel().getId() + "> **" + event.getAuthor().getAsTag() + "**:\n" + event.getMessage().getContentRaw();
-      event.getMessage().getMentionedUsers().stream().filter((u) -> (afks.get(u.getId()) != null)).forEach((u) -> SenderUtil.sendDM(u, relate));
+      event.getMessage().getMentionedUsers().stream().filter((u) -> (Thunder.getDatabase().afksettings.hasUser(u))).forEach((u) -> SenderUtil.sendDM(u, relate));
     }
     if (event.getChannelType() != ChannelType.PRIVATE && !event.getMessage().getMentionedUsers().isEmpty() && !event.getAuthor().isBot()) {
       StringBuilder builder = new StringBuilder();
       event.getMessage().getMentionedUsers().stream().forEach(u -> {
-        if (afks.get(u.getId()) != null) {
-          String response = afks.get(u.getId())[AFKs.MESSAGE];
+        if (Thunder.getDatabase().afksettings.hasUser(u)) {
+          String response = Thunder.getDatabase().afksettings.getUser(u).getMessage();
           if (response != null)
             builder.append("\n\uD83D\uDCA4 **").append(u.getName()).append("** is currently AFK:\n").append(response);
           }
@@ -261,8 +242,8 @@ public class Main extends ListenerAdapter {
   public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
     try {
       if (event.getMember().getUser().isBot()) return;
-      if (inVcRoles.get(event.getGuild().getId()) != null) {
-        event.getGuild().addRoleToMember(event.getMember(), event.getGuild().getRoleById(inVcRoles.get(event.getGuild().getId())[InVCRoles.ROLEID])).queue();
+      if (Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole() != null) {
+        event.getGuild().addRoleToMember(event.getMember(), event.getGuild().getRoleById(Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole())).queue();
       }
     } catch (Exception ex) {
       System.out.println("Error when giving a member voice role: " + ex.toString());
@@ -273,8 +254,8 @@ public class Main extends ListenerAdapter {
   public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
     try {
       if (event.getMember().getUser().isBot()) return;
-      if (inVcRoles.get(event.getGuild().getId()) != null) {
-        event.getGuild().removeRoleFromMember(event.getMember(), event.getGuild().getRoleById(inVcRoles.get(event.getGuild().getId())[InVCRoles.ROLEID])).queue();
+      if (Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole() != null) {
+        event.getGuild().removeRoleFromMember(event.getMember(), event.getGuild().getRoleById(Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole())).queue();
       }
     } catch (Exception ex) {
       System.out.println("Error when removing a member voice role: " + ex.toString());
