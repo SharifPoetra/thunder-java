@@ -68,39 +68,31 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   @Setter
   private AudioPlayer audioPlayer;
   @Getter
-  @Setter
   private float nightcore = 1.0f;
   @Getter
-  @Setter
   private boolean karaoke = false;
   @Getter
-  @Setter private boolean vaporwave = false;
-  @Getter
-  @Setter 
-  private boolean repeating = false;
-  @Getter
-  @Setter 
-  private float karaokeLevel = 1f;
+  private boolean vaporwave = false;
   @Getter
   @Setter
-  private float karaokeMono = 1f;
+  private boolean repeating = false;
   @Getter
-  @Setter 
-  private float karaokeWidth = 100f;
+  private float karaokeLevel = 1f;
+  @Getter
+  private float karaokeMono = 1f;
   @Getter 
-  @Setter 
+  private float karaokeWidth = 100f;
+  @Getter  
   private float karaokeBand = 220f;
   private static final float[] BASS_BOOST = {
     0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f
   };
-  @Getter
-  @Setter 
-  private boolean bassboost = false;
-  @Getter
-  @Setter 
-  private int pitch = 0;
   @Getter 
-  @Setter private float tempo = 1.0f;
+  private boolean bassboost = false;
+  @Getter 
+  private int pitch = 0;
+  @Getter
+  private float tempo = 1.0f;
   private CompletableFuture<Void> task;
 
   @SerializedName("high-quality-nightcore")
@@ -122,6 +114,56 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
   }
 
   // Methods
+  public void setNightcore(final float nightcore) {
+    this.nightcore = nightcore;
+    updateFilters(getPlayingTrack());
+  }
+
+  public void setKaraoke(final boolean karaoke) {
+    this.karaoke = karaoke;
+    updateFilters(getPlayingTrack());
+  }
+
+  public void setVaporwave(final boolean vaporwave) {
+    this.vaporwave = vaporwave;
+    updateFilters(getPlayingTrack());
+  }
+
+ public void setKaraokeLevel(final float karaokeLevel) {
+    this.karaokeLevel = karaokeLevel;
+    updateFilters(getPlayingTrack());
+  }
+
+  public void setKaraokeMono(final float karaokeMono) {
+    this.karaokeMono = karaokeMono;
+    updateFilters(getPlayingTrack());
+  }
+
+  public void setKaraokeWidth(final float karaokeWidth) {
+    this.karaokeWidth = karaokeWidth;
+    updateFilters(getPlayingTrack());
+  }
+
+  public void setKaraokeBand(final float karaokeBand) {
+    this.karaokeBand = karaokeBand;
+    updateFilters(getPlayingTrack());
+  }
+
+  public void setBassboost(final boolean bassboost) {
+    this.bassboost = bassboost;
+    updateFilters(getPlayingTrack());
+  }
+
+  public void setPitch(final int pitch) {
+    this.pitch = pitch;
+    updateFilters(getPlayingTrack());
+  }
+
+  public void setTempo(final float tempo) {
+    this.tempo = tempo;
+    updateFilters(getPlayingTrack());
+  }
+  
   public int addTrackToFront(QueuedTrack qtrack) {
     if (audioPlayer.getPlayingTrack() == null) {
       audioPlayer.playTrack(qtrack.getTrack());
@@ -131,7 +173,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
       return 0;
     }
   }
-
+  
   public int addTrack(QueuedTrack qtrack) {
     if (audioPlayer.getPlayingTrack() == null) {
       audioPlayer.playTrack(qtrack.getTrack());
