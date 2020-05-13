@@ -35,6 +35,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
@@ -132,15 +133,10 @@ public class Main extends ListenerAdapter {
     try {
       logger.info("Running JDABuilder...");
       JDA jda = JDABuilder
-        .create(config.getToken(), GatewayIntent.GUILD_PRESENCES,
-                GatewayIntent.GUILD_MESSAGES,
-                GatewayIntent.GUILD_MESSAGE_REACTIONS,
-                GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES,
-                GatewayIntent.GUILD_BANS,
-                GatewayIntent.GUILD_EMOJIS)
-        .setMemberCachePolicy(MemberCachePolicy.ALL)
+        .createDefault(config.getToken())
         .setChunkingFilter(ChunkingFilter.NONE)
         .addEventListeners(new Main(), waiter)
+        .setActivity(Activity.playing(config.getPrefix() + "help"))
         .build()
         .awaitReady();
       thunder.setJDA(jda);
