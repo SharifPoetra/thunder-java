@@ -1,0 +1,14 @@
+version: "3"
+services:
+    thunder:
+        image: sharifpoetra/thunder:latest
+        restart: always
+        labels:
+            - "com.centurylinklabs.watchtower.enable=true"
+        ports:
+            - 127.0.0.1:6000:6000
+        volumes:
+            - ./config.txt:/usr/thunder/config.txt
+            - ./h2data:/usr/thunder/h2data
+            - ./Playlists:/usr/thunder/Playlists
+        entrypoint: java -jar Thunder.jar

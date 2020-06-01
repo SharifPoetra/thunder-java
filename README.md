@@ -18,17 +18,18 @@
 
 # Selfhosting  
 
-Download the latest releases [here](https://github.com/SharifPoetra/thunder-java/releases) (it should be `thunder.jar` and `config.txt.example`. `playlist_file.txt.example` is just an example for how playlists works)
+## Using the latest releases:
 
-### Configuration
+1. Download the jar [here](https://github.com/SharifPoetra/thunder-java/releases) (it should be a `.jar` file and `config.txt.example`. `playlist_file.txt.example` is just an example for how playlists works)
+2. Rename `config.txt.example` to `config.txt` and fill it out.
+3. Run: `java -jar thunder.jar`
 
-Rename `config.txt.example` to `config.txt` and fill it out.
+## Using docker
 
-### Start it up
-
-```bash
-java -jar thunder.jar
-```
+1. Create your working directory, example: `mkdir thunder && cd thunder`
+2. Rename `config.txt.example` to `config.txt` and fill it out.
+3. Rename [docker-compose.yml.example](https://github.com/SharifPoetra/thunder-java/blob/master/docker-compose.yml.example) to `docker-compose.yml`
+4. Run: `docker-compose up --build -d`
 
 # Contributing
 

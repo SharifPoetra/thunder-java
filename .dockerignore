@@ -1,5 +1,32 @@
-**
-#ignore everything except the following files, they are used in the Dockerfile to build the thunder image
+# Java
+*.class
+*.jar
+hs_err_pid*
+
+# IntelliJ
+*.iws
+/.idea
+/out/
+.classpath
+.project
+.settings/
+.vscode/
+bin/
+
+# Gradle
+.gradle
+build/
+!gradle-wrapper.jar
+
+# Runtime data
+.git/
+h2data/
+Playlists/
+target/
+*.db
+*.sqlite
+config.txt
+
+# Don't ignore this for building thunder image
 !Dockerfile
 !thunder-all.jar
-!config.txt
