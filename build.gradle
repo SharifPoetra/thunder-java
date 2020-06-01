@@ -69,6 +69,13 @@ dependencies {
 shadowJar {
     archiveBaseName = 'thunder'
     archiveVersion = ''
+    doLast {
+      //copies the jar into a place where the Dockerfile can find it easily (and users maybe too)
+      copy {
+        from 'build/libs/thunder-all.jar'
+        into '.'
+      }
+    }
 }
 
 compileJava.options.encoding = 'UTF-8'
