@@ -6,7 +6,7 @@ COPY . .
 
 RUN echo [INFO] Starting to build Docker image... \
 && echo [INFO] Building gradle project... \
-&& ./gradlew build \
+&& ./gradlew shadowJar \
 && echo [INFO] Done!
 
 EXPOSE 3445
