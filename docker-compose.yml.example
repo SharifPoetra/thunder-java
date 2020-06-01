@@ -11,4 +11,4 @@ services:
             - ./config.txt:/usr/thunder/config.txt
             - ./h2data:/usr/thunder/h2data
             - ./Playlists:/usr/thunder/Playlists
-        entrypoint: java -jar Thunder.jar
+        entrypoint: java -jar thunder-all.jar
