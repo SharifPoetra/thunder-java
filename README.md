@@ -24,7 +24,7 @@
 2. Rename [config.txt.example](https://github.com/SharifPoetra/thunder-java/blob/master/config.txt.example) to `config.txt` and fill it out.
 3. Run: `java -jar thunder.jar`
 
-## Using docker
+## Using docker compose
 
 1. Create your working directory, example: `mkdir thunder && cd thunder`
 2. Rename [config.txt.example](https://github.com/SharifPoetra/thunder-java/blob/master/config.txt.example) to `config.txt` and fill it out.
