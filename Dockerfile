@@ -11,4 +11,4 @@ RUN echo [INFO] Starting to build Docker image... \
 
 EXPOSE 3445
 
-ENTRYPOINT ["java", "-jar", "Thunder.jar"]
+ENTRYPOINT ["java", "-jar", "thunder-all.jar"]
