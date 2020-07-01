@@ -60,7 +60,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'io.undertow:undertow-core:2.1.3.Final'
     implementation 'com.google.guava:guava:23.0'
-    implementation 'com.sparkjava:spark-core:2.9.1'
+    implementation 'com.sparkjava:spark-core:2.9.2'
     implementation 'com.h2database:h2:1.4.200'
     compileOnly 'org.projectlombok:lombok:1.18.12'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.3.72'
