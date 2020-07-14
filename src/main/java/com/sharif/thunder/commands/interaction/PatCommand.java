@@ -44,7 +44,7 @@ public class PatCommand extends InteractionCommand {
     try {
       event.getChannel().sendTyping().queue();
       User user = (User) args[0];
-      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/pat", "Bearer " + thunder.getConfig().getEmiliaKey());
+      byte[] data = NetworkUtil.download("https://emilia-api.xyz/api/pat", "Bearer " + thunder.getConfig().getEmiliaKey());
       event.getChannel().sendFile(data, "pat.gif").embed(new EmbedBuilder()
         .setAuthor(event.getAuthor().getName() + " pets " + user.getName() + "! " + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
         .setColor(event.getGuild().getSelfMember().getColor())

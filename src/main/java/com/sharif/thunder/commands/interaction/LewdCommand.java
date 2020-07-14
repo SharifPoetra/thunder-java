@@ -40,7 +40,7 @@ public class LewdCommand extends InteractionCommand {
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
       event.getChannel().sendTyping().queue();
-      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/lewd", "Bearer " + thunder.getConfig().getEmiliaKey());
+      byte[] data = NetworkUtil.download("https://emilia-api.xyz/api/lewd", "Bearer " + thunder.getConfig().getEmiliaKey());
       event.getChannel().sendFile(data, "lewd.gif").embed(new EmbedBuilder()
         .setAuthor(event.getAuthor().getName() + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
         .setColor(event.getGuild().getSelfMember().getColor())

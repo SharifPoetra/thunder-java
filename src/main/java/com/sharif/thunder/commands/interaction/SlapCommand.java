@@ -43,7 +43,7 @@ public class SlapCommand extends InteractionCommand {
     try {
       event.getChannel().sendTyping().queue();
       User user = (User) args[0];
-      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/slap", "Bearer " + thunder.getConfig().getEmiliaKey());
+      byte[] data = NetworkUtil.download("https://emilia-api.xyz/api/slap", "Bearer " + thunder.getConfig().getEmiliaKey());
       event.getChannel().sendFile(data, "slap.gif").embed(new EmbedBuilder()
         .setAuthor(event.getAuthor().getName() + " slaps " + user.getName() + "!! " + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
         .setColor(event.getGuild().getSelfMember().getColor())

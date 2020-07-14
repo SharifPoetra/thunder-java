@@ -39,7 +39,7 @@ public class CryCommand extends InteractionCommand {
   public void execute(Object[] args, MessageReceivedEvent event) {
     try {
       event.getChannel().sendTyping().queue();
-      byte[] data = NetworkUtil.download("https://emilia.shrf.xyz/api/cry", "Bearer " + thunder.getConfig().getEmiliaKey());
+      byte[] data = NetworkUtil.download("https://emilia-api.xyz/api/cry", "Bearer " + thunder.getConfig().getEmiliaKey());
       event.getChannel().sendFile(data, "cry.gif").embed(new EmbedBuilder()
         .setAuthor(event.getAuthor().getName() + " " + RandomUtil.randomElement(msg), null, event.getAuthor().getEffectiveAvatarUrl())
         .setColor(event.getGuild().getSelfMember().getColor())
