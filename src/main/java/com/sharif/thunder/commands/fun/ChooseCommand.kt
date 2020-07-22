@@ -21,21 +21,20 @@ import com.sharif.thunder.utils.SenderUtil
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ChooseCommand(thunder: Thunder) : FunCommand() {
-    private val thunder: Thunder
+    private val thunder: Thunder = thunder
     init {
-        this.thunder = thunder
-        this.name = "choose"
-        this.help = "make a decision."
-        this.arguments = arrayOf<Argument>(Argument("items", Argument.Type.LONGSTRING, true))
+        name = "choose"
+        help = "make a decision."
+        arguments = arrayOf<Argument>(Argument("items", Argument.Type.LONGSTRING, true))
     }
 
     override fun execute(args: Array<Any>, event: MessageReceivedEvent) {
-    val items = args[0] as String
-    val item = items.split((" ").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
-    if (item.size == 1) {
-    SenderUtil.replyWarning(event, "You only gave me one option, `" + item[0] + "`")
-    } else {
-    SenderUtil.replySuccess(event, "I choose `" + item[(Math.random() * item.size).toInt()] + "`")
-    }
+        val items = args[0] as String
+        val item = items.split((" ").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+        if (item.size == 1) {
+            SenderUtil.replyWarning(event, "You only gave me one option, `" + item[0] + "`")
+        } else {
+            SenderUtil.replySuccess(event, "I choose `" + item[(Math.random() * item.size).toInt()] + "`")
         }
+    }
 }
