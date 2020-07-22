@@ -30,7 +30,7 @@ class ChooseCommand(thunder: Thunder) : FunCommand() {
 
     override fun execute(args: Array<Any>, event: MessageReceivedEvent) {
         val items = args[0] as String
-        val item = items.split((" ").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+        val item = items.split((" ").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         if (item.size == 1) {
             SenderUtil.replyWarning(event, "You only gave me one option, `" + item[0] + "`")
         } else {

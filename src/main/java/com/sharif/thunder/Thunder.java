@@ -35,7 +35,7 @@ public class Thunder {
   @Getter
   private final OffsetDateTime readyAt = OffsetDateTime.now();
   @Getter
-  private final BotConfig config;
+  public final BotConfig config;
   @Getter
   private final ScheduledExecutorService threadpool;
   @Getter

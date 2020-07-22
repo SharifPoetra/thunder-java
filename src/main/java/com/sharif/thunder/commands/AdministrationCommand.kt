@@ -17,7 +17,7 @@ package com.sharif.thunder.commands
 
 abstract class AdministrationCommand : Command() {
     init {
-        this.category = Category("Administration")
+        category = Category("Administration")
         guildOnly = true
     }
 }

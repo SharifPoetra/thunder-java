@@ -17,7 +17,7 @@ package com.sharif.thunder.commands
 
 abstract class UtilitiesCommand : Command() {
     init {
-        this.category = Category("Utilities")
+        category = Category("Utilities")
         guildOnly = true
     }
 }
