@@ -13,12 +13,11 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.sharif.thunder.commands;
+package com.sharif.thunder.commands
 
-public abstract class AdministrationCommand extends Command {
-
-  public AdministrationCommand() {
-    this.category = new Category("Administration");
-    this.guildOnly = true;
-  }
+abstract class UtilitiesCommand : Command() {
+    init {
+        this.category = Category("Utilities")
+        guildOnly = true
+    }
 }

@@ -28,33 +28,33 @@ import lombok.Getter;
 public class BotConfig {
 
   @Getter(AccessLevel.NONE)
-  private Path path = null;
-  private String token;
-  private String prefix;
-  private String serverInvite;
-  private String success;
-  private String warning;
-  private String error;
-  private String loading;
-  private String searching;
-  private String music;
-  private String shuffleEmoji;
-  private String repeat;
-  private String playlistsFolder;
-  private String databaseFolder;
-  private String dbHost;
-  private String dbUser;
-  private String dbPass;
-  private String defaultLyrics;
-  private String emiliaKey;
+  public Path path = null;
+  public String token;
+  public String prefix;
+  public String serverInvite;
+  public String success;
+  public String warning;
+  public String error;
+  public String loading;
+  public String searching;
+  public String music;
+  public String shuffleEmoji;
+  public String repeat;
+  public String playlistsFolder;
+  public String databaseFolder;
+  public String dbHost;
+  public String dbUser;
+  public String dbPass;
+  public String defaultLyrics;
+  public String emiliaKey;
   @Getter(AccessLevel.NONE)
-  private boolean stayInChannel;
+  public boolean stayInChannel;
   @Getter(AccessLevel.NONE)
-  private boolean npImages;
+  public boolean npImages;
   @Getter
-  private int port;
-  private long ownerId;
-  private long maxSeconds;
+  public int port;
+  public long ownerId;
+  public long maxSeconds;
 
   public BotConfig() {
 
