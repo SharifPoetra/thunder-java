@@ -36,11 +36,13 @@ class BatSlapCommand(private val thunder: Thunder) : FunCommand() {
             event.channel.sendTyping().queue()
             val user = args[0] as User
             val data = NetworkUtil.download("https://emilia-api.xyz/api/batslap?slapper=" + event.author.effectiveAvatarUrl + "&slapped=" + user.effectiveAvatarUrl, "Bearer " + thunder.config.emiliaKey)
-            event.channel.sendFile(data, "batslap.png").embed(EmbedBuilder()
+            event.channel.sendFile(data, "batslap.png").embed(
+                EmbedBuilder()
                     .setAuthor(user.name + " has been batslapped by " + event.author.name, null, null)
                     .setColor(event.member!!.color)
                     .setImage("attachment://batslap.png")
-                    .build()).queue()
+                    .build()
+            ).queue()
         } catch (ex: Exception) {
             SenderUtil.replyError(event, "Shomething went wrong while fetching the API! Please try again.")
             println(ex)
