@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * movetrack command ([e3ef419](https://github.com/SharifPoetra/thunder-java/commit/e3ef41975636c7e53d59c5e4c11683655380a6a1))
 
-## [1.22.0] - (unreleased)
+## [1.22.0]
 ### Added
 - Add `resetfilters` command
 - Custom prefixes
