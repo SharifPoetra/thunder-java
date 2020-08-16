@@ -1,13 +1,13 @@
 # Changelog
-All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [Unreleased]
-### Added
-### Changed
-### Fixed
+### [1.20.1](https://github.com/SharifPoetra/thunder-java/compare/v1.20.0...v1.20.1) (2020-08-16)
+
+
+### Bug Fixes
+
+* movetrack command ([e3ef419](https://github.com/SharifPoetra/thunder-java/commit/e3ef41975636c7e53d59c5e4c11683655380a6a1))
 
 ## [1.22.0] - (unreleased)
 ### Added
