@@ -46,6 +46,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,11 +55,9 @@ public class Main extends ListenerAdapter {
   public static final String PAUSE_EMOJI = "\u23F8"; // ⏸
   public static final String STOP_EMOJI = "\u23F9"; // ⏹
   public static final Permission[] RECOMMENDED_PERMS = new Permission[] {Permission.MESSAGE_READ, Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE, Permission.MESSAGE_EXT_EMOJI, Permission.MANAGE_CHANNEL, Permission.VOICE_CONNECT, Permission.VOICE_SPEAK, Permission.NICKNAME_CHANGE};
-  private static JDA jda;
   private static Command[] commands;
   private static BotConfig config;
   private static Thunder thunder;
-  private static ThunderApi thunderApi;
 
   public static void main(String[] args) throws Exception {
 
@@ -70,7 +69,7 @@ public class Main extends ListenerAdapter {
     Database database = new Database(config.getDbHost(), config.getDbUser(), config.getDbPass());
     thunder = new Thunder(waiter, config, database);
     logger.info("Starting ThunderApi...");
-    thunderApi = new ThunderApi(thunder).start();
+    ThunderApi thunderApi = new ThunderApi(thunder).start();
 
     // lists all the commands
     logger.info("Loading all commands...");
@@ -171,7 +170,7 @@ public class Main extends ListenerAdapter {
     }
     if (event.getChannelType() != ChannelType.PRIVATE && !event.getMessage().getMentionedUsers().isEmpty() && !event.getAuthor().isBot()) {
       StringBuilder builder = new StringBuilder();
-      event.getMessage().getMentionedUsers().stream().forEach(u -> {
+      event.getMessage().getMentionedUsers().forEach(u -> {
         if (Thunder.getDatabase().afksettings.hasUser(u)) {
           String response = Thunder.getDatabase().afksettings.getUser(u).getMessage();
           if (response != null)
@@ -237,24 +236,22 @@ public class Main extends ListenerAdapter {
   }
 
   @Override
-  public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+  public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
     try {
       if (event.getMember().getUser().isBot()) return;
-      if (Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole() != null) {
+      if (Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole() != null)
         event.getGuild().addRoleToMember(event.getMember(), event.getGuild().getRoleById(Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole())).queue();
-      }
     } catch (Exception ex) {
       System.out.println("Error when giving a member voice role: " + ex.toString());
     }
   }
 
   @Override
-  public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+  public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
     try {
       if (event.getMember().getUser().isBot()) return;
-      if (Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole() != null) {
+      if (Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole() != null)
         event.getGuild().removeRoleFromMember(event.getMember(), event.getGuild().getRoleById(Thunder.getDatabase().guildSettings.getSettings(event.getGuild()).getVoiceRole())).queue();
-      }
     } catch (Exception ex) {
       System.out.println("Error when removing a member voice role: " + ex.toString());
     }
