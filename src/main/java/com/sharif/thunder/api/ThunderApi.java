@@ -54,6 +54,8 @@ public class ThunderApi {
     });
     
     get("/", (req, res) -> {
+      res.type("application/json");
+      res.status(200);
       return "{\"message\":\"SUCCESS\"}";
     });
 
@@ -62,7 +64,7 @@ public class ThunderApi {
 
       get("/stats/", (req, res) -> {
         try {
-          Predicate<User> isBot = user -> user.isBot();
+          Predicate<User> isBot = User::isBot;
           Runtime rt = Runtime.getRuntime();
           long guildCount = thunder.getJDA().getGuildCache().size();
           long channelCount = thunder.getJDA().getVoiceChannelCache().size() + thunder.getJDA().getTextChannelCache().size();
