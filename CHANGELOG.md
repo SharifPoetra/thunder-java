@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.21.0](https://github.com/SharifPoetra/thunder-java/compare/v1.20.5...v1.21.0) (2020-08-21)
+
+
+### Features
+
+* add dexter command ([5081bc2](https://github.com/SharifPoetra/thunder-java/commit/5081bc22b7e1e33271a9af4437677e0fab1335d5))
+
 ### [1.20.5](https://github.com/SharifPoetra/thunder-java/compare/v1.20.4...v1.20.5) (2020-08-21)
 
 ### [1.20.4](https://github.com/SharifPoetra/thunder-java/compare/v1.20.3...v1.20.4) (2020-08-21)
