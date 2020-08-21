@@ -36,10 +36,12 @@ class BobRossCommand(private val thunder: Thunder) : FunCommand() {
             event.channel.sendTyping().queue()
             val user = args[0] as User
             val data = NetworkUtil.download("https://emilia-api.xyz/api/bob-ross?image=" + user.effectiveAvatarUrl, "Bearer " + thunder.config.emiliaKey)
-            event.channel.sendFile(data, "bobross.png").embed(EmbedBuilder()
+            event.channel.sendFile(data, "bobross.png").embed(
+                EmbedBuilder()
                     .setColor(event.member!!.color)
                     .setImage("attachment://bobross.png")
-                    .build()).queue()
+                    .build()
+            ).queue()
         } catch (ex: Exception) {
             SenderUtil.replyError(event, "Shomething went wrong while fetching the API! Please try again.")
             println(ex)
