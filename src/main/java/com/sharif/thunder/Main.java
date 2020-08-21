@@ -132,13 +132,16 @@ public class Main extends ListenerAdapter {
 
     try {
       logger.info("Running JDABuilder...");
-      JDA jda = JDABuilder
-        .createDefault(config.getToken())
-        .setChunkingFilter(ChunkingFilter.NONE)
-        .addEventListeners(new Main(), waiter)
-        .setActivity(Activity.playing(config.getPrefix() + "help"))
-        .build()
-        .awaitReady();
+      JDA jda = JDABuilder.create(config.getToken(),
+              GatewayIntent.GUILD_PRESENCES,
+              GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS,
+              GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES)
+              .setMemberCachePolicy(MemberCachePolicy.ALL)
+              .setChunkingFilter(ChunkingFilter.NONE)
+              .addEventListeners(new Main(), waiter)
+              .setActivity(Activity.playing(config.getPrefix() + "help"))
+              .build()
+              .awaitReady();
       thunder.setJDA(jda);
     } catch (LoginException ex) {
       logger.error("Something went wrong when tried to login to discord: " + ex);
