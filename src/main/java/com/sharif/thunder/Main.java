@@ -82,6 +82,7 @@ public class Main extends ListenerAdapter {
       new BobRossCommand(thunder),
       new ChooseCommand(thunder),
       new BatSlapCommand(thunder),
+      new DexterCommand(thunder),
       // interaction
       new PatCommand(thunder),
       new SlapCommand(thunder),
