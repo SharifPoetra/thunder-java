@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.4](https://github.com/SharifPoetra/thunder-java/compare/v1.20.3...v1.20.4) (2020-08-21)
+
+
+### Bug Fixes
+
+* some style fixes ([94af290](https://github.com/SharifPoetra/thunder-java/commit/94af290259108c5ca58d94f279ad39773dfa2223))
+
+
+* enable gateway intent ([2caa5c3](https://github.com/SharifPoetra/thunder-java/commit/2caa5c3895a72f93886054f8bc0e4a36e7835128))
+* **standard-version:** test ([3193b0b](https://github.com/SharifPoetra/thunder-java/commit/3193b0b6089137fea157219346039c6e465f6ecd))
+
 ### [1.20.3](https://github.com/SharifPoetra/thunder-java/compare/v1.20.2...v1.20.3) (2020-08-16)
 
 ### [1.20.2](https://github.com/SharifPoetra/thunder-java/compare/v1.20.1...v1.20.2) (2020-08-16)
