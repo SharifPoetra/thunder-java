@@ -23,8 +23,7 @@ plugins {
 group = 'com.sharif'
 mainClassName = 'com.sharif.thunder.Main'
 version = '1.0.0'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = 1.8
 
 apply plugin: 'application'
 apply plugin: 'java'
