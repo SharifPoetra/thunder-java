@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.sparkjava:spark-core:2.9.2'
     implementation 'com.h2database:h2:1.4.200'
     compileOnly 'org.projectlombok:lombok:1.18.12'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.10'
 }
 
 shadowJar {
